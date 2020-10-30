@@ -1,0 +1,27 @@
+<T3DataStructure>
+    <sheets>
+        <sDEF>
+            <ROOT>
+                <TCEforms>
+                    <sheetTitle>Options</sheetTitle>
+                </TCEforms>
+                <type>array</type>
+                <el>
+                    <settings.choosenCollection>
+                        <TCEforms>
+                            <label>i18n: The Collection that is to be displayed</label>
+                            <config>
+                                <type>select</type>
+                                <itemsProcFunc>Ubl\SparqlToucan\Controller\FrontController->PluginList</itemsProcFunc>
+                                <renderType>selectSingle</renderType>
+                                <items>
+                                    <!-- empty by default -->
+                                </items>
+                            </config>
+                        </TCEforms>
+                    </settings.choosenCollection>
+                </el>
+            </ROOT>
+        </sDEF>
+    </sheets>
+</T3DataStructure>

@@ -1,0 +1,23 @@
+{
+    "name": "ubl/sparql-toucan",
+    "type": "typo3-cms-extension",
+    "description": "An Extension that fills parts of the website with the content of a semantic data source. Uses a triplestore as remote database",
+    "authors": [],
+    "require": {
+        "typo3/cms-core": "^8.7.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ubl\\SparqlToucan\\": "Classes"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Ubl\\SparqlToucan\\Tests\\": "Tests"
+        }
+    },
+    "replace": {
+        "sparql_toucan": "self.version",
+        "typo3-ter/sparql-toucan": "self.version"
+    }
+}

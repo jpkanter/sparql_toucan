@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2020-10-27T14:00:28Z" product-name="sparql_toucan">
+		<header/>
+		<body>
+			<trans-unit id="name.description">
+				<source>name</source>
+			</trans-unit>
+			<trans-unit id="cached_value.description">
+				<source>cachedValue</source>
+			</trans-unit>
+			<trans-unit id="subject.description">
+				<source>subject</source>
+			</trans-unit>
+			<trans-unit id="predicate.description">
+				<source>predicate</source>
+			</trans-unit>
+			<trans-unit id="mode.description">
+				<source>mode</source>
+			</trans-unit>
+			<trans-unit id="auto_update.description">
+				<source>autoUpdate</source>
+			</trans-unit>
+			<trans-unit id="source_id.description">
+				<source>Id of the source that is used for the datapoint</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

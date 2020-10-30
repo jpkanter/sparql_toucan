@@ -1,0 +1,73 @@
+<html xmlns:f="https://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:layout name="Default" />
+
+<f:section name="content">
+    <h1>Listing for Collection</h1>
+
+    <f:flashMessages />
+
+    <table  class="tx_sparqltoucan" >
+        <tr>
+            <th><f:translate key="tx_sparqltoucan_domain_model_collection.name" /></th>
+            <th><f:translate key="tx_sparqltoucan_domain_model_collection.layout" /></th>
+            <th><f:translate key="tx_sparqltoucan_domain_model_collection.style_override" /></th>
+            <th span="2">Actions </th>
+        </tr>
+
+        <f:for each="{collections}" as="collection">
+            <tr>
+                <td><f:link.action action="show" arguments="{collection : collection}"> {collection.name}</f:link.action></td>
+                <td><f:link.action action="show" arguments="{collection : collection}"> {collection.layout}</f:link.action></td>
+                <td><f:link.action action="show" arguments="{collection : collection}"> {collection.styleOverride}</f:link.action></td>
+                <td><f:link.action action="editCollection" arguments="{collection : collection}">Edit</f:link.action></td>
+                <td><f:link.action action="deleteCollection" arguments="{collection : collection}">Delete</f:link.action></td>
+            </tr>
+        </f:for>
+    </table>
+
+    <f:link.action action="newCollection">New Collection</f:link.action>
+
+    <h2>Datapoints</h2>
+    <table class="tx_sparqltoucan">
+        <tr>
+            <th>UID</th>
+            <th>PID</th>
+            <th>Source</th>
+            <th>Subject</th>
+            <th>Predicate</th>
+            <th>Value</th>
+        </tr>
+        <f:for each="{datapoints}" as="datapoint">
+            <tr>
+                <td>{datapoint.uid}</td>
+                <td>{datapoint.pid}</td>
+                <td>{datapoint.sourceId.name}</td>
+                <td>{datapoint.subject}</td>
+                <td>{datapoint.predicate}</td>
+                <td><strong>{datapoint.cachedValue}</strong></td>
+            </tr>
+        </f:for>
+    </table>
+    <f:link.action action="newDatapoint">New Datapoint</f:link.action>
+    <sub><f:link.action action="remoteUpdateDatapoints">Update Datapoints</f:link.action></sub>
+
+    <h2>Sources</h2>
+    <table  class="tx_sparkletoucan" >
+        <tr>
+            <th>UID</th>
+            <th>Name</th>
+            <th>URL</th>
+            <th span="2">i18n:Actions</th>
+        </tr>
+        <f:for each="{sources}" as="source">
+            <tr>
+                <td>{source.uid}</td>
+                <td>{source.name}</td>
+                <td>{source.url}</td>
+                <td><f:link.action action="deleteSource" arguments="{source:source}">New Source</f:link.action></td>
+            </tr>
+        </f:for>
+    </table>
+    <f:link.action action="newSource">New Source</f:link.action>
+</f:section>
+</html>
