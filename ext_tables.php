@@ -10,14 +10,6 @@ call_user_func(
             'Sparql Toucan Addin'
         );
 
-        $_EXTKEY = "sparql_toucan";
-        $GLOBALS['TBE_STYLES']['skins'][$_EXTKEY] = [
-            'name' => $_EXTKEY,
-            'stylesheetDirectories' => [
-                'css' => 'EXT:'.$_EXTKEY.'/stylesheets/visual/'
-            ]
-        ];
-
         if (TYPO3_MODE === 'BE') {
 
             \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
@@ -43,6 +35,7 @@ call_user_func(
                                     createDatapoint,
                                     
                                     addSource,
+                                    newSource,
                                     editSource,
                                     createSource,
                                     updateSource,

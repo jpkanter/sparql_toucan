@@ -170,7 +170,15 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->collectionEntryRepository->remove($collectionEntry);
         $this->redirect('editCollection', Null, Null, array('collection'=>$collection));
     }
+    /**
+     * action newSource
+     *
+     * @return void
+     */
+    public function newSourceAction()
+    {
 
+    }
     /**
      * action deleteSource
      *
