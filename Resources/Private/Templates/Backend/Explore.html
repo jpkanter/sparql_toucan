@@ -1,4 +1,5 @@
 {namespace tou=Ubl\SparqlToucan\ViewHelpers}
+{namespace v=FluidTYPO3\Vhs\ViewHelpers}
 
 <html xmlns:f="https://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
 <f:layout name="Backend" />
@@ -41,7 +42,16 @@
         <f:for each="{explorer}" as="row">
             <tr>
                 <td>{row.pre -> f:format.raw()}</td>
-                <td>{row.obj -> f:format.raw()}</td>
+                <td>
+                    <f:if condition="{row.form}=='uri'>">
+                        <f:then>
+                            <f:link.action action="explore" arguments="{postcontent: {sourceId: form.sourceId, subject: row.obj}}">{row.obj}</f:link.action>
+                        </f:then>
+                        <f:else>
+                            {row.obj -> f:format.raw()}
+                        </f:else>
+                    </f:if>
+                </td>
                 <f:if condition="<tou:isarray var='{row.extra}'/> ==1">
                     <f:then>
                         <td>

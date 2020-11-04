@@ -279,6 +279,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $sources = $this -> sourceRepository->findAll();
         $this->view->assign("sources", $sources);
         $formdata = $this->request->getArguments();
+        $this->view->assign("debug", $formdata);
         if( isset($formdata['postcontent'])) {
             $url = $this->sourceRepository->findByUid($formdata['postcontent']['sourceId'])->getUrl();
             // mirror content of form back to form
@@ -401,7 +402,8 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
             }
             elseif( $obj['type'] == "uri") {
-                $line['obj'] = $a_pre . $obj['value'] . $a_mid . $obj['value'] . $a_end;
+                $line['obj'] = $obj['value'];
+                $line['form'] = "uri";
             }
             foreach( $obj as $property => $value ) {
                 if( $property != "type" and $property != "value" ) {
