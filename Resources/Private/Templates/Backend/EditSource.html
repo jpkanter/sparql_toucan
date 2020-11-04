@@ -2,15 +2,15 @@
 <f:layout name="Backend" />
 
 <f:section name="content">
-    <h1>New Collection</h1>
+    <h1>Edit Source</h1>
 
     <f:flashMessages />
 
     <f:render partial="FormErrors" />
 
-    <f:form action="createCollection"  name="newCollection" object="{newCollection}">
-        <f:render partial="Collection/FormFields" />
-        <f:form.submit value="Create new" />
+    <f:form action="update" name="source" object="{source}" >
+        <f:render partial="Source/FormFields" arguments="{source:source}" />
+        <f:form.submit value="Save" />
     </f:form>
 </f:section>
 </html>

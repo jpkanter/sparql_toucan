@@ -1,16 +1,5 @@
 <html xmlns:f="https://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
-  <f:layout name="Default" />
-
-  This template displays a NEW form for the current domain object.
-
-  If you modify this template, do not forget to change the overwrite settings
-  in /Configuration/ExtensionBuilder/settings.yaml:
-    Resources:
-      Private:
-        Templates:
-          New.html: keep
-
-  Otherwise your changes will be overwritten the next time you save the extension in the extension builder
+  <f:layout name="Backend" />
 
   <f:section name="content">
     <h1>New Source</h1>
@@ -19,7 +8,7 @@
 
     <f:render partial="FormErrors" />
 
-    <f:form action="create"  name="newSource" object="{newSource}">
+    <f:form action="createSource"  name="newSource" object="{newSource}">
     <f:render partial="Source/FormFields" />
     <f:form.submit value="Create new" />
     </f:form>

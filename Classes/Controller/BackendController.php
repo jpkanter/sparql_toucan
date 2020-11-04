@@ -170,6 +170,54 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->collectionEntryRepository->remove($collectionEntry);
         $this->redirect('editCollection', Null, Null, array('collection'=>$collection));
     }
+
+
+    /**
+     * action createSource
+     *
+     * @param \Ubl\SparqlToucan\Domain\Model\Source $newSource
+     * @return void
+     */
+    public function createSourceAction(\Ubl\SparqlToucan\Domain\Model\Source $newSource)
+    {
+        $this->sourceRepository->add($newSource);
+        $this->redirect('overview');
+    }
+
+    /**
+     * action editSource
+     *
+     * @param \Ubl\SparqlToucan\Domain\Model\Source $source
+     * @ignorevalidation $source
+     * @return void
+     */
+    public function editSourceAction(\Ubl\SparqlToucan\Domain\Model\Source $source)
+    {
+        $this->view->assign('source', $source);
+    }
+
+    /**
+     * action showSource
+     *
+     * @param \Ubl\SparqlToucan\Domain\Model\Source $source
+     * @ignorevalidation $source
+     * @return void
+     */
+    public function showSourceAction(\Ubl\SparqlToucan\Domain\Model\Source $source)
+    {
+        $this->view->assign('source', $source);
+    }
+    /**
+     * action updateSource
+     *
+     * @param \Ubl\SparqlToucan\Domain\Model\Source $source
+     * @return void
+     */
+    public function updateSourceAction(\Ubl\SparqlToucan\Domain\Model\Source $source)
+    {
+        $this->sourceRepository->update($source);
+        $this->redirect('overview');
+    }
     /**
      * action newSource
      *
@@ -208,7 +256,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             array_push($debug, $this->simpleQuery($url, $sub, $pred));
             $content = "";
             foreach( $value as $line) {
-                if( strlen($content) > 0) { $content.= "<br>";}
+                if( strlen($content) > 0) { $content.= "\n";}
                 $content.= $line;
             }
             $dataentry->setCachedValue($content);
@@ -218,6 +266,46 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
         $this->view->assign("debug", $debug);
         $this->view->assign("datapoints", $this->datapointRepository->findAll());
+
+    }
+    /**
+     * action explore
+     * viewtool to explore sparql endpoints
+     *
+     * @param array
+     * @return void
+     */
+    public function exploreAction() {
+        $sources = $this -> sourceRepository->findAll();
+        $this->view->assign("sources", $sources);
+        $formdata = $this->request->getArguments();
+        if( isset($formdata['postcontent'])) {
+            $url = $this->sourceRepository->findByUid($formdata['postcontent']['sourceId'])->getUrl();
+            // mirror content of form back to form
+            $this->view->assign("form", $formdata['postcontent']);
+            // start request to sparql endpoint
+
+            $subject = trim($formdata['postcontent']['subject']);
+            if( preg_match("^<.*>$", $subject) == 0) {
+                $subject = "<" . $subject . ">";
+            }
+            // ^<.*>$
+
+            $predicate = trim($formdata['postcontent']['predicate']);
+            if( $predicate == "") { $predicate = "?pre"; }
+
+            $this->view->assign("form", $formdata['postcontent']);
+
+            if( trim($formdata['postcontent']['query']) != "") { //direct query
+                $content = $this->directQuery($url, $formdata['postcontent']['query']);
+                $this->view->assign("debug", $content);
+                return void;
+            }
+
+            $content = $this->simpleQuery($url, $subject, $predicate);
+            $this->view->assign("explorer", $this->parseSparqlJson($content));
+            $this->view->assign("debug", $content);
+        }
 
     }
 
@@ -274,5 +362,70 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             $jsoned = json_decode($content, True);
             return $jsoned['results']['bindings'];
         }
+    }
+    //overload
+    private function directQuery($url, $query) {
+        $requestFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Http\RequestFactory::class);
+        $additionalOptions = [
+            'headers' => ['Cache-Control' => 'no-cache'],
+            'form_params' => [
+                'query' => $query,
+                'format' => 'json'
+            ]
+        ];
+        $response = $requestFactory->request($url, 'POST', $additionalOptions);
+        if ($response->getStatusCode() === 200) {
+            $content = $response->getBody()->getContents();
+            $jsoned = json_decode($content, True);
+            return $jsoned['results']['bindings'];
+        }
+    }
+
+    private function parseSparqlJson($query, $predicate_name = 'pre', $object_name = 'obj') {
+        $a_pre = "<a href=\"";
+        $a_mid = "\">";
+        $a_end = "</a>";
+        $export = array();
+        foreach( $query as $entry ) {
+            $line = array();
+            $pre = $entry[$predicate_name ];
+            $obj = $entry[$object_name] ;
+            if( $pre['type'] == "uri") {
+                $line['pre'] = $a_pre . $pre['value'] . $a_mid . $pre['value']  . $a_end;
+            }
+            else {
+                $line['pre'] = $pre['type']. " - ". $pre['value'];
+            }
+            if( $obj['type'] == "literal") {
+                $line['obj'] = $obj['value'];
+
+            }
+            elseif( $obj['type'] == "uri") {
+                $line['obj'] = $a_pre . $obj['value'] . $a_mid . $obj['value'] . $a_end;
+            }
+            foreach( $obj as $property => $value ) {
+                if( $property != "type" and $property != "value" ) {
+                    switch( $property ) {
+                        case 'xml:lang':
+                            $property = "Language";
+                            break;
+                    }
+                    $newValue = $property . " - " . $value;
+                    if( !isset($line['extra']) ) {
+                        $line['extra'] = $newValue;
+                    } // overly complicated, i am sure
+                    else {
+                        if( is_array($line['extra'])) {
+                            $line['extra'][] = $newValue;
+                        }
+                        else {
+                            $line['extra'] = [$line['extra'], $newValue];
+                        }
+                    }
+                }
+            }
+            $export[] = $line;
+        }
+        return $export;
     }
 }

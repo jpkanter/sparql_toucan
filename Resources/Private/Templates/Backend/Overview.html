@@ -1,5 +1,5 @@
 <html xmlns:f="https://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
-<f:layout name="Default" />
+<f:layout name="Backend" />
 
 <f:section name="content">
     <h1>Listing for Collection</h1>
@@ -44,12 +44,14 @@
                 <td>{datapoint.sourceId.name}</td>
                 <td>{datapoint.subject}</td>
                 <td>{datapoint.predicate}</td>
-                <td><strong>{datapoint.cachedValue}</strong></td>
+                <td><strong><f:format.crop maxCharacters="200" append="&nbsp;[...]">{datapoint.cachedValue -> f:format.nl2br()}</f:format.crop></strong></td>
             </tr>
         </f:for>
     </table>
     <f:link.action action="newDatapoint">New Datapoint</f:link.action>
     <sub><f:link.action action="remoteUpdateDatapoints">Update Datapoints</f:link.action></sub>
+    <br>
+    <f:link.action action="explore" class="tx_sparqltoucan_fatlink">Explore Sparql Endpoint</f:link.action>
 
     <h2>Sources</h2>
     <table  class="tx_sparqltoucan" >
@@ -64,10 +66,14 @@
                 <td>{source.uid}</td>
                 <td>{source.name}</td>
                 <td>{source.url}</td>
-                <td><f:link.action action="deleteSource" arguments="{source:source}">i18n:Delete Source</f:link.action></td>
+                <td><f:link.action action="editSource" arguments="{source:source}">i18n:Edit Source</f:link.action></td>
+                <td><f:link.action action="deleteSource" arguments="{source:source}" class="tx_sparqltoucan_srslink">i18n:Delete Source</f:link.action></td>
             </tr>
         </f:for>
     </table>
     <f:link.action action="newSource">New Source</f:link.action>
+
+
+    <f:be.buttons.csh />
 </f:section>
 </html>

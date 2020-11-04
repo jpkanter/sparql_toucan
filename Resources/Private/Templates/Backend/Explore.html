@@ -1,0 +1,63 @@
+{namespace tou=Ubl\SparqlToucan\ViewHelpers}
+
+<html xmlns:f="https://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:layout name="Backend" />
+
+<f:section name="content">
+    <h1>Explore choosen Sparql Endpoint</h1>
+    <f:form action="explore"  name="postcontent" controller="Backend" enctype="multipart/form-data">
+        <div class="tx_sparqltoucan_central">
+            <table class="tx_sparqltoucan" align="center">
+                <tr>
+                    <td><label>Endpoints:</label></td>
+                    <td><f:form.select property="sourceId" options="{sources}" optionValueField="uid" optionLabelField="name" value="{form.sourceId}"/></td>
+                </tr>
+                <tr>
+                    <td><label>Subject</label></td>
+                    <td><f:form.textfield property="subject" value="{form.subject}"/></td>
+                </tr>
+                <tr>
+                    <td><label>Predicate</label></td>
+                    <td><f:form.textfield property="predicate" value="{form.predicate}"/></td>
+                </tr>
+                <tr>
+                    <td><label>Raw Query</label></td>
+                    <td><f:form.textfield property="query" value="{form.query}"/></td>
+                </tr>
+                <tr>
+                    <td colspan="2" align="center"><f:form.submit value="Explore" /></td>
+                </tr>
+            </table>
+        </div>
+    </f:form>
+
+    <table class="tx_sparqltoucan">
+        <tr>
+            <th>Predicate</th>
+            <th>Object</th>
+            <th>Extra Information</th>
+        </tr>
+
+        <f:for each="{explorer}" as="row">
+            <tr>
+                <td>{row.pre -> f:format.raw()}</td>
+                <td>{row.obj -> f:format.raw()}</td>
+                <f:if condition="<tou:isarray var='{row.extra}'/> ==1">
+                    <f:then>
+                        <td>
+                            <f:for each="{row.extra}" as="line">
+                                {line} </br>
+                            </f:for>
+                        </td>
+                    </f:then>
+                    <f:else>
+                        <td>{row.extra -> f:format.crop(maxCharacters: 50)}</td>
+                    </f:else>
+                </f:if>
+            </tr>
+        </f:for>
+    </table>
+    <f:debug>{debug}</f:debug>
+    <f:debug>{explorer}</f:debug>
+</f:section>
+</html>

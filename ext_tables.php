@@ -39,8 +39,10 @@ call_user_func(
                                     editSource,
                                     createSource,
                                     updateSource,
+                                    showSource,
                                     deleteSource,
                                     
+                                    explore,
                                     remoteUpdateDatapoints',
                     'Collection' => 'list, show, new, create, edit, update, delete','CollectionEntry' => 'list, show, new, create, edit, update, delete',
                 ],

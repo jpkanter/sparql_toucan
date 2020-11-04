@@ -4,7 +4,7 @@
     --tou_orange: #F88A19;
     --tou_red: #DA0000;
     --tou_blue: #0D2EA7;
-    --tou_lightyellow: #EFF14F;
+    --tou_lightyellow: #f4f697;
     --tou_purplered: #C93A82;
     --tou_lightgrey: #d4d3d3;
 }
@@ -13,6 +13,7 @@
     height:100%;
     overflow-y: scroll;
     margin-left: 1em;
+    margin-top: 1em;
 }
 
 table.tx_sparqltoucan {
@@ -21,6 +22,9 @@ table.tx_sparqltoucan {
 table.tx_sparqltoucan th {
     padding: 0em 1em;
     border-bottom: 1px solid var(--tou_lightyellow);
+}
+table.tx_sparqltoucan th, td {
+    vertical-align: top;
 }
 table.tx_sparqltoucan td:not(:last-child) {
     border-right: 1px solid var(--tou_lightgrey);
@@ -39,10 +43,41 @@ body {
 }
 a {
     color: var(--tou_blue);
+    font-weight: bold;
 }
 a:hover {
     color: var(--tou_orange)
 }
-h1, h2 {
-    color: var(--tou_red);
+a:focus:before {
+    content: "[";
+}
+a:focus:after {
+    content: "]";
+}
+a.tx_sparqltoucan_srslink {
+    color: var(--tou_purplered);
+    font-weight: normal;
+}
+a.tx_sparqltoucan_srslink:hover {
+    color: var(--tou_orange)
+}
+a.tx_sparqltoucan_fatlink {
+    font-size: 1.5em;
+}
+
+h1 {font-size: 4.5rem;}
+h2 {font-size: 2.0rem;}
+h3 {font-size: 1.6rem}
+h4 {font-size: 1.4rem}
+h5 {font-size: 1.2rem}
+h6 {font-size: 1.0rem}
+
+h1, h2, h3, h4, h5, h6 { color: var(--tou_red); font-weight: bold;}
+
+div.tx_sparqltoucan_central {
+    width: 60%;
+    margin: auto;
+    background: var(--tou_lightyellow);
+    border-radius: 2em;
+    padding: 2em;
 }
