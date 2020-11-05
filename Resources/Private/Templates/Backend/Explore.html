@@ -45,10 +45,10 @@
                 <td>
                     <f:if condition="{row.form}=='uri'>">
                         <f:then>
-                            <f:link.action action="explore" arguments="{postcontent: {sourceId: form.sourceId, subject: row.obj}}">{row.obj}</f:link.action>
+                            <f:link.action action="explore" arguments="{postcontent: {sourceId: form.sourceId, subject: row.obj.value}}">{row.obj.label}</f:link.action>
                         </f:then>
                         <f:else>
-                            {row.obj -> f:format.raw()}
+                            {row.obj.value -> f:format.raw()}
                         </f:else>
                     </f:if>
                 </td>
@@ -61,7 +61,7 @@
                         </td>
                     </f:then>
                     <f:else>
-                        <td>{row.extra -> f:format.crop(maxCharacters: 50)}</td>
+                        <td>{row.extra -> f:format.crop(maxCharacters: 100)}</td>
                     </f:else>
                 </f:if>
             </tr>

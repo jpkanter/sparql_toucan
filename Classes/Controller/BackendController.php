@@ -304,7 +304,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             }
 
             $content = $this->simpleQuery($url, $subject, $predicate);
-            $this->view->assign("explorer", $this->parseSparqlJson($content));
+            $this->view->assign("explorer", $this->parseSparqlJson($content, $formdata['postcontent']['sourceId']));
             $this->view->assign("debug", $content);
         }
 
@@ -363,6 +363,9 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             $jsoned = json_decode($content, True);
             return $jsoned['results']['bindings'];
         }
+        else {
+            return null;
+        }
     }
     //overload
     private function directQuery($url, $query) {
@@ -382,27 +385,35 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
     }
 
-    private function parseSparqlJson($query, $predicate_name = 'pre', $object_name = 'obj') {
+    private function parseSparqlJson($query, $SourceID = null, $predicate_name = 'pre', $object_name = 'obj') {
         $a_pre = "<a href=\"";
         $a_mid = "\">";
         $a_end = "</a>";
         $export = array();
         foreach( $query as $entry ) {
             $line = array();
-            $pre = $entry[$predicate_name ];
+            $pre = $entry[$predicate_name];
             $obj = $entry[$object_name] ;
             if( $pre['type'] == "uri") {
-                $line['pre'] = $a_pre . $pre['value'] . $a_mid . $pre['value']  . $a_end;
+                if( $SourceID != null ) {
+                    $label = $this->findLabels($SourceID, $pre['value']);
+                }
+                else {
+                    $label = $pre['value'];
+                }
+                $line['pre'] = $a_pre . $pre['value'] . $a_mid . $label . $a_end;
             }
             else {
                 $line['pre'] = $pre['type']. " - ". $pre['value'];
             }
-            if( $obj['type'] == "literal") {
-                $line['obj'] = $obj['value'];
+            if( $obj['type'] == "literal" or $obj['type'] == "typed-literal") {
+                $line['obj']['value'] = $obj['value'];
+                $line['obj']['label'] = $obj['value'];
 
             }
             elseif( $obj['type'] == "uri") {
-                $line['obj'] = $obj['value'];
+                $line['obj']['value'] = $obj['value'];
+                $line['obj']['label'] = $label = $this->findLabels($SourceID, $obj['value']);
                 $line['form'] = "uri";
             }
             foreach( $obj as $property => $value ) {
@@ -429,5 +440,25 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             $export[] = $line;
         }
         return $export;
+    }
+
+    private function findLabels($SourceID, $uri) {
+        // add database lookup here first
+        $url = $this->sourceRepository->findByUid($SourceID)->getUrl();
+        $maybeData = $this->simpleQuery($url, "<".$uri.">", "<http://www.w3.org/2000/01/rdf-schema#label>");
+        $default = $uri;
+        if( $maybeData != null ) {
+            foreach( $maybeData as $entry ){
+                if( isset($entry['obj']['xml:lang'])) {
+                    if( $entry['obj']['xml:lang'] == "de" ) {
+                        return $entry['obj']['value'];
+                    }
+                    elseif( $entry['obj']['xml:lang'] == "en") {
+                        $default = $entry['obj']['value'];
+                    }
+                }
+            }
+        }
+        return $default;
     }
 }
