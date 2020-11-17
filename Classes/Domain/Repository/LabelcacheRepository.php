@@ -1,6 +1,7 @@
 <?php
 namespace Ubl\SparqlToucan\Domain\Repository;
 
+use TYPO3\CMS\Extbase\Persistence\Repository;
 /***
  *
  * This file is part of the "Sparql Toucan" Extension for TYPO3 CMS.
@@ -39,12 +40,13 @@ class LabelcacheRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         );
 
         $labels = $query->execute()->toArray();
+
         foreach( $labels as $label) {
-            if( $label['language'] == $fallback_language ) {
-                $fallback = $label;
+            if( $label->getLanguage() == $fallback_language ) {
+                $fallback = $label->getContent();
             }
-            if( $label['language'] == $language) {
-                return $label;
+            if( $label->getLanguage() == $language) {
+                return $label->getContent();
             }
         }
         if ( isset($fallback) ) {

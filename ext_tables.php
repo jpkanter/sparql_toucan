@@ -43,6 +43,7 @@ call_user_func(
                                     deleteSource,
                                     
                                     explore,
+                                    testSomething,
                                     remoteUpdateDatapoints',
                     'Collection' => 'list, show, new, create, edit, update, delete','CollectionEntry' => 'list, show, new, create, edit, update, delete',
                 ],

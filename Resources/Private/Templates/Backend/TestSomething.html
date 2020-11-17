@@ -1,0 +1,10 @@
+<html xmlns:f="https://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:layout name="Backend" />
+
+<f:section name="content">
+    <h1>Debug Page</h1>
+    <em>This Page can contain different things at different points in time. Its content will always be two variables with different content.</em>
+    <f:debug>{_all}</f:debug>
+    <f:link.action action="testSomething" class="tx_sparqltoucan_fatlink">Test it again</f:link.action>
+</f:section>
+</html>

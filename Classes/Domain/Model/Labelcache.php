@@ -41,6 +41,13 @@ class Labelcache extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $language = '';
 
     /**
+     * Id of the source that is used for the datapoint
+     *
+     * @var \Ubl\SparqlToucan\Domain\Model\Source
+     */
+    protected $sourceId = null;
+
+    /**
      * status
      * 0 = normal entry
      * 1 = temporary entry created cause nothing could be found
@@ -50,13 +57,28 @@ class Labelcache extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $status = 0;
 
     /**
+     * Labelcache constructor.
+     * @param Source|null $sourceId
+     * @param string $subject - URI of the described object
+     * @param string $content - actual label, preferably one lined
+     * @param string $language - language of the label, follows std iso abb
+     * @param int $status - 0 for normal, 1 for temporary entries
+     */
+    public function __construct(\Ubl\SparqlToucan\Domain\Model\Source $sourceId = NULL,  $subject="",$content="", $language="en", $status=0) {
+        $this->sourceId = $sourceId;
+        $this->subject = $subject;
+        $this->content = $content;
+        $this->language = $language;
+        $this->status = $status;
+    }
+    /**
      * Returns the content
      *
      * @return string $content
      */
     public function getContent()
     {
-        return $this->Content;
+        return $this->content;
     }
 
     /**
@@ -77,7 +99,7 @@ class Labelcache extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function getLanguage()
     {
-        return $this->Language;
+        return $this->language;
     }
 
     /**
@@ -115,7 +137,7 @@ class Labelcache extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Returns the status
      *
-     * @return string $subject
+     * @return integer $subject
      */
     public function getStatus()
     {
@@ -125,7 +147,7 @@ class Labelcache extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Sets the status
      *
-     * @param string $status
+     * @param integer $status
      * @return void
      */
     public function setStatus($status)

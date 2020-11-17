@@ -483,9 +483,10 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                     $onelabel->setSourceId($source);
                     $onelabel->setLanguage($entry['obj']['xml:lang']);
                     $onelabel->setContent($entry['obj']['value']);
-                    echo($onelabel->getContent()." <=> ". $entry['obj']['value']);
-                    //$this->labelcacheRepository->add($onelabel);
+
+                    $this->labelcacheRepository->add($onelabel);
                     $persistenceManager->persistAll();
+
                     if( $entry['obj']['xml:lang'] == $language) {
                         $label = $entry['obj']['value'];
                     }
@@ -508,5 +509,50 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
         return $label;
 
+    }
+
+    public function testSomethingAction() {
+        $persistenceManager = $this->objectManager->get("TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager");
+        $datasource = [
+            "source_id" => 1,
+            "uri" => "https://data.finc.info/resource/organisation/DE-15/department/zw01",
+            "content" => "Some Label",
+            "language" => "en",
+            "status" => 1
+        ];
+
+        $a_label = new \Ubl\SparqlToucan\Domain\Model\Labelcache();
+
+        $source = $this->sourceRepository->findByUid($datasource['source_id']);
+        $a_label->setContent($datasource['content']);
+        $a_label->setSourceId($source);
+        $a_label->setLanguage($datasource['language']);
+        $a_label->setSubject($datasource['uri']);
+        $a_label->setStatus($datasource['status']);
+
+        $b_label = new \Ubl\SparqlToucan\Domain\Model\Labelcache($source, $datasource['uri'], $datasource['content'], $datasource['language'], $datasource['status']);
+
+        $received = [
+            "source" => $a_label->getSourceId(),
+            "uri" => $a_label->getSubject(),
+            "content" => $a_label->getContent(),
+            "language" => $a_label->getLanguage(),
+            "status" => $a_label->getStatus()
+        ];
+        $received2 = [
+            "source" => $b_label->getSourceId(),
+            "uri" => $b_label->getSubject(),
+            "content" => $b_label->getContent(),
+            "language" => $b_label->getLanguage(),
+            "status" => $b_label->getStatus()
+
+        ];
+
+        $this->view->assign("alabel", $a_label);
+        $this->view->assign("datasource", $datasource);
+        $this->view->assign("received", $received);
+        $this->view->assign("blabel", $b_label);
+        $this->labelcacheRepository->add($a_label);
+        $persistenceManager->persistAll();
     }
 }
