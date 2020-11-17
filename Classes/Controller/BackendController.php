@@ -53,8 +53,15 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @inject
      */
     protected $sourceRepository = null;
+    /**
+     * labelcacheRepository
+     *
+     * @var Ubl\SparqlToucan\Domain\Repository\LabelcacheRepository
+     * @inject
+     */
+    protected $labelcacheRepository = null;
 
-    pUblic function OverviewAction() {
+    public function OverviewAction() {
         $collections = $this->collectionRepository->findAll();
         $this->view->assign("collections", $collections);
         $sources = $this->sourceRepository->findAll();
@@ -63,7 +70,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->view->assign("datapoints", $datapoints);
     }
 
-    pUblic function showCollectionAction(\Ubl\SparqlToucan\Domain\Model\Collection $collection)
+    public function showCollectionAction(\Ubl\SparqlToucan\Domain\Model\Collection $collection)
     {
         $this->view->assign('collection', $collection);
     }
@@ -74,7 +81,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @param \Ubl\SparqlToucan\Domain\Model\Collection $collection
      * @return void
      */
-    pUblic function updateCollectionAction(\Ubl\SparqlToucan\Domain\Model\Collection $collection)
+    public function updateCollectionAction(\Ubl\SparqlToucan\Domain\Model\Collection $collection)
     {
         $this->collectionRepository->update($collection);
         $this->redirect('overview');
@@ -86,7 +93,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @ignorevalidation $collection
      * @return void
      */
-    pUblic function editCollectionAction(\Ubl\SparqlToucan\Domain\Model\Collection $collection)
+    public function editCollectionAction(\Ubl\SparqlToucan\Domain\Model\Collection $collection)
     {
         $this->view->assign('collection', $collection);
         $entries = $this->collectionEntryRepository->fetchCorresponding($collection);
@@ -442,23 +449,64 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         return $export;
     }
 
-    private function findLabels($SourceID, $uri) {
+    private function findLabels($SourceID, $uri, $language="en") {
         // add database lookup here first
+        $source = $this->sourceRepository->findByUid($SourceID);
+        try {
+            $label = $this->labelcacheRepository->fetchLabel($source, $uri, $language);
+        }
+        catch(\Exception $e) {
+            if( $e->getCode() == 1) //this doesnt look good
+            {
+                $label = $this->getLabel($SourceID, $uri, $language);
+            }
+            else {
+                throw $e;
+            }
+
+        }
+        return $label;
+
+    }
+
+    private function getLabel($SourceID, $uri, $language) {
+        $persistenceManager = $this->objectManager->get("TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager");
+        $fallback_language = "en";
+        $source = $this->sourceRepository->findByUid($SourceID);
         $url = $this->sourceRepository->findByUid($SourceID)->getUrl();
         $maybeData = $this->simpleQuery($url, "<".$uri.">", "<http://www.w3.org/2000/01/rdf-schema#label>");
-        $default = $uri;
         if( $maybeData != null ) {
             foreach( $maybeData as $entry ){
-                if( isset($entry['obj']['xml:lang'])) {
-                    if( $entry['obj']['xml:lang'] == "de" ) {
-                        return $entry['obj']['value'];
+                if( isset($entry['obj']['xml:lang']) and trim($entry['obj']['value']) != "") {
+                    $onelabel = new \Ubl\SparqlToucan\Domain\Model\Labelcache();
+                    $onelabel->setSubject($uri);
+                    $onelabel->setSourceId($source);
+                    $onelabel->setLanguage($entry['obj']['xml:lang']);
+                    $onelabel->setContent($entry['obj']['value']);
+                    echo($onelabel->getContent()." <=> ". $entry['obj']['value']);
+                    //$this->labelcacheRepository->add($onelabel);
+                    $persistenceManager->persistAll();
+                    if( $entry['obj']['xml:lang'] == $language) {
+                        $label = $entry['obj']['value'];
                     }
-                    elseif( $entry['obj']['xml:lang'] == "en") {
-                        $default = $entry['obj']['value'];
+                    if( !isset($label) and $entry['obj']['xml:lang'] == $fallback_language) {
+                        $label = $entry['obj']['value'];
                     }
                 }
             }
         }
-        return $default;
+        //if nothing is found $default wont be set, in this case we create a new dummy label for the time beeing
+        if( !isset($label) ) {
+            $onelabel = new \Ubl\SparqlToucan\Domain\Model\Labelcache();
+            $onelabel->setSubject($uri);
+            $onelabel->setSourceId($source);
+            $onelabel->setLanguage($fallback_language);
+            $onelabel->setContent($uri);
+            $onelabel->setStatus(1);
+            $this->labelcacheRepository->add($onelabel);
+            $label = $uri;
+        }
+        return $label;
+
     }
 }

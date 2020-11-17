@@ -69,5 +69,7 @@ call_user_func(
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('tx_sparqltoucan_domain_model_collectionentry', 'EXT:sparql_toucan/Resources/Private/Language/locallang_csh_tx_sparqltoucan_domain_model_collectionentry.xlf');
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_sparqltoucan_domain_model_collectionentry');
 
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_sparqltoucan_domain_model_labelcache');
+
     }
 );

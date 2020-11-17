@@ -17,6 +17,15 @@ namespace Ubl\SparqlToucan\Domain\Repository;
  */
 class CollectionEntryRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
 {
+    //copy pasted function, ignoring PAGEID cause it makes no sense for  this plugin, i sincerly hope this is no
+    //kind of noob trap i am getting into
+    public function initializeObject()
+    {
+        $querySettings = $this->objectManager->get(\TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings::class);
+        $querySettings->setRespectStoragePage(false);
+        $this->setDefaultQuerySettings($querySettings);
+    }
+
     /**
      * Returns all entries to a corresponding collection
      *
