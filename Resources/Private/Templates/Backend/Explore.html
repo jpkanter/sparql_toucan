@@ -37,11 +37,12 @@
             <th>Predicate</th>
             <th>Object</th>
             <th>Extra Information</th>
+            <th>New Datapoint</th>
         </tr>
 
         <f:for each="{explorer}" as="row">
             <tr>
-                <td>{row.pre -> f:format.raw()}</td>
+                <td>{row.pre.display -> f:format.raw()}</td>
                 <td>
                     <f:if condition="{row.form}=='uri'>">
                         <f:then>
@@ -64,6 +65,17 @@
                         <td>{row.extra -> f:format.crop(maxCharacters: 100)}</td>
                     </f:else>
                 </f:if>
+                <td>
+                    <f:if condition="{row.form} != 'uri'">
+                        <f:form action="newDatapoint"  name="newDatapoint" object="{Datapoint}">
+                            <f:form.hidden property="name" value=""/>
+                            <f:form.hidden property="subject" value="{form.subject}"/>
+                            <f:form.hidden property="predicate" value="{row.pre.value}"/>
+                            <f:form.hidden property="source_id" value="{form.sourceId}"/>
+                            <f:form.submit value="Convert to Datapoint" />
+                        </f:form>
+                    </f:if>
+                </td>
             </tr>
         </f:for>
     </table>

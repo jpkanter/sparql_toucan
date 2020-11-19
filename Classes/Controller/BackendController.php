@@ -408,7 +408,9 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 else {
                     $label = $pre['value'];
                 }
-                $line['pre'] = $a_pre . $pre['value'] . $a_mid . $label . $a_end;
+                $line['pre'] = array();
+                $line['pre']['display'] = $a_pre . $pre['value'] . $a_mid . $label . $a_end;
+                $line['pre']['value'] = $pre['value'];
             }
             else {
                 $line['pre'] = $pre['type']. " - ". $pre['value'];
@@ -512,7 +514,6 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     }
 
     public function testSomethingAction() {
-        $persistenceManager = $this->objectManager->get("TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager");
         $datasource = [
             "source_id" => 1,
             "uri" => "https://data.finc.info/resource/organisation/DE-15/department/zw01",
@@ -552,7 +553,5 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->view->assign("datasource", $datasource);
         $this->view->assign("received", $received);
         $this->view->assign("blabel", $b_label);
-        $this->labelcacheRepository->add($a_label);
-        $persistenceManager->persistAll();
     }
 }

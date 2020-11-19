@@ -6,15 +6,15 @@
 <label for="sourceID">
 	i18n:SourceID
 </label><br />
-	<f:form.select property="sourceId" options="{sources}" optionValueField="uid" optionLabelField="name"/></br>
+	<f:form.select property="sourceId" options="{sources}" optionValueField="uid" optionLabelField="name" value="{sourceId}"/></br>
 <label for="subject">
 	<f:translate key="tx_sparqltoucan_domain_model_datapoint.subject" />
 </label><br />
-	<f:form.textfield property="subject" /><br />
+	<f:form.textfield property="subject" value="{subject}"/><br />
 <label for="predicate">
 	<f:translate key="tx_sparqltoucan_domain_model_datapoint.predicate" />
 </label><br />
-	<f:form.textfield property="predicate" /><br />
+	<f:form.textfield property="predicate" value="{predicate}"/><br/>
 <label for="mode">
 	<f:translate key="tx_sparqltoucan_domain_model_datapoint.mode" />
 </label><br />
