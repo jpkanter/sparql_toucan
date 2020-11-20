@@ -14,4 +14,18 @@
 			</trans-unit>
 		</body>
 	</file>
+	<file source-language="de" datatype="plaintext" original="messages" date="2020-11-20T14:00:28Z" product-name="sparql_toucan">
+		<header/>
+		<body>
+			<trans-unit id="name.description">
+				<source>Name</source>
+			</trans-unit>
+			<trans-unit id="layout.description">
+				<source>Layout</source>
+			</trans-unit>
+			<trans-unit id="style_override.description">
+				<source>Individueller Stil</source>
+			</trans-unit>
+		</body>
+	</file>
 </xliff>

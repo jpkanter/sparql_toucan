@@ -20,4 +20,24 @@
 			</trans-unit>
 		</body>
 	</file>
+	<file source-language="de" datatype="plaintext" original="messages" date="2020-11-17T14:00:28Z" product-name="sparql_toucan">
+		<header/>
+		<body>
+			<trans-unit id="content.description">
+				<source>Bezeichnung/source>
+			</trans-unit>
+			<trans-unit id="subject.description">
+				<source>URI des bezeichneten Prädikats</source>
+			</trans-unit>
+			<trans-unit id="language.description">
+				<source>Sprache der Bezeichnung</source>
+			</trans-unit>
+			<trans-unit id="status.description">
+				<source>Bezeichungsstatus (temporär oder permanent)</source>
+			</trans-unit>
+			<trans-unit id="source_id.description">
+				<source>Datenquelle der Bezeichnung</source>
+			</trans-unit>
+		</body>
+	</file>
 </xliff>

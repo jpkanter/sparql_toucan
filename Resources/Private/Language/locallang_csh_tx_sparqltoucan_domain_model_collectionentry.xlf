@@ -23,4 +23,27 @@
 			</trans-unit>
 		</body>
 	</file>
+	<file source-language="de" datatype="plaintext" original="messages" date="2020-11-20T14:00:28Z" product-name="sparql_toucan">
+		<header/>
+		<body>
+			<trans-unit id="name.description">
+				<source>Name</source>
+			</trans-unit>
+			<trans-unit id="position.description">
+				<source>Position in der Kollektion</source>
+			</trans-unit>
+			<trans-unit id="style.description">
+				<source>Erscheinung</source>
+			</trans-unit>
+			<trans-unit id="style_name.description">
+				<source>CSS-Stil Name</source>
+			</trans-unit>
+			<trans-unit id="datapoint_id.description">
+				<source>Genutzer Datenpunkt</source>
+			</trans-unit>
+			<trans-unit id="collection_i_d.description">
+				<source>Übergeordnete Kollektion</source>
+			</trans-unit>
+		</body>
+	</file>
 </xliff>

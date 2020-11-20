@@ -7,7 +7,18 @@
 				<source>name</source>
 			</trans-unit>
 			<trans-unit id="url.description">
-				<source>url</source>
+				<source>URL of the Data</source>
+			</trans-unit>
+		</body>
+	</file>
+	<file source-language="de" datatype="plaintext" original="messages" date="2020-10-27T14:00:28Z" product-name="sparql_toucan">
+		<header/>
+		<body>
+			<trans-unit id="name.description">
+				<source>Name</source>
+			</trans-unit>
+			<trans-unit id="url.description">
+				<source>URL der Datenquelle</source>
 			</trans-unit>
 		</body>
 	</file>
