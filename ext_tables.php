@@ -42,6 +42,8 @@ call_user_func(
                                     showSource,
                                     deleteSource,
                                     
+                                    labelcacheOverview,
+                                    
                                     explore,
                                     testSomething,
                                     remoteUpdateDatapoints',

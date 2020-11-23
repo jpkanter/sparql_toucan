@@ -298,7 +298,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             // start request to sparql endpoint
 
             $subject = trim($formdata['postcontent']['subject']);
-            if( preg_match("^<.*>$", $subject) == 0) {
+            if( preg_match("^<.*>$^", $subject) == 0) {
                 $subject = "<" . $subject . ">";
             }
             // ^<.*>$
@@ -319,6 +319,18 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             $this->view->assign("debug", $content);
         }
 
+    }
+
+    /**
+     * action labelcache
+     * shows all the labels
+     *
+     * @param array
+     * @return void
+     */
+    public function labelcacheOverviewAction() {
+        $labels = $this->labelcacheRepository->findAll();
+        $this->view->assign("labelcache", $labels);
     }
 
     private function recursiveSparqlQuery($url, $subject, $predicate) {
