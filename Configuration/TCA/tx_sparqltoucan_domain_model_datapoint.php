@@ -116,11 +116,11 @@ return [
         ],
 
         'name' => [
-            'exclude' => true,
+            'exclude' => false,
             'label' => 'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_datapoint.name',
             'config' => [
                 'type' => 'input',
-                'size' => 30,
+                'size' => 255,
                 'eval' => 'trim'
             ],
         ],

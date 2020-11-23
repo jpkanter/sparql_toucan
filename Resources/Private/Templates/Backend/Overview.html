@@ -31,7 +31,7 @@
     <table class="tx_sparqltoucan">
         <tr>
             <th>UID</th>
-            <th>PID</th>
+            <th>Name</th>
             <th>Source</th>
             <th>Subject</th>
             <th>Predicate</th>
@@ -40,7 +40,7 @@
         <f:for each="{datapoints}" as="datapoint">
             <tr>
                 <td>{datapoint.uid}</td>
-                <td>{datapoint.pid}</td>
+                <td>{datapoint.name}</td>
                 <td>{datapoint.sourceId.name}</td>
                 <td>{datapoint.subject}</td>
                 <td>{datapoint.predicate}</td>

@@ -8,8 +8,8 @@
 
     <f:render partial="FormErrors" />
     <f:variable name="testdata" value="{testconnection:1'}" />
-    <f:form action="createDatapoint"  name="newDatapoint" object="{newDatapoint">
-        <f:render partial="Datapoint/FormFields" arguments="{sources:sources}"/>
+    <f:form action="createDatapoint"  name="newDatapoint" object="{newDatapoint}">
+        <f:render partial="Datapoint/FormFields" arguments="{sources:sources, newDatapoint:datapoint}"/>
         <f:form.submit value="Create new" />
         <f:form.submit additionalAttributes="{test:1}" value="Test Connection" />
     </f:form>

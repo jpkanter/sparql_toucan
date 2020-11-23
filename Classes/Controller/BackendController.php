@@ -1,6 +1,7 @@
 <?php
 namespace Ubl\SparqlToucan\Controller;
 
+use Ubl\SparqlToucan\Domain\Model\Datapoint;
 use Ubl\SparqlToucan\Domain\Repository\CollectionRepository;
 use Ubl\SparqlToucan\Domain\Repository\CollectionEntryRepository;
 use Ubl\SparqlToucan\Domain\Repository\SourceRepository;
@@ -110,23 +111,26 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     {
 
     }
+
     /**
      * action newDatapointAction
      *
+     * @param Datapoint|null $newDatapoint
      * @return void
      */
-    public function newDatapointAction()
+    public function newDatapointAction(Datapoint $newDatapoint = Null)
     {
         $sources= $this->sourceRepository->findAll();
         $this->view->assign("sources", $sources);
+        $this->view->assign("newDatapoint", $newDatapoint);
     }
     /**
      * action createDatapoint
      *
-     * @param \Ubl\SparqlToucan\Domain\Model\Collection $newCollection
+     * @param \Ubl\SparqlToucan\Domain\Model\Datapoint $newDatapoint
      * @return void
      */
-    public function createDatapointAction(\Ubl\SparqlToucan\Domain\Model\Datapoint $newDatapoint)
+    public function createDatapointAction(Datapoint $newDatapoint)
     {
         // update content
         $value = $this->recursiveSparqlQuery(

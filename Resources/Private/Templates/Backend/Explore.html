@@ -67,11 +67,11 @@
                 </f:if>
                 <td>
                     <f:if condition="{row.form} != 'uri'">
-                        <f:form action="newDatapoint"  name="newDatapoint" object="{Datapoint}">
+                        <f:form action="newDatapoint"  name="newDatapoint" object="{newDatapoint}">
                             <f:form.hidden property="name" value=""/>
                             <f:form.hidden property="subject" value="{form.subject}"/>
                             <f:form.hidden property="predicate" value="{row.pre.value}"/>
-                            <f:form.hidden property="source_id" value="{form.sourceId}"/>
+                            <f:form.hidden property="sourceId" value="{form.sourceId}"/>
                             <f:form.submit value="Convert to Datapoint" />
                         </f:form>
                     </f:if>
