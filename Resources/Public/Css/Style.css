@@ -4,9 +4,12 @@
     --tou_orange: #F88A19;
     --tou_red: #DA0000;
     --tou_blue: #0D2EA7;
+    --tou_darkblue: #091d6a;
     --tou_lightyellow: #f4f697;
     --tou_purplered: #C93A82;
     --tou_lightgrey: #d4d3d3;
+    --tou_darkgrey: #4c4c4c;
+    --tou_purewhite: #FFFFFF;
 }
 
 .tx-sparql-toucan {
@@ -150,6 +153,12 @@ ul.f3-widget-paginator li a:hover {
     color: var(--tou_white);
 }
 
+table.tx_sparqltoucan_paginator_table tr th {
+    background-color: var(--tou_darkblue);
+    color: var(--tou_purewhite);
+    padding: 0.5rem;
+}
+
 table.tx_sparqltoucan_paginator_table tr td {
     padding: 0.1rem 0.75rem;
     font-size: 1rem;
@@ -157,5 +166,10 @@ table.tx_sparqltoucan_paginator_table tr td {
 
 table.tx_sparqltoucan_paginator_table tr.tx_sparqltoucan_table_temp td {
     font-style: italic;
-    color: var(--tou_lightgrey);
+    color: var(--tou_darkgrey);
+}
+
+table.tx_sparqltoucan_paginator_table tr:hover, table.tx_sparqltoucan_paginator_table tr.tx_sparqltoucan_table_temp:hover td {
+    background: var(--tou_blue);
+    color: var(--tou_purewhite);
 }
