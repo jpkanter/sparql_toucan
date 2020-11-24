@@ -6,17 +6,11 @@
 			<trans-unit id="content.description">
 				<source>Label of the given ressource</source>
 			</trans-unit>
-			<trans-unit id="subject.description">
-				<source>URI of an linked data object</source>
-			</trans-unit>
 			<trans-unit id="language.description">
 				<source>Language of the label</source>
 			</trans-unit>
-			<trans-unit id="status.description">
-				<source>Whether the entry is temporary or permanent</source>
-			</trans-unit>
-			<trans-unit id="source_id.description">
-				<source>Id of the source that is used for the datapoint</source>
+			<trans-unit id="datapoint_id.description">
+				<source>Id of the datapoint this entry belongs to</source>
 			</trans-unit>
 		</body>
 	</file>
@@ -26,17 +20,11 @@
 			<trans-unit id="content.description">
 				<source>Bezeichnung</source>
 			</trans-unit>
-			<trans-unit id="subject.description">
-				<source>URI des bezeichneten Prädikats</source>
-			</trans-unit>
 			<trans-unit id="language.description">
 				<source>Sprache der Bezeichnung</source>
 			</trans-unit>
-			<trans-unit id="status.description">
-				<source>Bezeichungsstatus (temporär oder permanent)</source>
-			</trans-unit>
-			<trans-unit id="source_id.description">
-				<source>Datenquelle der Bezeichnung</source>
+			<trans-unit id="datapoint_id.description">
+				<source>Identifizierungsnummer des Datenpunktes</source>
 			</trans-unit>
 		</body>
 	</file>
