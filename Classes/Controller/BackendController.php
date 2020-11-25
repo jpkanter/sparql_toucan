@@ -132,15 +132,20 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     public function createDatapointAction(Datapoint $newDatapoint)
     {
+        $persistenceManager = $this->objectManager->get("TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager");
         // update content
-        $value = $this->recursiveSparqlQuery(
-            $newDatapoint->getSourceId()->getUrl(),
-            "<".$newDatapoint->getSubject().">",
-            "<".$newDatapoint->getPredicate().">");
-        $newDatapoint->setCachedValue($value);
         $this->datapointRepository->add($newDatapoint);
+        $persistenceManager->persistAll();
+        $this->UpdateDatapointsLanguagePoints($newDatapoint);
         $this->redirect('overview');
     }
+
+    public function updateDatapointLanguagePoints(\Ubl\SparqlToucan\Domain\Model\Datapoint $datapoint)
+    {
+        $datapoint->getUID();
+        $this->simpleQuery($datapoint->getSourceId()->getUrl(), $datapoint->getSubject(), $datapoint->getPredicate());
+    }
+
     /**
      * action createCollection
      *
@@ -298,7 +303,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             // start request to sparql endpoint
 
             $subject = trim($formdata['postcontent']['subject']);
-            if( preg_match("^<.*>$", $subject) == 0) {
+            if( preg_match("^<.*>$^", $subject) == 0) {
                 $subject = "<" . $subject . ">";
             }
             // ^<.*>$
@@ -359,6 +364,13 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
     }
 
+    /**
+     * @param $url URL of the sparql endpoint
+     * @param $subject subject of the standard sparql query involved
+     * @param $predicate predicate of the standard sparql query
+     * @return array containing the jsoned result of the endpoint
+     * @throws \Exception Code 10 - other than status Code 200
+     */
     private function simpleQuery($url, $subject, $predicate) {
         $requestFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Http\RequestFactory::class);
         $additionalOptions = [
@@ -371,11 +383,17 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $response = $requestFactory->request($url, 'POST', $additionalOptions);
         if ($response->getStatusCode() === 200) {
             $content = $response->getBody()->getContents();
-            $jsoned = json_decode($content, True);
-            return $jsoned['results']['bindings'];
+            try {
+                $jsoned = json_decode($content, True);
+                return $jsoned['results']['bindings'];
+            }
+            catch(\Exception $e) {
+                throw $e;
+            }
+
         }
         else {
-            return null;
+            throw new \Exception("Couldnt interpret returned server message", 10);
         }
     }
     //overload
