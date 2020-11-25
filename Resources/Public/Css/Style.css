@@ -4,13 +4,16 @@
     --tou_orange: #F88A19;
     --tou_red: #DA0000;
     --tou_blue: #0D2EA7;
+    --tou_darkblue: #091d6a;
     --tou_lightyellow: #f4f697;
     --tou_purplered: #C93A82;
     --tou_lightgrey: #d4d3d3;
+    --tou_darkgrey: #4c4c4c;
+    --tou_purewhite: #FFFFFF;
 }
 
 .tx-sparql-toucan {
-    height:100%;
+    height: 800px; /*Change this, only for debugging*/
     overflow-y: scroll;
     margin-left: 1em;
     margin-top: 1em;
@@ -80,4 +83,93 @@ div.tx_sparqltoucan_central {
     background: var(--tou_lightyellow);
     border-radius: 2em;
     padding: 2em;
+}
+
+div.tx_sparqltoucan_menu ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+
+}
+
+div.tx_sparqltoucan_menu ul li {
+    float: left;
+    rem: 1.5rem;
+    margin: 0.25rem;
+    padding: 0.25rem 0.75rem;
+    display: inline-block;
+    font-size: 18px;
+    border: 2px solid var(--tou_black);
+    background-color: var(--tou_lightyellow);
+}
+
+div.tx_sparqltoucan_menu ul li:hover {
+    background-color: var(--tou_purplered);
+    color: var(--tou_white);
+    border: 2px solid var(--tou_orange);
+}
+
+div.tx_sparqltoucan_menu ul li:hover a {
+    color: var(--tou_white);
+    text-decoration: none;
+    display: inline-block;
+}
+
+ul.f3-widget-paginator {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+ul.f3-widget-paginator li {
+    float: left;
+    margin: 0.25rem;
+}
+
+ul.f3-widget-paginator li.current {
+    display: inline-block;
+    border: 1px solid var(--tou_red);
+    background-color: var(--tou_red);
+    color: var(--tou_white);
+    padding: 0.25rem 0.75rem;
+    font-size: 1.2rem;
+    font-weight: bolder;
+}
+
+ul.f3-widget-paginator li a {
+    display: inline-block;
+    border: 1px solid var(--tou_black);
+    color: var(--tou_black);
+    padding: 0.25rem 0.75rem;
+    font-size: 1.2rem;
+    font-weight: bolder;
+}
+
+ul.f3-widget-paginator li a:hover {
+    text-decoration: none;
+    background-color: var(--tou_orange);
+    color: var(--tou_white);
+}
+
+table.tx_sparqltoucan_paginator_table tr th {
+    background-color: var(--tou_darkblue);
+    color: var(--tou_purewhite);
+    padding: 0.5rem;
+}
+
+table.tx_sparqltoucan_paginator_table tr td {
+    padding: 0.1rem 0.75rem;
+    font-size: 1rem;
+}
+
+table.tx_sparqltoucan_paginator_table tr.tx_sparqltoucan_table_temp td {
+    font-style: italic;
+    color: var(--tou_darkgrey);
+}
+
+table.tx_sparqltoucan_paginator_table tr:hover, table.tx_sparqltoucan_paginator_table tr.tx_sparqltoucan_table_temp:hover td {
+    background: var(--tou_blue);
+    color: var(--tou_purewhite);
 }

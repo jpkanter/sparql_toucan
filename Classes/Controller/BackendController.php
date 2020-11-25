@@ -326,6 +326,18 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
     }
 
+    /**
+     * action labelcache
+     * shows all the labels
+     *
+     * @param array
+     * @return void
+     */
+    public function labelcacheOverviewAction() {
+        $labels = $this->labelcacheRepository->findAll();
+        $this->view->assign("labelcache", $labels);
+    }
+
     private function recursiveSparqlQuery($url, $subject, $predicate) {
         $languageFilter = "de"; # TODO
         $requestFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Http\RequestFactory::class);

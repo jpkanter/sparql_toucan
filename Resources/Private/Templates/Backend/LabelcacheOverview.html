@@ -1,0 +1,40 @@
+<html xmlns:f="https://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:layout name="Backend" />
+
+<f:section name="content">
+
+    <h1>All the Labels</h1>
+
+    <f:flashMessages />
+
+    <table class="tx_sparqltoucan_paginator_table">
+        <tr>
+            <th>Source</th>
+            <th>Subject</th>
+            <th>Language</th>
+            <th>Label</th>
+            <th>Status</th>
+        </tr>
+        <f:widget.paginate objects="{labelcache}" as="paginateLabel" configuration="{itemsPerPage: 30, insertAbove: 0, insertBelow: 1, maximumNumberOfLinks: 10}">
+            <f:for each="{paginateLabel}" as="label">
+                <f:if condition="{label.status} == 0">
+                    <f:then><tr></f:then>
+                    <f:else><tr class="tx_sparqltoucan_table_temp"></f:else>
+                </f:if>
+                    <td>{label.sourceId.name}</td>
+                    <td>{label.subject}</td>
+                    <td>{label.language}</td>
+                    <td>{label.content}</td>
+                    <td>
+                        <f:if condition="{label.status} == 0">
+                            <f:then>Permanent</f:then>
+                            <f:else>Temporary</f:else>
+                        </f:if>
+                    </td>
+                </tr>
+            </f:for>
+        </f:widget.paginate>
+    </table>
+
+</f:section>
+</html>
