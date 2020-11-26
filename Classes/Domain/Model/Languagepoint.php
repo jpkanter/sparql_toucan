@@ -15,7 +15,7 @@ namespace Ubl\SparqlToucan\Domain\Model;
 /**
  * Languagepoint, the actual data that is supposed to be in a datapoint but sorted by language
  */
-class Labelcache extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+class Languagepoint extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
 
     /**

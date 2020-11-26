@@ -50,7 +50,7 @@ CREATE TABLE tx_sparqltoucan_domain_model_datapoint (
 	pid int(11) DEFAULT '0' NOT NULL,
 
 	name varchar(255) DEFAULT '' NOT NULL,
-	cached_value text DEFAULT '' NOT NULL, /*this has to go in favor of languagepoint*/
+	cached_value text DEFAULT '' NOT NULL,
 	subject varchar(255) DEFAULT '' NOT NULL,
 	predicate varchar(255) DEFAULT '' NOT NULL,
 	mode int(11) DEFAULT '0' NOT NULL,
@@ -221,7 +221,7 @@ CREATE TABLE tx_sparqltoucan_domain_model_labelcache (
 #
 # Table structure for table 'tx_sparqltoucan_domain_model_languagepoint'
 #
-CREATE TABLE tx_sparqltoucan_domain_model_labelcache (
+CREATE TABLE tx_sparqltoucan_domain_model_languagepoint (
 
      uid int(11) NOT NULL auto_increment,
      pid int(11) DEFAULT '0' NOT NULL,

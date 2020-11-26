@@ -2,10 +2,12 @@
 namespace Ubl\SparqlToucan\Controller;
 
 use Ubl\SparqlToucan\Domain\Model\Datapoint;
+use Ubl\SparqlToucan\Domain\Model\Languagepoint;
 use Ubl\SparqlToucan\Domain\Repository\CollectionRepository;
 use Ubl\SparqlToucan\Domain\Repository\CollectionEntryRepository;
 use Ubl\SparqlToucan\Domain\Repository\SourceRepository;
 use Ubl\SparqlToucan\Domain\Repository\DatapointRepository;
+use Ubl\SparqlToucan\Domain\Repository\LanguagepointRepository;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use Psr\Http\Message\RequestFactoryInterface;
@@ -61,6 +63,13 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @inject
      */
     protected $labelcacheRepository = null;
+    /**
+     * languagepointRepository
+     *
+     * @var Ubl\SparqlToucan\Domain\Repository\LanguagepointRepository
+     * @inject
+     */
+    protected $languagepointRepository = null;
 
     public function OverviewAction() {
         $collections = $this->collectionRepository->findAll();
@@ -136,14 +145,68 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         // update content
         $this->datapointRepository->add($newDatapoint);
         $persistenceManager->persistAll();
-        $this->UpdateDatapointsLanguagePoints($newDatapoint);
+        $this->updateDatapointLanguagepoints($newDatapoint);
         $this->redirect('overview');
     }
 
-    public function updateDatapointLanguagePoints(\Ubl\SparqlToucan\Domain\Model\Datapoint $datapoint)
+    public function updateDatapointLanguagepoints(\Ubl\SparqlToucan\Domain\Model\Datapoint $datapoint)
     {
         $datapoint->getUID();
-        $this->simpleQuery($datapoint->getSourceId()->getUrl(), $datapoint->getSubject(), $datapoint->getPredicate());
+        try {
+            $subject = $datapoint->getSubject();
+            if( preg_match("^<.*>$^", $subject) == 0) {
+                $subject = "<" . $subject . ">";
+            }
+            $predicate = $datapoint->getPredicate();
+            if( preg_match("^<.*>$^", $predicate) == 0) {
+                $predicate = "<" . $predicate . ">";
+            }
+            $jsoned = $this->simpleQuery($datapoint->getSourceId()->getUrl(), $subject, $predicate);
+            /* This might get really interesting if we assume that people modeled their linked data incorrectly. If every
+            thing is in order, there should be either a language identifier or some other thing that tells us informations
+            but its entirely possible that at least the following things happen:
+            - there is a language part AND literal URLS
+            - there is more than one literal string
+             * */
+            $languagePoints = array();
+            $counter_nonLanguage = 0;
+            $counter_Language = 0;
+            foreach( $jsoned as $row ) {
+                $node = $row['obj'];
+                //check for language
+                if( isset($node['xml:lang']) ) {
+                    $l_point = new Languagepoint($datapoint, $node['value'], $node['xml:lang']);
+                    $languagePoints[] = clone $l_point;
+                    $counter_Language+= 1;
+                }
+                else {
+                    $l_point = new Languagepoint($datapoint, $node['value']); // default language
+                    $languagePoints[] = clone $l_point; //things get dicey if there is more than one
+                    $counter_nonLanguage+= 1;
+                }
+            }
+            if( $counter_Language > 0 and $counter_nonLanguage > 0 ) {
+                //language AND literals, something has to be done
+                throw new \Exception("Language and literal entries at the same time", 6);
+            }
+            if( $counter_nonLanguage > 1 ) {
+                //more than one literal
+                throw new \Exception("More than one non-language entry in node.", 5);
+            }
+            if( $counter_nonLanguage == 0 and $counter_Language == 0) {
+                //no entry at all
+                throw new \Exception("Nothing found in the remote Source", 4);
+            }
+            //everything is okay
+            foreach( $languagePoints as $l_point ) {
+                $this->languagepointRepository->add($l_point);
+            }
+            return $languagePoints;
+        }
+        catch( \Exception $e ) {
+            return $e->getMessage();
+        }
+
     }
 
     /**
@@ -262,26 +325,19 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     public function remoteUpdateDatapointsAction() {
         $persistenceManager = $this->objectManager->get("TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager");
         //request test
-        $debug = array();
-        $datapoints = $this->datapointRepository->findAll()->toArray();
-        foreach( $datapoints as $dataentry ) {
-            $url = $dataentry->getSourceId()->getUrl();
-            $sub = '<'.$dataentry->getSubject().'>';
-            $pred = '<'.$dataentry->getPredicate().'>';
-            $value = $this->recursiveSparqlQuery($url, $sub, $pred);
-            array_push($debug, $this->simpleQuery($url, $sub, $pred));
-            $content = "";
-            foreach( $value as $line) {
-                if( strlen($content) > 0) { $content.= "\n";}
-                $content.= $line;
+        $datapoints = $this->datapointRepository->findAll();
+        $totallist = array();
+        foreach( $datapoints as $point ) {
+            try {
+                $pointList = $this->updateDatapointLanguagepoints($point);
+                $totallist = array_merge($totallist, $pointList);
             }
-            $dataentry->setCachedValue($content);
-            echo( $content);
-            $this->datapointRepository->update($dataentry);
-            $persistenceManager->persistAll();
+            catch( \Exception $e ) {
+                echo $e->getMessage()."<br>";
+            }
+
         }
-        $this->view->assign("debug", $debug);
-        $this->view->assign("datapoints", $this->datapointRepository->findAll());
+        $this->view->assign("languagepoints", $totallist);
 
     }
     /**
@@ -385,6 +441,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     private function simpleQuery($url, $subject, $predicate) {
         $requestFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Http\RequestFactory::class);
+
         $additionalOptions = [
             'headers' => ['Cache-Control' => 'no-cache'],
             'form_params' => [
@@ -548,44 +605,11 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     }
 
     public function testSomethingAction() {
-        $datasource = [
-            "source_id" => 1,
-            "uri" => "https://data.finc.info/resource/organisation/DE-15/department/zw01",
-            "content" => "Some Label",
-            "language" => "en",
-            "status" => 1
-        ];
-
-        $a_label = new \Ubl\SparqlToucan\Domain\Model\Labelcache();
-
-        $source = $this->sourceRepository->findByUid($datasource['source_id']);
-        $a_label->setContent($datasource['content']);
-        $a_label->setSourceId($source);
-        $a_label->setLanguage($datasource['language']);
-        $a_label->setSubject($datasource['uri']);
-        $a_label->setStatus($datasource['status']);
-
-        $b_label = new \Ubl\SparqlToucan\Domain\Model\Labelcache($source, $datasource['uri'], $datasource['content'], $datasource['language'], $datasource['status']);
-
-        $received = [
-            "source" => $a_label->getSourceId(),
-            "uri" => $a_label->getSubject(),
-            "content" => $a_label->getContent(),
-            "language" => $a_label->getLanguage(),
-            "status" => $a_label->getStatus()
-        ];
-        $received2 = [
-            "source" => $b_label->getSourceId(),
-            "uri" => $b_label->getSubject(),
-            "content" => $b_label->getContent(),
-            "language" => $b_label->getLanguage(),
-            "status" => $b_label->getStatus()
-
-        ];
-
-        $this->view->assign("alabel", $a_label);
-        $this->view->assign("datasource", $datasource);
-        $this->view->assign("received", $received);
-        $this->view->assign("blabel", $b_label);
+        $datapoint = $this->datapointRepository->findByIdentifier(11);
+        $this->view->assign("debug9", $this->languagepointRepository->fetchCorresponding($datapoint));
+        $this->languagepointRepository->deleteCorresponding($datapoint);
+        //$this->view->assign("debug1", $this->updateDatapointLanguagepoints($datapoint));
+        //$datapoint = $this->datapointRepository->findByIdentifier(9);
+        //$this->view->assign("debug2", $this->updateDatapointLanguagepoints($datapoint));
     }
 }

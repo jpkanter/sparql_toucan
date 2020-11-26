@@ -10,13 +10,13 @@
         <tr>
 
         </tr>
-        <f:for each="{datapoints}" as="entry">
+        <f:for each="{languagepoint}" as="entry">
             <tr>
-                <td>{entry.uid}</td>
-                <td>{entry.name}</td>
-                <td>{entry.subject}</td>
-                <td>{entry.predicate}</td>
-                <td>{entry.cachedValue}</td>
+                <td>{langugepoint.uid}</td>
+                <td>{languagepoint.datapoint_id.name}</td>
+                <td>{languagepoint.datapoint_id.source_id.name}</td>
+                <td>{languagepoint.language}</td>
+                <td>{languagepoint.content}</td>
             </tr>
         </f:for>
     </table>
