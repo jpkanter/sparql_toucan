@@ -77,7 +77,13 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $sources = $this->sourceRepository->findAll();
         $this->view->assign("sources", $sources);
         $datapoints = $this->datapointRepository->findAll();
+        $supplement = array();
+        foreach( $datapoints as $key => $value ) {
+            $lang = $this->languagepointRepository->fetchCorresponding($value);
+            $supplement[$key] = $lang;
+        }
         $this->view->assign("datapoints", $datapoints);
+        $this->view->assign("supplement", $supplement);
     }
 
     public function showCollectionAction(\Ubl\SparqlToucan\Domain\Model\Collection $collection)
@@ -394,6 +400,18 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->view->assign("labelcache", $labels);
     }
 
+    /**
+     * action languagepoint
+     * shows all languagepoint without regard for order
+     *
+     * @param void
+     * @return void
+     */
+    public function languagepointOverviewAction() {
+        $languagepoints = $this->languagepointRepository->findAll();
+        $this->view->assign("languagepoints", $languagepoints);
+    }
+
     private function recursiveSparqlQuery($url, $subject, $predicate) {
         $languageFilter = "de"; # TODO
         $requestFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Http\RequestFactory::class);
@@ -607,7 +625,8 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     public function testSomethingAction() {
         $datapoint = $this->datapointRepository->findByIdentifier(11);
         $this->view->assign("debug9", $this->languagepointRepository->fetchCorresponding($datapoint));
-        $this->languagepointRepository->deleteCorresponding($datapoint);
+        $this->view->assign("debug7", $datapoint);
+        //$this->languagepointRepository->deleteCorresponding($datapoint);
         //$this->view->assign("debug1", $this->updateDatapointLanguagepoints($datapoint));
         //$datapoint = $this->datapointRepository->findByIdentifier(9);
         //$this->view->assign("debug2", $this->updateDatapointLanguagepoints($datapoint));

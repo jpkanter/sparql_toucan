@@ -13,8 +13,6 @@
 }
 
 .tx-sparql-toucan {
-    height: 800px; /*Change this, only for debugging*/
-    overflow-y: scroll;
     margin-left: 1em;
     margin-top: 1em;
 }
@@ -83,6 +81,15 @@ div.tx_sparqltoucan_central {
     background: var(--tou_lightyellow);
     border-radius: 2em;
     padding: 2em;
+}
+
+.tx_toucan_language_block {
+    display: inline-block;
+    font-weight: bolder;
+    border: 1px solid var(--tou_black);
+    font-size: 0.8rem;
+    font-family: "Courier 10 Pitch";
+    padding: 0.05rem 0.2rem
 }
 
 div.tx_sparqltoucan_menu ul {

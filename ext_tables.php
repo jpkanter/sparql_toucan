@@ -43,6 +43,7 @@ call_user_func(
                                     deleteSource,
                                     
                                     labelcacheOverview,
+                                    languagepointOverview,
                                     
                                     explore,
                                     testSomething,

@@ -9,7 +9,7 @@
     <div class="tx_sparqltoucan_menu">
         <ul>
             <li><f:link.action action="labelcacheOverview">Labelcache</f:link.action></li>
-            <li>Second thing</li>
+            <li><f:link.action action="languagepointOverview">Languagepoint</f:link.action></li>
             <li>Third thing</li>
         </ul>
     </div>
@@ -45,14 +45,20 @@
             <th>Predicate</th>
             <th>Value</th>
         </tr>
-        <f:for each="{datapoints}" as="datapoint">
+        <f:for each="{datapoints}" as="datapoint" key="for_key">
             <tr>
                 <td>{datapoint.uid}</td>
                 <td>{datapoint.name}</td>
                 <td>{datapoint.sourceId.name}</td>
                 <td>{datapoint.subject}</td>
                 <td>{datapoint.predicate}</td>
-                <td><strong><f:format.crop maxCharacters="200" append="&nbsp;[...]">{datapoint.cachedValue -> f:format.nl2br()}</f:format.crop></strong></td>
+                <td>
+                    <f:for each="{supplement.{for_key}}" as="sub_points">
+                        <strong>{sub_points.content}</strong>
+                        <span class="tx_toucan_language_block">{sub_points.language}</span>
+                        <br>
+                    </f:for>
+                </td>
             </tr>
         </f:for>
     </table>
@@ -86,5 +92,7 @@
 
     <p><em>Only real with capitalised nouns in english</em></p>
     <f:link.action action="testSomething" class="tx_sparqltoucan_fatlink">Do they Debug Case of the Day.</f:link.action>
+
+    <f:debug>{_all}</f:debug>
 </f:section>
 </html>
