@@ -1,6 +1,9 @@
 <?php
 namespace Ubl\SparqlToucan\Domain\Repository;
 
+use TYPO3\CMS\Extbase\Persistence\Repository;
+use Ubl\SparqlToucan\Domain\Model\Collection;
+
 /***
  *
  * This file is part of the "Sparql Toucan" Extension for TYPO3 CMS.
@@ -19,6 +22,7 @@ class CollectionEntryRepository extends \TYPO3\CMS\Extbase\Persistence\Repositor
 {
     //copy pasted function, ignoring PAGEID cause it makes no sense for  this plugin, i sincerly hope this is no
     //kind of noob trap i am getting into
+
     public function ignorePID()
     {
         $querySettings = $this->objectManager->get(\TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings::class);
@@ -30,12 +34,22 @@ class CollectionEntryRepository extends \TYPO3\CMS\Extbase\Persistence\Repositor
      * Returns all entries to a corresponding collection
      *
      * @param \Ubl\SparqlToucan\Domain\Model\Collection $collection
-     * @return \Ubul\SparqlToucan\Domain\Model\CollectionEntry $collectionEntry
+     * @return \Ubl\SparqlToucan\Domain\Model\CollectionEntry $collectionEntry
      */
-    public function fetchCorresponding($collectionId) {
+    public function fetchCorresponding(Collection $collection) {
 
         $query = $this->createQuery();
-        $query->matching($query->equals('collection_i_d', $collectionId));
+        $query->matching($query->equals('collection_i_d', $collection));
         return $query->execute();
+    }
+
+    public function deleteCorresponding(Collection $collection) {
+        $persistenceManager = $this->objectManager->get("TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager");
+        $entries = $this->fetchCorresponding($collection);
+        foreach($entries as $entry) {
+            $this->remove($entry);
+
+        }
+        $persistenceManager->persistAll();
     }
 }

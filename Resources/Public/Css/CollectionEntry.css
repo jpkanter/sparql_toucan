@@ -1,0 +1,26 @@
+.tx_sparqltoucan_ce_none { /* #0 */
+    /*font-style: normal;*/
+    /*Placeholder in case i actually want to style no-style in some way*/
+}
+
+.tx_sparqltoucan_ce_bold { /* #1 */
+    font-weight: bolder;
+}
+
+.tx_sparqltoucan_ce_italic { /* #2 */
+    font-style: italic;
+}
+
+.tx_sparqltoucan_ce_bold-italic { /* #3 */
+    font-style: italic;
+    font-weight: bolder;
+}
+
+.tx_sparqltoucan_ce_thin { /* #4 */
+    font-weight: lighter;
+}
+
+.tx_sparqltoucan_ce_thin-italic { /* #5 */
+    font-weight: lighter;
+    font-style: italic;
+}

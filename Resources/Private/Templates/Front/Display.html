@@ -6,10 +6,16 @@
 
     <h2>Kollektion: "{collection.name}"</h2>
     <f:if condition="{collection.layout}==1">
-        <f:render partial="Front/1row" arguments="{entries:entries}" />
+        <f:render partial="CollectionDisplay/1row" arguments="{entries:entries}" />
     </f:if>
     <f:if condition="{collection.layout}==2">
-        <f:render partial="Front/2row" arguments="{entries:entries}" />
+        <f:render partial="CollectionDisplay/2row" arguments="{entries:entries}" />
     </f:if>
+    <f:debug>{_all}</f:debug>
 </f:section>
+
+<f:section name="FooterAssets">
+    <link rel="stylesheet" href="{f:uri.resource(path:'Css/CollectionEntry.css')}"/>
+</f:section>
+
 </htm

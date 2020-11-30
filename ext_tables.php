@@ -48,7 +48,7 @@ call_user_func(
                                     explore,
                                     testSomething,
                                     remoteUpdateDatapoints',
-                    'Collection' => 'list, show, new, create, edit, update, delete','CollectionEntry' => 'list, show, new, create, edit, update, delete',
+                    'Collection' => 'list, show, new, create, edit, update, delete','CollectionEntry.css' => 'list, show, new, create, edit, update, delete',
                 ],
                 [
                     'access' => 'user,group',

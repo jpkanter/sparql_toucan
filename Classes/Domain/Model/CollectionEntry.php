@@ -46,6 +46,13 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $styleName = '';
 
     /**
+     * tempValue
+     *
+     * @var string
+     */
+    protected $tempValue = '';
+
+    /**
      * the referenced datapoint
      *
      * @var \Ubl\SparqlToucan\Domain\Model\Datapoint
@@ -141,6 +148,28 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setStyleName($styleName)
     {
         $this->styleName = $styleName;
+    }
+
+    /**
+     * Returns the tempValue
+     *
+     * @return string $tempValue
+     */
+    public function getTempValue()
+    {
+        return $this->tempValue;
+    }
+
+    /**
+     * Sets the tempValue, a variable that doesnt exists in  the database and is here for display reasons
+     * it also might be a quite ugly hack
+     *
+     * @param string $tempValue
+     * @return void
+     */
+    public function setTempValue($tempValue)
+    {
+        $this->tempValue = $tempValue;
     }
 
     /**

@@ -53,11 +53,47 @@ class FrontController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
      * @inject
      */
     protected $sourceRepository = null;
+    /**
+     * labelcacheRepository
+     *
+     * @var Ubl\SparqlToucan\Domain\Repository\LabelcacheRepository
+     * @inject
+     */
+    protected $labelcacheRepository = null;
+    /**
+     * languagepointRepository
+     *
+     * @var Ubl\SparqlToucan\Domain\Repository\LanguagepointRepository
+     * @inject
+     */
+    protected $languagepointRepository = null;
+
+    protected function getLanguage() {
+        //this abstracts the language name for the moment but is no permanent solution
+        /*Typo V9*/
+        /*
+                $languageAspect = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Context\Context::class)->getAspect('language');
+                $sys_language_uid = $languageAspect->getId();
+                //or
+                $context = GeneralUtility::makeInstance(Context::class);
+                // The requested language of the current page as integer (uid)
+                $currentLanguageUid = $context->getPropertyFromAspect('language', 'id');
+        */
+        // $GLOBALS['TSFE']->sys_language_uid
+        if (TYPO3_MODE === 'FE') {
+            if (isset($GLOBALS['TSFE']->config['config']['language'])) {
+                return $GLOBALS['TSFE']->config['config']['language'];
+            }
+        } elseif (strlen($GLOBALS['BE_USER']->uc['lang']) > 0) {
+            return $GLOBALS['BE_USER']->uc['lang'];
+        }
+        return 'en'; //default
+    }
 
     public function DisplayAction() {
         $collectionId= $this->settings['choosenCollection'];
         $collection = $this->collectionRepository->findByIdentifier($collectionId);
-        $entries = $this->collectionEntryRepository->fetchCorresponding($collection->getUid());
+        $entries = $this->collectionEntryRepository->fetchCorresponding($collection)->toArray();
         /*
         $points = array();
         foreach( $entries->toArray() as $entry) {
@@ -66,6 +102,15 @@ class FrontController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                 array_push($points, $temp);
             }
         }*/
+
+        $sys_language_name = $this->getLanguage();
+        $testint = 0;
+        foreach( $entries as &$entry) {
+            $value = $this->languagepointRepository->fetchSpecificLanguage($entry->getDatapointId(), $sys_language_name);
+            $entry->SetTempValue($value);
+            $entry->getDatapointId()->setCachedValue($value);
+        }
+        $this->view->assign("test", $testint);
         $this->view->assign("collection", $collection);
         $this->view->assign("entries", $entries);
     }
