@@ -61,19 +61,132 @@
 				<source>Style</source>
 			</trans-unit>
 			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.style_name">
-				<source>Style Name</source>
+				<source>CSS Style Name</source>
 			</trans-unit>
 			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.datapoint_id">
-				<source>Datapoint Id</source>
+				<source>Datapoint</source>
 			</trans-unit>
 			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.collection_i_d">
-				<source>Collection I D</source>
+				<source>Collection</source>
 			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_sparqlfront.name">
 				<source>Sparql Toucan Addin</source>
 			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.style0">
+				<source>No Styling</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.style_bold">
+				<source>Bold</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.style_italic">
+				<source>Italic</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.style_bolditalic">
+				<source>Bolt &amp; Italic</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.style_thin">
+				<source>Thin</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.style_thinitalic">
+				<source>Thin &amp; Italic</source>
+			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_sparqlfront.description">
 				<source>Singular Addin that displays a collection of the sparql toucan extension. Needs additional setup</source>
+			</trans-unit>
+		</body>
+	</file>
+	<file source-language="de" datatype="plaintext" original="messages" date="2020-11-30T15:12:22Z" product-name="sparql_toucan">
+		<header/>
+		<body>
+			<trans-unit id="tx_sparqltoucan_domain_model_source">
+				<source>Quell-Schnittstelle</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_source.name">
+				<source>Name</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_source.url">
+				<source>Url</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_datapoint">
+				<source>Datenpunkt</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_datapoint.name">
+				<source>Name</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_datapoint.cached_value">
+				<source>Zwischenwert</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_datapoint.subject">
+				<source>Subject</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_datapoint.predicate">
+				<source>Predicate</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_datapoint.mode">
+				<source>Mode</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_datapoint.auto_update">
+				<source>automatische Aktualisierung</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_datapoint.source_id">
+				<source>Quelle</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_collection">
+				<source>Kollektion</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_collection.name">
+				<source>Name</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_collection.layout">
+				<source>Layout</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_collection.style_override">
+				<source>Überschreibender Stil</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry">
+				<source>Kollektionseintrag</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.name">
+				<source>Name</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.position">
+				<source>Position</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.style">
+				<source>Standard-Stil</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.style_name">
+				<source>CSS-Stil Name</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.datapoint_id">
+				<source>Datenpunkt</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.collection_i_d">
+				<source>Kollektion</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_sparqlfront.name">
+				<source>Sparql Toucan Erweiterung</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.style0">
+				<source>Kein Stil</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.style_bold">
+				<source>Fett</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.style_italic">
+				<source>Kursiv</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.style_bolditalic">
+				<source>Fett &amp; Kursiv</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.style_thin">
+				<source>Dünn</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.style_thinitalic">
+				<source>Dünn &amp; Kursiv</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_sparqlfront.description">
+				<source>Selbststehendes Add-In das Linked Data anzeigt, benötigt weitere Einrichtung.</source>
 			</trans-unit>
 		</body>
 	</file>

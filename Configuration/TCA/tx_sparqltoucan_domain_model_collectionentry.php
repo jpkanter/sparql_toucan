@@ -120,7 +120,7 @@ return [
             'label' => 'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.name',
             'config' => [
                 'type' => 'input',
-                'size' => 30,
+                'size' => 128,
                 'eval' => 'trim'
             ],
         ],
@@ -130,24 +130,31 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 4,
-                'eval' => 'int'
-            ]
+                'eval' => 'trim'
+            ],
         ],
         'style' => [
             'exclude' => true,
             'label' => 'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style',
             'config' => [
-                'type' => 'input',
-                'size' => 4,
-                'eval' => 'int'
-            ]
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'items' => [
+                    ['LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style0', 0],
+                    ['LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_bold', 1],
+                    ['LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_italic', 2],
+                    ['LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_bolditalic', 3],
+                    ['LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_thin', 4],
+                    ['LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_thinitalic', 5],
+                ],
+            ],
         ],
         'style_name' => [
             'exclude' => true,
             'label' => 'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_name',
             'config' => [
                 'type' => 'input',
-                'size' => 30,
+                'size' => 128,
                 'eval' => 'trim'
             ],
         ],
