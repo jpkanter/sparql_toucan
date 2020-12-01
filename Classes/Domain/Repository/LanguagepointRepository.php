@@ -33,6 +33,7 @@ class LanguagepointRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     //show available languages
 
     public function fetchCorresponding(Datapoint $datapoint) {
+        //findBy('datapoint_id', $datapoint)
         $query = $this->createQuery();
         $query->matching($query->equals('datapoint_id', $datapoint));
         //$query->statement("SELECT * from  	tx_sparqltoucan_domain_model_languagepoint  WHERE datapoint_id = ".$datapoint->getUid()." AND deleted = 0 AND hidden = 0");

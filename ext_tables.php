@@ -27,6 +27,8 @@ call_user_func(
                                     
                                     createCollectionEntry, 
                                     deleteCollectionEntry, 
+                                    showCollectionEntry,
+                                    updateCollectionEntry,
                                     
                                     newDatapoint,
                                     editDatapoint,

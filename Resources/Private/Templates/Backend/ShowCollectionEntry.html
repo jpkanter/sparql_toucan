@@ -1,0 +1,69 @@
+<html xmlns:f="https://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:layout name="Backend" />
+
+<f:section name="content">
+
+    <f:flashMessages />
+
+    <f:render partial="FormErrors" />
+
+    <div class="tx_sparqltoucan_formworld">
+        <h2>Edit of Collection Entry #{ThisEntry.uid}</h2>
+        <f:form action="updateCollectionEntry" name="collectionEntry" object="{ThisEntry}" >
+            <f:form.hidden property="collectionID" value="{ThisEntry.collectionID}"/>
+
+            <label for="name">Name</label>
+                <f:form.textfield property="name" size="50" type="text" placeholder="[Name]" maxlength="128" value="{ThisEntry.name}"/>
+            <label for="position">Position</label>
+                <f:form.textfield property="position" size="4" type="integer" placeholder="[position]" maxlength="4" value="{ThisEntry.position}"/>
+            <label for="style">Style</label>
+                <f:form.select property="style" value="{ThisEntry.style}">
+                    <f:form.select.option value="0"><f:translate key="LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style0" /></f:form.select.option>
+                    <f:form.select.option value="1"><f:translate key="LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_bold" /></f:form.select.option>
+                    <f:form.select.option value="2"><f:translate key="LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_italic" /></f:form.select.option>
+                    <f:form.select.option value="3"><f:translate key="LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_bolditalic" /></f:form.select.option>
+                    <f:form.select.option value="4"><f:translate key="LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_thin" /></f:form.select.option>
+                    <f:form.select.option value="5"><f:translate key="LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_thinitalic" /></f:form.select.option>
+                </f:form.select>
+            <label for="style_name">CSS Style Name</label>
+                <f:form.textfield property="style_name" size="50" type="text" placeholder="[CSS Style Class Name" maxlength="128" value="{ThisEntry.style_name}"/>
+            <label for="datapoint_id">Datapoint</label>
+                <f:form.select property="datapointId" options="{Datapoints}" optionValueField="uid" optionLabelField="name" value="{ThisEntry.datapointId}"/>
+            <div class="additional_data">
+                [Current Datapoint]<br>
+                (Subject)<br>
+                &lt;<span class="tx_sparqltoucan_monospaced">{ThisEntry.datapointId.subject}</span>&gt; <br><br>
+                (Predicate)<br>
+                &lt;<span class="tx_sparqltoucan_monospaced">{ThisEntry.datapointId.predicate}</span>&gt; <br>
+                <br>[Languagepoints]<br>
+                <f:for each="{LanguagePoints}" as="Point">
+                    {Point.content} <span class="tx_toucan_language_block">{Point.language}</span><br>
+                </f:for>
+
+            </div>
+            <f:form.submit value="Update"/>
+        </f:form>
+    </div>
+
+    <div>
+        <h2>Assigned Collection</h2>
+        <h3>{ThisEntry.collectionID.name}</h3>
+        <h2>All Entries of Collection</h2>
+        <table class="tx_sparqltoucan">
+            <tr>
+                <th><f:translate key="tx_sparqltoucan_domain_model_collectionentry.position" /></th>
+                <th><f:translate key="tx_sparqltoucan_domain_model_collectionentry.name" /></th>
+                <th><f:translate key="tx_sparqltoucan_domain_model_collectionentry.style" /></th>
+                <th><f:translate key="tx_sparqltoucan_domain_model_collectionentry.style_name" /></th>
+                <th colspan="2">Actions</th>
+            </tr>
+            <f:for each="{OtherEntries}" as="CollectionEntry">
+                <f:render partial="Backend/CollectionEntryTableRow" arguments="{CollectionEntry:CollectionEntry}" />
+            </f:for>
+        </table>
+    </div>
+
+    <f:debug>{_all}</f:debug>
+
+</f:section>
+</html>

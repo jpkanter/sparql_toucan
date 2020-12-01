@@ -75,6 +75,10 @@ h6 {font-size: 1.0rem}
 
 h1, h2, h3, h4, h5, h6 { color: var(--tou_red); font-weight: bold;}
 
+.tx_sparqltoucan_monospaced {
+    font-family: "Fira Code", "Courier New", "monospace", "Courier" ;
+}
+
 div.tx_sparqltoucan_central {
     width: 60%;
     margin: auto;
@@ -179,4 +183,36 @@ table.tx_sparqltoucan_paginator_table tr.tx_sparqltoucan_table_temp td {
 table.tx_sparqltoucan_paginator_table tr:hover, table.tx_sparqltoucan_paginator_table tr.tx_sparqltoucan_table_temp:hover td {
     background: var(--tou_blue);
     color: var(--tou_purewhite);
+}
+
+div.tx_sparqltoucan_formworld {
+    width: 41rem;
+}
+
+div.tx_sparqltoucan_formworld label {
+    display: block;
+}
+
+div.tx_sparqltoucan_formworld input, div.tx_sparqltoucan_formworld select {
+    margin-left: 2rem;
+}
+div.tx_sparqltoucan_formworld input[type="submit"] {
+    margin: 2rem auto;
+    display: block;
+}
+
+div.tx_sparqltoucan_formworld input:before, div.tx_sparqltoucan_formworld select:before {
+    white-space: pre;
+    content: "\A";
+}
+
+div.tx_sparqltoucan_formworld input[type="submit"]:before {
+    white-space: pre-line;
+    content: "\A";
+}
+
+div.tx_sparqltoucan_formworld .additional_data {
+    font-size: 1rem;
+    color: var(--tou_darkgrey);
+    margin-left: 2rem;
 }

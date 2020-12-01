@@ -43,7 +43,7 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var string
      */
-    protected $styleName = '';
+    protected $style_name = '';
 
     /**
      * tempValue
@@ -130,24 +130,24 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     * Returns the styleName
+     * Returns the style_name
      *
      * @return string $styleName
      */
-    public function getStyleName()
+    public function getStyle_name()
     {
-        return $this->styleName;
+        return $this->style_name;
     }
 
     /**
-     * Sets the styleName
+     * Sets the style_name
      *
-     * @param string $styleName
+     * @param string $style_name
      * @return void
      */
-    public function setStyleName($styleName)
+    public function setStyle_name($style_name)
     {
-        $this->styleName = $styleName;
+        $this->style_name = $style_name;
     }
 
     /**

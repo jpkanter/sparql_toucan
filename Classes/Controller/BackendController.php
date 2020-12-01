@@ -256,6 +256,27 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->redirect('editCollection', Null, Null, array('collection'=>$collection));
     }
 
+    /**
+     * action showCollectionEntry
+     * Shows the collection edit site but with some additional data to put the point into context
+     *
+     * @param \Ubl\SparqlToucan\Domain\Model\CollectionEntry $collectionEntry
+     * @return void
+     */
+    public function showCollectionEntryAction(\Ubl\SparqlToucan\Domain\Model\CollectionEntry $collectionEntry)
+    {
+        $this->view->assign("ThisEntry", $collectionEntry);
+        $this->view->assign("OtherEntries", $this->collectionEntryRepository->fetchCorresponding($collectionEntry->getCollectionID()));
+        $this->view->assign("Datapoints", $this->datapointRepository->findAll());
+        $this->view->assign("LanguagePoints", $this->languagepointRepository->fetchCorresponding($collectionEntry->getDatapointId()));
+    }
+
+    public function updateCollectionEntryAction(\Ubl\SparqlToucan\Domain\Model\CollectionEntry $collectionEntry) {
+        $this->addFlashMessage('[The Entry has been updated, Cache clearing required to see effects immediately]', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
+        $this->collectionEntryRepository->update($collectionEntry);
+        $this->redirect('showCollectionEntry', Null, Null, array('collectionEntry'=>$collectionEntry));
+    }
+
 
     /**
      * action createSource
