@@ -76,14 +76,6 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->view->assign("collections", $collections);
         $sources = $this->sourceRepository->findAll();
         $this->view->assign("sources", $sources);
-        $datapoints = $this->datapointRepository->findAll();
-        $supplement = array();
-        foreach( $datapoints as $key => $value ) {
-            $lang = $this->languagepointRepository->fetchCorresponding($value);
-            $supplement[$key] = $lang;
-        }
-        $this->view->assign("datapoints", $datapoints);
-        $this->view->assign("supplement", $supplement);
     }
 
     public function showCollectionAction(\Ubl\SparqlToucan\Domain\Model\Collection $collection)
@@ -431,6 +423,17 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     public function languagepointOverviewAction() {
         $languagepoints = $this->languagepointRepository->findAll();
         $this->view->assign("languagepoints", $languagepoints);
+    }
+
+    public function datapointOverviewAction() {
+        $datapoints = $this->datapointRepository->findAll();
+        $supplement = array();
+        foreach( $datapoints as $key => $value ) {
+            $lang = $this->languagepointRepository->fetchCorresponding($value);
+            $supplement[$key] = $lang;
+        }
+        $this->view->assign("datapoints", $datapoints);
+        $this->view->assign("supplement", $supplement);
     }
 
     private function recursiveSparqlQuery($url, $subject, $predicate) {

@@ -34,7 +34,7 @@
 				<source>Auto Update</source>
 			</trans-unit>
 			<trans-unit id="tx_sparqltoucan_domain_model_datapoint.source_id">
-				<source>Source Id</source>
+				<source>Source</source>
 			</trans-unit>
 			<trans-unit id="tx_sparqltoucan_domain_model_collection">
 				<source>Collection</source>
@@ -64,10 +64,10 @@
 				<source>Style Name</source>
 			</trans-unit>
 			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.datapoint_id">
-				<source>Datapoint Id</source>
+				<source>Datapoint</source>
 			</trans-unit>
 			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.collection_i_d">
-				<source>Collection I D</source>
+				<source>Collection</source>
 			</trans-unit>
 			<trans-unit id="tx_sparqltoucan_bck_overview_title">
 				<source>Listing of Collections</source>

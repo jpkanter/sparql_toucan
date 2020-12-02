@@ -30,6 +30,7 @@ call_user_func(
                                     showCollectionEntry,
                                     updateCollectionEntry,
                                     
+                                    datapointOverview,
                                     newDatapoint,
                                     editDatapoint,
                                     updateDatapoint,
@@ -58,7 +59,7 @@ call_user_func(
                     'labels' => 'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_sparqlbackend.xlf',
                 ]
             );
-
+            unset($GLOBALS['TBE_MODULES']['_configuration']['web_Ubl.SparqlToucanweb']['navigationComponentId']);
         }
 
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile('sparql_toucan', 'Configuration/TypoScript', 'Sparql Toucan');

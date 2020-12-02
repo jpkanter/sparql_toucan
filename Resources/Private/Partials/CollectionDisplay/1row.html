@@ -1,7 +1,7 @@
 <html xmlns:f="https://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
 <ul>
     <f:for each="{entries}" as="collectionEntry">
-        <li><f:render partial="CollectionDisplay/SingleEntry" arguments="{collectionEntry:collectionEntry}" /></li>
+        <f:render partial="CollectionDisplay/SingleEntry" arguments="{collectionEntry:collectionEntry}" /><br>
     </f:for>
 </ul>
 </html>

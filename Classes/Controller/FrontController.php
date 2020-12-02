@@ -1,6 +1,8 @@
 <?php
 namespace Ubl\SparqlToucan\Controller;
 
+use Ubl\SparqlToucan\Domain\Model\CollectionEntry;
+use Ubl\SparqlToucan\Domain\Model\Datapoint;
 use Ubl\SparqlToucan\Domain\Repository\CollectionRepository;
 use Ubl\SparqlToucan\Domain\Repository\CollectionEntryRepository;
 use Ubl\SparqlToucan\Domain\Repository\SourceRepository;
@@ -104,12 +106,32 @@ class FrontController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         }*/
 
         $sys_language_name = $this->getLanguage();
-        $testint = 0;
+
+        $lastElement = end($entries);
+        if( $lastElement != False) {
+            $lastCounter = $lastElement->getPosition();
+        }
+
+        $blankEntries = [];
+        $cycleCounter = 1;
         foreach( $entries as &$entry) {
+            //adding empty elements
+            While( $entry->getPosition() < $cycleCounter) {
+                $tempDP = new Datapoint();
+                $tempDP->setCachedValue("");
+                $tempCEntry = new CollectionEntry();
+                $tempCEntry->setDatapointId($tempDP);
+                $tempCEntry->setPosition($cycleCounter);
+                $blankEntries[] = clone $tempCEntry;
+                $cycleCounter++;
+            }
             $value = $this->languagepointRepository->fetchSpecificLanguage($entry->getDatapointId(), $sys_language_name);
             $entry->SetTempValue($value);
             $entry->getDatapointId()->setCachedValue($value);
+            $cycleCounter++;
         }
+        $entries = array_merge($entries, $blankEntries);
+
         $this->view->assign("test", $testint);
         $this->view->assign("collection", $collection);
         $this->view->assign("entries", $entries);

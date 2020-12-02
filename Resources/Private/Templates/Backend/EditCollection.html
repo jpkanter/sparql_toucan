@@ -14,9 +14,8 @@
     </f:form>
 
     <h2>Assigned Entries</h2>
-    <table>
+    <table class="tx_sparqltoucan">
         <tr>
-            <th>UID</th>
             <th><f:translate key="tx_sparqltoucan_domain_model_collectionentry.position" /></th>
             <th><f:translate key="tx_sparqltoucan_domain_model_collectionentry.name" /></th>
             <th><f:translate key="tx_sparqltoucan_domain_model_collectionentry.datapoint_id" /></th>
@@ -26,9 +25,12 @@
         </tr>
         <f:for each="{collectionEntry}" as="collectionEntry">
             <tr style="border: 1px solid grey">
-                <td>{collectionEntry.uid}</td>
                 <td>{collectionEntry.position}</td>
                 <td>{collectionEntry.name} - <em>{collectionEntry.datapointId.name}</em></td>
+                <td>
+                    {collectionEntry.datapointId.p
+                    redicate}
+                </td>
                 <td>{collectionEntry.style}</td>
                 <td>{collectionEntry.style_name}</td>
                 <td><f:link.action action="showCollectionEntry" arguments="{collectionEntry : collectionEntry}">Edit</f:link.action></td>
@@ -40,9 +42,9 @@
         </tr>
         <tr>
             <f:form action="createCollectionEntry" name="newCollectionEntry" object="{newCollectionEntry}" >
-                <td><f:form.hidden property="collectionID" value="{collection.uid}"/> </td>
-                <td><f:form.textfield property="position" /></td> <!--Fill with open Positions Function-->
-                <td><f:form.textfield property="name" /></td>
+                <f:form.hidden property="collectionID" value="{collection.uid}"/>
+                <td><f:form.textfield property="position" size="4"/></td> <!--Fill with open Positions Function-->
+                <td><f:form.textfield property="name" size="50"/></td>
                 <td><f:form.select property="datapointId" options="{datapoints}" optionValueField="uid" optionLabelField="name"/></td>
                 <td><f:form.select property="style">
                     <f:form.select.option value="0"><f:translate key="LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style0" /></f:form.select.option>
@@ -53,7 +55,7 @@
                     <f:form.select.option value="5"><f:translate key="LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_thinitalic" /></f:form.select.option>
                 </f:form.select></td>
                 <td><f:form.textfield property="style_name" /></td>
-                <td><f:form.submit value="Create" /></td>
+                <td colspan="2"><f:form.submit value="Create" /></td>
             </f:form>
         </tr>
     </table>

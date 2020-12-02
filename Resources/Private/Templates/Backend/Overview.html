@@ -10,7 +10,7 @@
         <ul>
             <li><f:link.action action="labelcacheOverview">Labelcache</f:link.action></li>
             <li><f:link.action action="languagepointOverview">Languagepoint</f:link.action></li>
-            <li>Third thing</li>
+            <li><f:link.action action="datapointOverview">Datapointpoint</f:link.action></li>
         </ul>
     </div>
 
@@ -35,37 +35,7 @@
 
     <f:link.action action="newCollection">New Collection</f:link.action>
 
-    <h2>Datapoints</h2>
-    <table class="tx_sparqltoucan">
-        <tr>
-            <th>UID</th>
-            <th>Name</th>
-            <th>Source</th>
-            <th>Subject</th>
-            <th>Predicate</th>
-            <th>Value</th>
-        </tr>
-        <f:for each="{datapoints}" as="datapoint" key="for_key">
-            <tr>
-                <td>{datapoint.uid}</td>
-                <td>{datapoint.name}</td>
-                <td>{datapoint.sourceId.name}</td>
-                <td>{datapoint.subject}</td>
-                <td>{datapoint.predicate}</td>
-                <td>
-                    <f:for each="{supplement.{for_key}}" as="sub_points">
-                        <strong>{sub_points.content}</strong>
-                        <span class="tx_toucan_language_block">{sub_points.language}</span>
-                        <br>
-                    </f:for>
-                </td>
-            </tr>
-        </f:for>
-    </table>
-    <f:link.action action="newDatapoint">New Datapoint</f:link.action>
-    <sub><f:link.action action="remoteUpdateDatapoints">Update Datapoints</f:link.action></sub>
-    <br>
-    <f:link.action action="explore" class="tx_sparqltoucan_fatlink">Explore Sparql Endpoint</f:link.action>
+
 
     <h2>Sources</h2>
     <table  class="tx_sparqltoucan" >

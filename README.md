@@ -19,3 +19,7 @@ In order to achieve the functionality to get language specific LanguagePoints in
 *30.11.2020 - 14:10*
 
 I have additional doubts regarding the way i am doing CollectionEntry Styles. I am currently using a set of *CSS* classes to style the span that displays the text, but i might be better to just use `strong` and `em` to be better included in the general rules for web.
+
+*02.12.2020 - 10:14*
+
+After spending some time with the current (static) implementation and toying around with my own structure i am quite certain that i thought to simple in the ways i planned to integrate my plug-in into the existing website structure. There are actually some tricks i could pull with custom CSS-classes which are already possible in my current design but i doubt it would ultimately lead to any desired outcome. There is the almost certain chance that the plug-in will be used by people not very knowledgeable in general web technologies, even less than me. For the moment i will put the front-end questions aside and rather concentrate on the tree-structure of the data itself. There are some unsuspecting challenges here as well. 

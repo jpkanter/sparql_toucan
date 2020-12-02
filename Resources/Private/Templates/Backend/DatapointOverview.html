@@ -1,0 +1,44 @@
+<html xmlns:f="https://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:layout name="Backend" />
+
+<f:section name="content">
+
+    <h1>All the Datapoints!</h1>
+
+    <f:flashMessages />
+
+    <table class="tx_sparqltoucan_paginator_table">
+        <tr>
+            <th>UID</th>
+            <th>Name</th>
+            <th>Source</th>
+            <th>Subject</th>
+            <th>Predicate</th>
+            <th>Value</th>
+        </tr>
+        <f:widget.paginate objects="{datapoints}" as="paginateLabel" configuration="{itemsPerPage: 30, insertAbove: 0, insertBelow: 1, maximumNumberOfLinks: 10}">
+            <f:for each="{paginateLabel}" as="datapoint" key="for_key">
+                <tr>
+                    <td>{datapoint.uid}</td>
+                    <td>{datapoint.name}</td>
+                    <td>{datapoint.sourceId.name}</td>
+                    <td>{datapoint.subject}</td>
+                    <td>{datapoint.predicate}</td>
+                    <td>
+                        <f:for each="{supplement.{for_key}}" as="sub_points">
+                            <strong>{sub_points.content}</strong>
+                            <span class="tx_toucan_language_block">{sub_points.language}</span>
+                            <br>
+                        </f:for>
+                    </td>
+                </tr>
+            </f:for>
+        </f:widget.paginate>
+    </table>
+    <f:link.action action="newDatapoint">New Datapoint</f:link.action>
+    <sub><f:link.action action="remoteUpdateDatapoints">Update Datapoints</f:link.action></sub>
+    <br>
+    <f:link.action action="explore" class="tx_sparqltoucan_fatlink">Explore Sparql Endpoint</f:link.action>
+
+</f:section>
+</html>
