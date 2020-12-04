@@ -24,6 +24,8 @@ call_user_func(
                                     editCollection, 
                                     createCollection, 
                                     updateCollection, 
+                                    newComplexCollection,
+                                    createComplexCollection,
                                     
                                     createCollectionEntry, 
                                     deleteCollectionEntry, 

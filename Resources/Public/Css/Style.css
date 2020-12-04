@@ -79,6 +79,13 @@ h1, h2, h3, h4, h5, h6 { color: var(--tou_red); font-weight: bold;}
     font-family: "Fira Code", "Courier New", "monospace", "Courier" ;
 }
 
+.tx_sparqltoucan_errortext {
+    color: var(--tou_red);
+    font-weight: bolder;
+    font-size: 1.8rem;
+    font-family: Impact, "Coda Heavy","Impacted";
+}
+
 div.tx_sparqltoucan_central {
     width: 60%;
     margin: auto;

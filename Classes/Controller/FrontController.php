@@ -93,7 +93,7 @@ class FrontController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
     }
 
     public function DisplayAction() {
-        $collectionId= $this->settings['choosenCollection'];
+        $collectionId = $this->settings['choosenCollection'];
         $collection = $this->collectionRepository->findByIdentifier($collectionId);
         $entries = $this->collectionEntryRepository->fetchCorresponding($collection)->toArray();
         /*
@@ -108,15 +108,21 @@ class FrontController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $sys_language_name = $this->getLanguage();
 
         $lastElement = end($entries);
+        reset($entries);
         if( $lastElement != False) {
             $lastCounter = $lastElement->getPosition();
         }
 
+        /****DEBUG****/
+        $exceptionStack = array();
+
         $blankEntries = [];
         $cycleCounter = 1;
-        foreach( $entries as &$entry) {
+        $blankLines = 0;
+
+        foreach ($entries as &$entry) {
             //adding empty elements
-            While( $entry->getPosition() < $cycleCounter) {
+            while ($entry->getPosition() < $cycleCounter and $blankLines < 6) {
                 $tempDP = new Datapoint();
                 $tempDP->setCachedValue("");
                 $tempCEntry = new CollectionEntry();
@@ -124,16 +130,24 @@ class FrontController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                 $tempCEntry->setPosition($cycleCounter);
                 $blankEntries[] = clone $tempCEntry;
                 $cycleCounter++;
+                $blankLines++;
             }
-            $value = $this->languagepointRepository->fetchSpecificLanguage($entry->getDatapointId(), $sys_language_name);
-            $entry->SetTempValue($value);
-            $entry->getDatapointId()->setCachedValue($value);
+            try {
+                $value = $this->languagepointRepository->fetchSpecificLanguage($entry->getDatapointId(), $sys_language_name);
+                $entry->SetTempValue($value);
+                $entry->getDatapointId()->setCachedValue($value);
+            } catch (\Exception $e) {
+                $error['message'] = $e->getMessage();
+                $error['code'] = $e->getCode();
+                $exceptionStack[] = $error;
+            }
             $cycleCounter++;
         }
-        $entries = array_merge($entries, $blankEntries);
+        array_push($entries, $blankEntries);
 
         $this->view->assign("test", $testint);
         $this->view->assign("collection", $collection);
+        $this->view->assign("exceptions", $exceptionStack);
         $this->view->assign("entries", $entries);
     }
 

@@ -2,7 +2,8 @@
 <f:layout name="Backend" />
 
 <f:section name="content">
-    <h1><f:translate key="tx_sparqltoucan_bck_overview_title" /></h1>
+
+    <h1>Sparql Toucan Main Menu</h1>
 
     <f:flashMessages />
 
@@ -11,9 +12,14 @@
             <li><f:link.action action="labelcacheOverview">Labelcache</f:link.action></li>
             <li><f:link.action action="languagepointOverview">Languagepoint</f:link.action></li>
             <li><f:link.action action="datapointOverview">Datapointpoint</f:link.action></li>
+            <li><f:link.action action="explore" class="tx_sparqltoucan_fatlink">Explore Sparql Endpoint</f:link.action></li>
         </ul>
     </div>
 
+    <br>
+    <br>
+
+    <h2><f:translate key="tx_sparqltoucan_bck_overview_title" /></h2>
     <table  class="tx_sparqltoucan" >
         <tr>
             <th><f:translate key="tx_sparqltoucan_domain_model_collection.name" /></th>

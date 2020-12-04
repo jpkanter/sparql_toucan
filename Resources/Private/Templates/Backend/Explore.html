@@ -32,6 +32,14 @@
         </div>
     </f:form>
 
+    <f:form action="newComplexCollection"  name="seedDatapoint" object="{seedDatapoint}">
+        <f:form.hidden property="name" value=""/>
+        <f:form.hidden property="subject" value="{form.subject}"/>
+        <f:form.hidden property="predicate" value=""/>
+        <f:form.hidden property="sourceId" value="{form.sourceId}"/>
+        <f:form.submit value="Collection Creation" />
+    </f:form>
+
     <table class="tx_sparqltoucan">
         <tr>
             <th>Predicate</th>

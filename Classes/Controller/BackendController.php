@@ -1,6 +1,8 @@
 <?php
 namespace Ubl\SparqlToucan\Controller;
 
+use Ubl\SparqlToucan\Domain\Model\Collection;
+use Ubl\SparqlToucan\Domain\Model\CollectionEntry;
 use Ubl\SparqlToucan\Domain\Model\Datapoint;
 use Ubl\SparqlToucan\Domain\Model\Languagepoint;
 use Ubl\SparqlToucan\Domain\Repository\CollectionRepository;
@@ -196,6 +198,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 throw new \Exception("Nothing found in the remote Source", 4);
             }
             //everything is okay
+            $this->languagepointRepository->deleteCorresponding($datapoint);
             foreach( $languagePoints as $l_point ) {
                 $this->languagepointRepository->add($l_point);
             }
@@ -218,6 +221,10 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->addFlashMessage('The object was created. Please be aware that this action is pUblicly accessible unless you implement an access check. See https://docs.typo3.org/typo3cms/extensions/extension_builder/User/Index.html', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
         $this->collectionRepository->add($newCollection);
         $this->redirect('Overview');
+    }
+    public function createCollectionAction2(\Ubl\SparqlToucan\Domain\Model\Collection $newCollection)
+    {
+        $this->collectionRepository->add($newCollection);
     }
     /**
      * action createCollectionEntry
@@ -349,7 +356,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         foreach( $datapoints as $point ) {
             try {
                 $pointList = $this->updateDatapointLanguagepoints($point);
-                $totallist = array_merge($totallist, $pointList);
+                array_push($totallist, $pointList);
             }
             catch( \Exception $e ) {
                 echo $e->getMessage()."<br>";
@@ -434,6 +441,241 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
         $this->view->assign("datapoints", $datapoints);
         $this->view->assign("supplement", $supplement);
+    }
+
+    public function newComplexCollectionAction(Datapoint $seedDatapoint) {
+        //request all object stuff
+        $this->view->assign("seedDatapoint", $seedDatapoint);
+
+        $url = $seedDatapoint->getSourceId()->getUrl();
+        $subject = trim($seedDatapoint->getSubject());
+        if( preg_match("^<.*>$^", $subject) == 0) {
+            $subject = "<" . $subject . ">";
+        }
+        $content = $this->simpleQuery($url, $subject, "?pre");
+        $this->view->assign("explorer", $content);
+
+        try {
+            $this->view->assign("newName", $this->labelcacheRepository->fetchLabel($seedDatapoint->getSourceId(), $seedDatapoint->getSubject()));
+        }
+        catch( \Exception $e ) {
+            if( $e->getCode() == 1 ) {
+                $this->view-assign("newName", "");
+            }
+        }
+
+
+
+        $addressCondition = [
+            "http://www.w3.org/2000/01/rdf-schema#label",
+            "http://schema.org/email",
+            "http://schema.org/telephone",
+            "http://schema.org/address"
+        ];
+        $deletePoints = [];
+        foreach( $content as $line) {
+            foreach( $addressCondition as $key => $subj ) {
+                if( $subj == $line['pre']['value'] ) {
+                    $deletePoints[] = $key;
+                }
+            }
+        }
+        foreach( $deletePoints as $key) {
+            unset($addressCondition[$key]);
+        }
+        if( count($addressCondition) <= 0 ) {
+            $this->view->assign("place", True);
+            $this->view->assign("sources", $this->sourceRepository->findAll());
+        }
+
+
+    }
+
+    public function createComplexCollectionAction() {
+        $persistenceManager = $this->objectManager->get("TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager");
+        $formdata = $this->request->getArguments();
+        $this->view->assign("debug", $formdata);
+        //Input Sanitation
+            //i am quite sure i can leverage extbase here instead of do it myself
+        if( trim($formdata['CollectionAndMore']['layout']) == "" ) {
+            $formdata['CollectionAndMore']['layout'] = 1;
+        }
+
+        $newCollection = new Collection(
+            $formdata['CollectionAndMore']['name'],
+            $formdata['CollectionAndMore']['layout'],
+            $formdata['CollectionAndMore']['style_override']
+        );
+        $this->collectionRepository->add($newCollection);
+
+        $thisSource = $this->sourceRepository->findByIdentifier($formdata['CollectionAndMore']['sourceId']);
+        $url = $thisSource->getUrl();
+        $subject = trim($formdata['CollectionAndMore']['subject']);
+        if( preg_match("^<.*>$^", $subject) == 0) {
+            $subject = "<" . $subject . ">";
+        }
+        $content = $this->simpleQuery($url, $subject, "?pre");
+        //in real case we need to request the type of template here
+        $addressCondition = [
+            "http://www.w3.org/2000/01/rdf-schema#label" => 1,
+            "http://schema.org/email" => 5,
+            "http://schema.org/telephone" => 6,
+            "http://schema.org/address" => -1
+        ];
+        $subPointList = [
+          "http://schema.org/address" => [
+              "http://schema.org/streetAddress" => 2,
+              "http://schema.org/postalCode" => 3,
+              "http://schema.org/addressLocality" => 4,
+          ]
+        ];
+        $reusedDatapoints = array();
+        $remainingConditions = array();
+        //check direct links of existing datapoints
+        foreach( $addressCondition as $singleCondition => $position) {
+            if( $position != -1 ) {
+                $result = $this->datapointRepository->findCopies($thisSource, $formdata['CollectionAndMore']['subject'], $singleCondition);
+                if( count($result) <= 0 )  {
+                    $remainingConditions[] = $singleCondition;
+                }
+                else {
+                    $reusedDatapoints[] = $result->toArray()[0];
+                }
+            }
+            else {
+                foreach( $subPointList[$singleCondition] as $key => $discard ) {
+                    foreach( $content as $line ) { //this can be solved better
+                        if($line['pre']['value'] == $singleCondition) {
+                            $tempSubject = $line['obj']['value'];
+                            break;
+                        }
+                    }
+                    $result = $this->datapointRepository->findCopies($thisSource, $tempSubject, $key);
+                    if( count($result) <= 0 )  {
+                        $remainingConditions[] = $singleCondition;
+                    }
+                    else {
+                        $reusedDatapoints[] = $result->toArray()[0];
+                    }
+                }
+            }
+
+        }
+        $this->view->assign("oldDatapoints", $reusedDatapoints);
+
+        $newDatapoints = array();
+        $this->view->assign("remain", $remainingConditions);
+        foreach( $remainingConditions as $predicate ) {
+            if( $position != -1 ) {
+                $tempDP = new Datapoint();
+                $tempDP->setSourceId($thisSource);
+                $tempDP->setSubject($formdata['CollectionAndMore']['subject']);
+                $tempDP->setPredicate($predicate);
+                $tempDP->setAutoUpdate(true);
+                $newDatapoints[] = clone $tempDP;
+            }
+            else {
+                //finding subject
+                foreach( $content as $line ) {
+                    if($line['pre']['value'] == $predicate) {
+                        $tempSubject = $line['obj']['value'];
+                        break;
+                    }
+                }
+                foreach( $subPointList[$predicate] as $anotherPredicate => $discard ) {
+                    //ERROR CONDITION IF NO RESULT SHOWN
+                    $tempDP = new Datapoint();
+                    $tempDP->setSourceId($thisSource);
+                    $tempDP->setSubject($tempSubject);
+                    $tempDP->setPredicate($anotherPredicate);
+                    $tempDP->setAutoUpdate(true);
+                    $newDatapoints[] = clone $tempDP;
+                }
+            }
+
+        }
+        $this->view->assign("newDatapoints", $newDatapoints);
+        //Persists Datapoints here
+        foreach( $newDatapoints as $DP ) {
+            $this->datapointRepository->add($DP);
+        }
+        $persistenceManager->persistAll();
+
+        $newCollectionEntries = array();
+        foreach( $newDatapoints as $DP ) {
+            foreach($addressCondition as $key => $position) {
+                if( $position != -1 ) {
+                    if( $DP->getPredicate() == $key ) {
+                        $tempEntry = new CollectionEntry();
+                        $tempEntry->setName($key);
+                        $tempEntry->setPosition($position);
+                        $tempEntry->setStyle(0);
+                        $tempEntry->setStyle_name("");
+                        $tempEntry->setCollectionID($newCollection);
+                        $tempEntry->setDatapointId($DP);
+                        $newCollectionEntries[] = clone $tempEntry;
+                        break;
+                    }
+                }
+                else {
+                    foreach( $subPointList[$key] as $predicate => $subPosition ) {
+                        if( $DP->getPredicate() == $predicate ) {
+                            $tempEntry = new CollectionEntry();
+                            $tempEntry->setName($predicate);
+                            $tempEntry->setPosition($subPosition);
+                            $tempEntry->setStyle(0);
+                            $tempEntry->setStyle_name("");
+                            $tempEntry->setCollectionID($newCollection);
+                            $tempEntry->setDatapointId($DP);
+                            $newCollectionEntries[] = clone $tempEntry;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        foreach( $reusedDatapoints as $DP) {
+            //i dont need to foreach this right? - 03.12.2020
+            foreach($addressCondition as $key => $position) {
+                if( $position != -1 ) {
+                    if( $DP->getPredicate() == $key ) {
+                        $tempEntry = new CollectionEntry();
+                        $tempEntry->setName($key);
+                        $tempEntry->setPosition($position);
+                        $tempEntry->setStyle(0);
+                        $tempEntry->setStyle_name("");
+                        $tempEntry->setCollectionID($newCollection);
+                        $tempEntry->setDatapointId($DP);
+                        $newCollectionEntries[] = clone $tempEntry;
+                        break;
+                    }
+                }
+                else {
+                    foreach( $subPointList[$key] as $key2 => $position ) {
+                        if( $DP->getPredicate() == $key2 ) {
+                            $tempEntry = new CollectionEntry();
+                            $tempEntry->setName($key2);
+                            $tempEntry->setPosition($position);
+                            $tempEntry->setStyle(0);
+                            $tempEntry->setStyle_name("");
+                            $tempEntry->setCollectionID($newCollection);
+                            $tempEntry->setDatapointId($DP);
+                            $newCollectionEntries[] = clone $tempEntry;
+                            break;
+                        }
+                    }
+                }
+
+            }
+        }
+        foreach( $newCollectionEntries as $CE ) {
+            $this->collectionEntryRepository->add($CE);
+        }
+        $persistenceManager->persistAll();
+
+        $this->view->assign("newCollectionEntries", $newCollectionEntries);
+
+        $this->view->assign("newCollection", $newCollection);
     }
 
     private function recursiveSparqlQuery($url, $subject, $predicate) {

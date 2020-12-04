@@ -12,6 +12,15 @@
         <f:render partial="CollectionDisplay/2row" arguments="{entries:entries}" />
     </f:if>
     <f:debug>{_all}</f:debug>
+
+    <f:if condition="exceptions">
+        <pre>
+            <f:for each="exceptions" as="e">
+                ({e.code}) {e.message}\n
+            </f:for>
+        </pre>
+    </f:if>
+
 </f:section>
 
 <f:section name="FooterAssets">

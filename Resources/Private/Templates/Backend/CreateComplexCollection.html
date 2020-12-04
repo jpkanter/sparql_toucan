@@ -1,0 +1,34 @@
+<html xmlns:f="https://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:layout name="Backend" />
+
+<f:section name="content">
+
+    <f:flashMessages />
+
+    <f:render partial="FormErrors" />
+
+    <h2>Entries created</h2>
+        <f:if condition="{newCollectionEntries}">
+            <f:for each="{newCollectionEntries}" as="point">
+                [{point.position}] - {point.name}<br>
+            </f:for>
+        </f:if>
+
+    <h2>New Datapoints</h2>
+        <f:if condition="{newDatapoints}">
+            <f:for each="{newDatapoints}" as="point">
+                {point.SourceId.url} - {point.subject} - {point.predicate}<br>
+            </f:for>
+        </f:if>
+
+    <h2>Reused Datapoints</h2>
+        <f:if condition="{oldDatapoints}">
+            <f:for each="{oldDatapoints}" as="point">
+                {point.SourceId.url} - {point.subject} - {point.predicate}<br>
+            </f:for>
+        </f:if>
+
+    <f:debug>{_all}</f:debug>
+
+</f:section>
+</html>

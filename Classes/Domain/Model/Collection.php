@@ -40,6 +40,18 @@ class Collection extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $styleOverride = '';
 
     /**
+     * Collection constructor.
+     * @param string $name
+     * @param int $layout
+     * @param string $style_override
+     */
+    public function __construct($name = "", $layout = 1, $style_override = "") {
+        $this->name = $name;
+        $this->layout = $layout;
+        $this->styleOverride = $style_override;
+    }
+
+    /**
      * Returns the name
      *
      * @return string $name
