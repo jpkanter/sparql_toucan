@@ -191,6 +191,10 @@ table.tx_sparqltoucan_paginator_table tr:hover, table.tx_sparqltoucan_paginator_
     background: var(--tou_blue);
     color: var(--tou_purewhite);
 }
+.tx-sparql-toucan.mini_id {
+    font-size: 0.8rem;
+    color: var(--tou_lightgrey);
+}
 
 div.tx_sparqltoucan_formworld {
     width: 41rem;

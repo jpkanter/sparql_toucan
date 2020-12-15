@@ -17,6 +17,7 @@
         <f:widget.paginate objects="{languagepoints}" as="paginateLabel" configuration="{itemsPerPage: 30, insertAbove: 0, insertBelow: 1, maximumNumberOfLinks: 10}">
             <f:for each="{paginateLabel}" as="point">
                 <tr>
+                    <td class="tx-sparql-toucan_mini_id">{point.datapointId.uid}</td>
                     <td>{point.datapointId.name}</td>
                     <td>{point.datapointId.sourceId.name}</td>
                     <td><span class="tx_toucan_language_block">{point.language}</span></td>
