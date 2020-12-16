@@ -1,6 +1,7 @@
 <?php
 namespace Ubl\SparqlToucan\Controller;
 
+use MongoDB\Driver\Query;
 use Ubl\SparqlToucan\Domain\Model\Collection;
 use Ubl\SparqlToucan\Domain\Model\CollectionEntry;
 use Ubl\SparqlToucan\Domain\Model\Datapoint;
@@ -365,6 +366,35 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
         $this->view->assign("languagepoints", $totallist);
 
+    }
+
+    public function timemachineAction() {
+        $time_delta = 3600;
+        $deletionTime = time() - $time_delta;
+
+        $travelers = array();
+
+        $tables = [
+            "datapoint" => $this->datapointRepository,
+            "languagepoint" => $this->languagepointRepository,
+            "collectionentry" => $this->collectionEntryRepository,
+            "collection" => $this->collectionRepository,
+            "labelcache" => $this->labelcacheRepository,
+            "source" => $this->sourceRepository
+        ];
+        //according to the docs i shall not do this, making queries outside of the repo
+        foreach( $tables as $key => $repository ) { //this feels like a little dirty trick that actually works
+            $query = $repository -> createQuery();
+            $query->setOrderings(['crdate' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING]);
+            $query->matching($query->greaterThanOrEqual('crdate', $deletionTime));
+            $travelers[$key] = $query->execute()->toArray();
+        }
+
+        $this->view->assign("tables", $travelers);
+
+        $this->view->assign("deletionTime", $deletionTime);
+
+        # $deletionTime = now - 3600;
     }
     /**
      * action explore

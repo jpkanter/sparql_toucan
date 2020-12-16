@@ -1,0 +1,34 @@
+<html xmlns:f="https://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+
+    <table class="tx_sparqltoucan">
+        <tr>
+            <th><f:translate key="tx_sparqltoucan_domain_model_collectionentry.collection_i_d"/></th>
+            <th><f:translate key="tx_sparqltoucan_domain_model_collectionentry.position" /></th>
+            <th><f:translate key="tx_sparqltoucan_domain_model_collectionentry.name" /></th>
+            <th><f:translate key="tx_sparqltoucan_domain_model_collectionentry.style" /></th>
+            <th><f:translate key="tx_sparqltoucan_domain_model_collectionentry.style_name" /></th>
+            <th colspan="2">Actions</th>
+        </tr>
+        <f:for each="{CollectionEntries}" as="CollectionEntry">
+            <tr>
+            <td>{CollectionEntry.collectionID.name}</td>
+            <td>{CollectionEntry.position}</td>
+            <td>{CollectionEntry.name} - <em>{CollectionEntry.datapointId.name}</em></td>
+            <td><f:switch expression="{CollectionEntry.style}">
+                <f:case value="0"><f:translate key="LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style0" /></f:case>
+                <f:case value="1"><f:translate key="LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_bold" /></f:case>
+                <f:case value="2"><f:translate key="LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_italic" /></f:case>
+                <f:case value="3"><f:translate key="LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_bolditalic" /></f:case>
+                <f:case value="4"><f:translate key="LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_thin" /></f:case>
+                <f:case value="5"><f:translate key="LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_thinitalic" /></f:case>
+                <f:case default="true"><f:translate key="LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style0" /></f:case>
+            </f:switch>
+            </td>
+            <td><span class="tx_sparqltoucan_monospaced">{CollectionEntry.style_name}</span></td>
+            <td><f:link.action action="showCollectionEntry" arguments="{collectionEntry : CollectionEntry}">Edit</f:link.action></td>
+            <td><f:link.action action="deleteCollectionEntry" arguments="{collectionEntry : CollectionEntry}">Remove</f:link.action></td>
+            </tr>
+        </f:for>
+    </table>
+
+</html>

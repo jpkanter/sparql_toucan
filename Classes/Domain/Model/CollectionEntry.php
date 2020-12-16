@@ -71,6 +71,20 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return string $name
      */
+
+    /** @var int */
+    protected $crdate;
+
+    /**
+     * Returns the crdate
+     *
+     * @return int
+     */
+    public function getCrdate()
+    {
+        return $this->crdate;
+    }
+
     public function getName()
     {
         return $this->name;

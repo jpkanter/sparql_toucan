@@ -71,4 +71,12 @@ module.tx_sparqltoucan_web_sparqltoucansparqlbackend {
         layoutRootPaths.0 = EXT:sparql_toucan/Resources/Private/Backend/Layouts/
         layoutRootPaths.1 = {$module.tx_sparqltoucan_sparqlbackend.view.layoutRootPath}
     }
+    page {
+        includeCSS {
+            datetimepicker = EXT:your_extension/Resources/Public/Css/jquery.datetimepicker.min.css
+        }
+        includeJS {
+            JqueryUITimepicker = EXT:your_extension/Resources/Public/javascript/jquery.datetimepicker.full.min.js
+        }
+    }
 }

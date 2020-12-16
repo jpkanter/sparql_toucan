@@ -114,6 +114,11 @@ return [
                 ],
             ],
         ],
+        'crdata' => [
+            'config' => [
+                'type' => 'passthrough',
+            ],
+        ],
 
         'content' => [
             'exclude' => true,

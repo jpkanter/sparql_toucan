@@ -1,0 +1,36 @@
+<html xmlns:f="https://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:layout name="Backend" />
+
+<f:section name="content">
+
+    <h1>Timemachine - Thins that happened <em>recently</em></h1>
+    <f:flashMessages />
+
+    <f:render partial="FormErrors" />
+
+    <f:form action="deleteInTime" name="timemachineDeletion">
+        <f:form.textfield type="text" id="datetimepicker" name="PublishDate" />
+        <script type="text/javascript">
+            $('#datetimepicker').datetimepicker();
+        </script>
+        <f:form.button type="submit" value="Submit"/>
+    </f:form>
+
+    <f:if condition="{tables.collection -> f:count()} > 0">
+        <h2>Collections</h2>
+        <f:render partial="Backend/CompleteTableCollection" arguments="{Collections: tables.collection}" />
+    </f:if>
+    <f:if condition="{tables.collectionentry -> f:count()} > 0">
+        <h2>Collection Entries</h2>
+        <f:render partial="Backend/CompleteTableCollectionentry" arguments="{CollectionEntries: tables.collectionentry}" />
+    </f:if>
+
+    <f:if condition="{tables.datapoint -> f:count()} > 0">
+        <h2>Datapoints</h2>
+        <f:render partial="Backend/CompleteTableDatapoint" arguments="{Datapoints: tables.datapoint}" />
+    </f:if>
+
+
+    <f:debug>{_all}</f:debug>
+</f:section>
+</html>
