@@ -66,12 +66,6 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $collectionID = null;
 
-    /**
-     * Returns the name
-     *
-     * @return string $name
-     */
-
     /** @var int */
     protected $crdate;
 
@@ -84,6 +78,12 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return $this->crdate;
     }
+
+    /**
+     * Returns the name
+     *
+     * @return string $name
+     */
 
     public function getName()
     {

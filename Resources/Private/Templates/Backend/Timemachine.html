@@ -3,18 +3,31 @@
 
 <f:section name="content">
 
-    <h1>Timemachine - Thins that happened <em>recently</em></h1>
+    <h1>Timemachine - Things that happened <em>recently</em></h1>
     <f:flashMessages />
 
     <f:render partial="FormErrors" />
 
-    <f:form action="deleteInTime" name="timemachineDeletion">
-        <f:form.textfield type="text" id="datetimepicker" name="PublishDate" />
-        <script type="text/javascript">
-            $('#datetimepicker').datetimepicker();
-        </script>
-        <f:form.button type="submit" value="Submit"/>
-    </f:form>
+    <div>
+        <div class="tx_sparqltoucan_formworld">
+            <f:form action="timemachine" name="timemachineDeletion">
+                <label>Time-Delta</label>
+                <f:form.textfield type="time" id="datetimepicker" name="timeDelta" value="{f:if(condition: '{time_delta}', then: '{time_delta}', else: '01:00')}"/>
+                <script type="text/javascript">
+                    $('#datetimepicker').datetimepicker();
+                </script>
+                <label>Expands the scope the time machine looks into the past</label>
+                <f:form.submit value="Apply" />
+            </f:form>
+        </div>
+
+        <div class="tx-sparqltoucan_formworld">
+            <f:form action="deleteTimemachine" name="timemachineLever">
+                <f:form.hidden property="deletionTime" value="{deletionTime}"/>
+                <f:form.submit value="Delete All recent activities"/>
+            </f:form>
+        </div>
+    </div>
 
     <f:if condition="{tables.collection -> f:count()} > 0">
         <h2>Collections</h2>
@@ -30,6 +43,10 @@
         <f:render partial="Backend/CompleteTableDatapoint" arguments="{Datapoints: tables.datapoint}" />
     </f:if>
 
+    <f:if condition="{tables.languagepoint -> f:count()} > 0">
+        <h2>Languapoint</h2>
+        <f:render partial="Backend/CompleteTableLanguagepoint" arguments="{Languagepoints: tables.languagepoint}" />
+    </f:if>
 
     <f:debug>{_all}</f:debug>
 </f:section>

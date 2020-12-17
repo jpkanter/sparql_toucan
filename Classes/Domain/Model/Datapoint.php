@@ -60,28 +60,24 @@ class Datapoint extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $autoUpdate = false;
 
     /**
-     * @var \DateTime
-     */
-    protected $crdate = null;
-
-
-    /**
-     * Returns the creation date
-     *
-     * @return \DateTime $crdate
-     */
-    public function getCrdate()
-    {
-        return $this->crdate;
-    }
-
-
-    /**
      * Id of the source that is used for the datapoint
      *
      * @var \Ubl\SparqlToucan\Domain\Model\Source
      */
     protected $sourceId = null;
+
+    /** @var int */
+    protected $crdate;
+
+    /**
+     * Returns the crdate
+     *
+     * @return int
+     */
+    public function getCrdate()
+    {
+        return $this->crdate;
+    }
 
     /**
      * Returns the name

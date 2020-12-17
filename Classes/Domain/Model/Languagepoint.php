@@ -39,6 +39,19 @@ class Languagepoint extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $datapointId = null;
 
+    /** @var int */
+    protected $crdate;
+
+    /**
+     * Returns the crdate
+     *
+     * @return int
+     */
+    public function getCrdate()
+    {
+        return $this->crdate;
+    }
+
     /**
      * Languagepoint constructor.
      * @param Datapoint|null $datapointId

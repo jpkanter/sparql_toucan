@@ -15,15 +15,15 @@
                 </tr>
                 <tr>
                     <td><label>Subject</label></td>
-                    <td><f:form.textfield property="subject" value="{form.subject}"/></td>
+                    <td><f:form.textfield property="subject" value="{form.subject}" size="90"/></td>
                 </tr>
                 <tr>
                     <td><label>Predicate</label></td>
-                    <td><f:form.textfield property="predicate" value="{form.predicate}"/></td>
+                    <td><f:form.textfield property="predicate" value="{form.predicate}" size="90"/></td>
                 </tr>
                 <tr>
                     <td><label>Raw Query</label></td>
-                    <td><f:form.textfield property="query" value="{form.query}"/></td>
+                    <td><f:form.textarea property="query" rows="4" cols="90">{form.query}</f:form.textarea></td>
                 </tr>
                 <tr>
                     <td colspan="2" align="center"><f:form.submit value="Explore" /></td>

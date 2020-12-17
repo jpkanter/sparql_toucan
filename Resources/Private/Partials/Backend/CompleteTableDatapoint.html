@@ -1,0 +1,30 @@
+<html xmlns:f="https://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+
+    <table class="tx_sparqltoucan">
+
+        <tr>
+            <th><f:translate key="tx_sparqltoucan_domain_model_datapoint.name" /></th>
+            <th><f:translate key="tx_sparqltoucan_domain_model_datapoint.subject" /></th>
+            <th><f:translate key="tx_sparqltoucan_domain_model_datapoint.predicate" /></th>
+            <th><f:translate key="tx_sparqltoucan_domain_model_datapoint.mode" /></th>
+            <th><f:translate key="tx_sparqltoucan_domain_model_datapoint.auto_update" /></th>
+            <th><f:translate key="tx_sparqltoucan_domain_model_datapoint.source_id" /></th>
+            <th span="2">Actions </th>
+        </tr>
+
+        <f:for each="{Datapoints}" as="datapoint">
+            <tr>
+                <td>{datapoint.name}</td>
+                <td><span class="tx_sparqltoucan_teletext">{datapoint.subject}</span></td>
+                <td><span class="tx_sparqltoucan_teletext">{datapoint.predicate}</span></td>
+                <td>{datapoint.mode}</td>
+                <td>{f:if(condition: '{datapoint.autoUpdate} == 1', then: 'Yes', else: 'No')}</td>
+                <td>{datapoint.sourceId.name}</td>
+                <td><f:link.action action="editDatapoint" arguments="{datapoint: datapoint}">Edit</f:link.action></td>
+                <td><f:link.action action="deleteDatapoint" arguments="{datapoint: datapoint}">Remove</f:link.action></td>
+            </tr>
+        </f:for>
+
+    </table>
+
+</html>

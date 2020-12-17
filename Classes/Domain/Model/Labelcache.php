@@ -56,6 +56,19 @@ class Labelcache extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $status = 0;
 
+    /** @var int */
+    protected $crdate;
+
+    /**
+     * Returns the crdate
+     *
+     * @return int
+     */
+    public function getCrdate()
+    {
+        return $this->crdate;
+    }
+
     /**
      * Labelcache constructor.
      * @param Source|null $sourceId

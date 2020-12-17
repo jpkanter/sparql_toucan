@@ -31,10 +31,10 @@
 
         <f:for each="{collections}" as="collection">
             <tr>
-                <td><f:link.action action="show" arguments="{collection : collection}"> {collection.name}</f:link.action></td>
-                <td><f:link.action action="show" arguments="{collection : collection}"> {collection.layout}</f:link.action></td>
-                <td><f:link.action action="show" arguments="{collection : collection}"> {collection.styleOverride}</f:link.action></td>
-                <td><f:link.action action="editCollection" arguments="{collection : collection}">Edit</f:link.action></td>
+                <td><f:link.action action="editCollection" arguments="{collection : collection}"> {collection.name}</f:link.action></td>
+                <td><f:link.action action="editCollection" arguments="{collection : collection}"> {collection.layout}</f:link.action></td>
+                <td><f:link.action action="editCollection" arguments="{collection : collection}"> {collection.styleOverride}</f:link.action></td>
+                <td><f:link.action action="updateCollectionLanguagepoints" arguments="{collection : collection}">Update Collection Languagepoints</f:link.action></td>
                 <td><f:link.action action="deleteCollection" arguments="{collection : collection}">Delete</f:link.action></td>
             </tr>
         </f:for>

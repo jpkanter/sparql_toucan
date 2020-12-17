@@ -223,6 +223,12 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->collectionRepository->add($newCollection);
         $this->redirect('Overview');
     }
+
+    public function deleteCollectionAction(\Ubl\SparqlToucan\Domain\Model\Collection $collection) {
+        $this->collectionRepository->saveDelete($collection);
+        $this->redirect("overview");
+    }
+
     public function createCollectionAction2(\Ubl\SparqlToucan\Domain\Model\Collection $newCollection)
     {
         $this->collectionRepository->add($newCollection);
@@ -234,6 +240,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @param \Ubl\SparqlToucan\Domain\Model\Collection $collection
      * @return void
      */
+
     public function createCollectionEntryAction(\Ubl\SparqlToucan\Domain\Model\CollectionEntry $newCollectionEntry)
     {
         $collection = $this->collectionRepository->findByUid($newCollectionEntry->getCollectionID());
@@ -369,7 +376,14 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     }
 
     public function timemachineAction() {
+        $formdata = $this->request->getArguments();
         $time_delta = 3600;
+        if( isset($formdata['timeDelta']) ) {
+            if ( ($time_delta = strtotime($formdata['timeDelta'])) !== false ) {
+                $this->view->assign("time_delta", $formdata['timeDelta']);
+                $time_delta = $time_delta - strtotime("00:00");
+            }
+        }
         $deletionTime = time() - $time_delta;
 
         $travelers = array();
@@ -396,6 +410,48 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
         # $deletionTime = now - 3600;
     }
+
+    public function deleteTimemachineAction() {
+        $machine_reach = 24 * 3600; //seconds, we are staying in metaphor here, our machine is weak and cannot go further than 24 hours
+        $formdata = $this->request->getArguments();
+        $this->view->assign("form", $formdata);
+
+        //failsafes
+        if( !isset($formdata['timemachineLever']['deletionTime'])) {
+            $this->addFlashMessage("The machine was activated without providing the parameters needed.", '', \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
+            $this->redirect("timemachine");
+        }
+        $deletionTime = intval($formdata['timemachineLever']['deletionTime']);
+        if( $deletionTime == 0 or $deletionTime == 1 ) { //as we deal in minutes this should never fail right?
+            $this->addFlashMessage("The machine encountered parameters of the wrong kind.", '', \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR);
+            $this->redirect("timemachine");
+        }
+        if( time() - $deletionTime > $machine_reach ) {
+            $this->addFlashMessage("The machine was used for a scope beyond its capability", '', \TYPO3\CMS\Core\Messaging\FlashMessage::WARNING);
+            $this->redirect("timemachine");
+        }
+
+        $tables = [
+            "datapoint" => $this->datapointRepository,
+            "languagepoint" => $this->languagepointRepository,
+            "collectionentry" => $this->collectionEntryRepository,
+            "collection" => $this->collectionRepository,
+            "labelcache" => $this->labelcacheRepository,
+            "source" => $this->sourceRepository
+        ];
+        foreach( $tables as $key => $repository ) {
+            $query = $repository -> createQuery();
+            $query->setOrderings(['crdate' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING]);
+            $query->matching($query->greaterThanOrEqual('crdate', $deletionTime));
+            $result = $query->execute()->toArray();
+            foreach($result as $entry ) {
+                $repository->remove($entry);
+            }
+        }
+        $this->addFlashMessage("The machine did it work and erased the past", '', \TYPO3\CMS\Core\Messaging\FlashMessage::OK);
+        $this->redirect("timemachine");
+    }
+
     /**
      * action explore
      * viewtool to explore sparql endpoints
@@ -566,13 +622,14 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             if( $position != -1 ) {
                 $result = $this->datapointRepository->findCopies($thisSource, $formdata['CollectionAndMore']['subject'], $singleCondition);
                 if( count($result) <= 0 )  {
-                    $remainingConditions[] = $singleCondition;
+                    $remainingConditions[$singleCondition]  = $position;
                 }
                 else {
                     $reusedDatapoints[] = $result->toArray()[0];
                 }
             }
             else {
+                $parts = 0;
                 foreach( $subPointList[$singleCondition] as $key => $discard ) {
                     foreach( $content as $line ) { //this can be solved better
                         if($line['pre']['value'] == $singleCondition) {
@@ -582,11 +639,14 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                     }
                     $result = $this->datapointRepository->findCopies($thisSource, $tempSubject, $key);
                     if( count($result) <= 0 )  {
-                        $remainingConditions[] = $singleCondition;
+                        $parts++; //counts upwards to all sub fields we need
                     }
                     else {
                         $reusedDatapoints[] = $result->toArray()[0];
                     }
+                }
+                if( $parts == count($subPointList[$singleCondition])) {
+                    $remainingConditions[$singleCondition] = $position; //$position shold always be -1
                 }
             }
 
@@ -595,7 +655,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
         $newDatapoints = array();
         $this->view->assign("remain", $remainingConditions);
-        foreach( $remainingConditions as $predicate ) {
+        foreach( $remainingConditions as $predicate => $position ) {
             if( $position != -1 ) {
                 $tempDP = new Datapoint();
                 $tempDP->setSourceId($thisSource);
@@ -706,6 +766,26 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->view->assign("newCollectionEntries", $newCollectionEntries);
 
         $this->view->assign("newCollection", $newCollection);
+    }
+
+    /**
+     * action updateCollection
+     *
+     * @param \Ubl\SparqlToucan\Domain\Model\Collection $collection
+     * @return void
+     */
+    public function updateCollectionLanguagepointsAction(Collection $collection) {
+        $entryQueryResults = $this->collectionEntryRepository->fetchCorresponding($collection);
+        if( count($entryQueryResults) <= 0) {
+            $this->addFlashmessage("This collection has no entries at all", "", \TYPO3\CMS\Core\Messaging\FlashMessage::NOTICE);
+        }
+        $thecount = 0;
+        foreach($entryQueryResults as $entry) {
+            $this->UpdateDatapointLanguagepoints($entry->getDatapointId());
+            $thecount++;
+        }
+        $this->addFlashmessage($thecount." Entries were updated.", "", \TYPO3\CMS\Core\Messaging\FlashMessage::OK);
+        $this->redirect("overview");
     }
 
     private function recursiveSparqlQuery($url, $subject, $predicate) {

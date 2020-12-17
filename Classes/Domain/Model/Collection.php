@@ -39,6 +39,19 @@ class Collection extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $styleOverride = '';
 
+    /** @var int */
+    protected $crdate;
+
+    /**
+     * Returns the crdate
+     *
+     * @return int
+     */
+    public function getCrdate()
+    {
+        return $this->crdate;
+    }
+
     /**
      * Collection constructor.
      * @param string $name

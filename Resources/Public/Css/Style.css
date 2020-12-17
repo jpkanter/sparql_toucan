@@ -10,6 +10,9 @@
     --tou_lightgrey: #d4d3d3;
     --tou_darkgrey: #4c4c4c;
     --tou_purewhite: #FFFFFF;
+
+    --tou_teletext: "Fira Code", "Courier New", "monospace", "Courier" ;
+    --tou_impact: Impact, "Coda Heavy","Impacted";
 }
 
 .tx-sparql-toucan {
@@ -76,14 +79,20 @@ h6 {font-size: 1.0rem}
 h1, h2, h3, h4, h5, h6 { color: var(--tou_red); font-weight: bold;}
 
 .tx_sparqltoucan_monospaced {
-    font-family: "Fira Code", "Courier New", "monospace", "Courier" ;
+    font-family: var(--tou_teletext) ;
+}
+
+.tx_sparqltoucan_teletext {
+    font-family: var(--tou_teletext);
+    font-size: 0.85rem;
+    letter-spacing: -0.05rem;
 }
 
 .tx_sparqltoucan_errortext {
     color: var(--tou_red);
     font-weight: bolder;
     font-size: 1.8rem;
-    font-family: Impact, "Coda Heavy","Impacted";
+    font-family: var(--tou_impact);
 }
 
 div.tx_sparqltoucan_central {

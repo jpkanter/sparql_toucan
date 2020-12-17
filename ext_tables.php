@@ -23,9 +23,11 @@ call_user_func(
                                     newCollection,
                                     editCollection, 
                                     createCollection, 
+                                    deleteCollection,
                                     updateCollection, 
                                     newComplexCollection,
                                     createComplexCollection,
+                                    updateCollectionLanguagepoints,
                                     
                                     createCollectionEntry, 
                                     deleteCollectionEntry, 
@@ -51,6 +53,7 @@ call_user_func(
                                     languagepointOverview,
                                     
                                     timemachine,
+                                    deleteTimemachine,
                                     explore,
                                     testSomething,
                                     remoteUpdateDatapoints',
