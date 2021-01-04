@@ -29,6 +29,8 @@ call_user_func(
                                     createComplexCollection,
                                     updateCollectionLanguagepoints,
                                     
+                                    backport,
+                                    
                                     createCollectionEntry, 
                                     deleteCollectionEntry, 
                                     showCollectionEntry,
@@ -56,7 +58,7 @@ call_user_func(
                                     deleteTimemachine,
                                     explore,
                                     testSomething,
-                                    remoteUpdateDatapoints',
+                                    remoteUpdateDatapoints,',
                     'Collection' => 'list, show, new, create, edit, update, delete','CollectionEntry.css' => 'list, show, new, create, edit, update, delete',
                 ],
                 [

@@ -546,7 +546,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
         catch( \Exception $e ) {
             if( $e->getCode() == 1 ) {
-                $this->view-assign("newName", "");
+                $this->view->assign("newName", "");
             }
         }
 
@@ -790,7 +790,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
     private function recursiveSparqlQuery($url, $subject, $predicate) {
         $languageFilter = "de"; # TODO
-        $requestFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Http\RequestFactory::class);
+        //$requestFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Http\RequestFactory::class); #V8.7
         $additionalOptions = [
             'headers' => ['Cache-Control' => 'no-cache'],
             'form_params' => [
@@ -798,7 +798,15 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 'format' => 'json'
             ]
         ];
-        $response = $requestFactory->request($url, 'POST', $additionalOptions);
+
+        $request = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            'TYPO3\\CMS\\Core\\Http\\HttpRequest',
+            $url,
+            'HEAD',
+            $additionalOptions);
+        $request->setMethod('POST');
+        $response = $request->send();
+        // $response = $requestFactory->request($url, 'POST', $additionalOptions); #V8.7
 
         if ($response->getStatusCode() === 200) {
             $content = $response->getBody()->getContents();
@@ -834,7 +842,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @throws \Exception Code 10 - other than status Code 200
      */
     private function simpleQuery($url, $subject, $predicate) {
-        $requestFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Http\RequestFactory::class);
+        //$requestFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Http\RequestFactory::class); #V8.7
 
         $additionalOptions = [
             'headers' => ['Cache-Control' => 'no-cache'],
@@ -843,9 +851,16 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 'format' => 'json'
             ]
         ];
-        $response = $requestFactory->request($url, 'POST', $additionalOptions);
-        if ($response->getStatusCode() === 200) {
-            $content = $response->getBody()->getContents();
+        // $response = $requestFactory->request($url, 'POST', $additionalOptions); #V8.7
+        $request = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+            'TYPO3\\CMS\\Core\\Http\\HttpRequest',
+            $url);
+        $request->setMethod(\TYPO3\CMS\Core\Http\HttpRequest::METHOD_POST)
+            ->addPostParameter($additionalOptions['form_params']);
+        $response = $request->send();
+
+        if ($response->getStatus() === 200) { #->getStatusCode() for V8.7+
+            $content = $response->getBody(); #getBody()->getContents() for V8.7+
             try {
                 $jsoned = json_decode($content, True);
                 return $jsoned['results']['bindings'];
@@ -861,7 +876,8 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     }
     //overload
     private function directQuery($url, $query) {
-        $requestFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Http\RequestFactory::class);
+        //$requestFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Http\RequestFactory::class); #V8.7
+        $requestFactory = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Http\\HttpRequest', 'http://typo3.org/');
         $additionalOptions = [
             'headers' => ['Cache-Control' => 'no-cache'],
             'form_params' => [
@@ -1006,5 +1022,10 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         //$this->view->assign("debug1", $this->updateDatapointLanguagepoints($datapoint));
         //$datapoint = $this->datapointRepository->findByIdentifier(9);
         //$this->view->assign("debug2", $this->updateDatapointLanguagepoints($datapoint));
+    }
+
+    #TODO: delete this backport
+    public function backportAction()
+    {
     }
 }

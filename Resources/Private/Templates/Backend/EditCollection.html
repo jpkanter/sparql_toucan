@@ -45,19 +45,22 @@
                 <td><f:form.textfield property="position" size="4"/></td> <!--Fill with open Positions Function-->
                 <td><f:form.textfield property="name" size="50"/></td>
                 <td><f:form.select property="datapointId" options="{datapoints}" optionValueField="uid" optionLabelField="name"/></td>
-                <td><f:form.select property="style">
-                    <f:form.select.option value="0"><f:translate key="LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style0" /></f:form.select.option>
-                    <f:form.select.option value="1"><f:translate key="LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_bold" /></f:form.select.option>
-                    <f:form.select.option value="2"><f:translate key="LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_italic" /></f:form.select.option>
-                    <f:form.select.option value="3"><f:translate key="LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_bolditalic" /></f:form.select.option>
-                    <f:form.select.option value="4"><f:translate key="LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_thin" /></f:form.select.option>
-                    <f:form.select.option value="5"><f:translate key="LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_thinitalic" /></f:form.select.option>
-                </f:form.select></td>
+                <td>
+                <f:form.select property="style" options="{
+                0: '{f:translate(key:\'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style0\')}',
+                1: '{f:translate(key:\'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_bold\')}',
+                2: '{f:translate(key:\'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_italic\')}',
+                3: '{f:translate(key:\'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_bolditalic\')}',
+                4: '{f:translate(key:\'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_thin\')},
+                5: '{f:translate(key:\'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_thinitalic\')}'
+                }"/>
+                </td>
                 <td><f:form.textfield property="style_name" /></td>
                 <td colspan="2"><f:form.submit value="Create" /></td>
             </f:form>
         </tr>
     </table>
+    <f:debug>{_all}</f:debug>
 
 </f:section>
 </html>
