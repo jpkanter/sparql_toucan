@@ -107,4 +107,5 @@ class CollectionEntryController extends \TYPO3\CMS\Extbase\Mvc\Controller\Action
         $this->collectionEntryRepository->remove($collectionEntry);
         $this->redirect('list');
     }
+
 }

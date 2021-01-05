@@ -38,4 +38,9 @@ After spending some time with the current (static) implementation and toying aro
     There is no option to just specify payloud and retrieval method, instead `setMethod('post')->addPostParameter(array)` is used
     
   * general Fluid Stuff
+    
     `<f:form.select.option>` does not exist yet, therefore all options have to be defined in the `options` part of the original `<f:form.select>` tag
+    
+    `<f:variable>` does not yet exists, its use has to be solved in other ways
+* *FrontController.php*
+  * The Collection Choose Dialog in the plugin setup uses a ConnectionPool Query to get the avaible collections, for some reasons a normal storage query isnt possible in that case. I concede that i really dont know why that is the way it is. Replaced with `$GLOBALS['db']` connection query.

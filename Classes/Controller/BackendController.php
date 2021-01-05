@@ -110,6 +110,11 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $entries = $this->collectionEntryRepository->fetchCorresponding($collection);
         $this->view->assign('collectionEntry', $entries);
         $datapoints = $this->datapointRepository->findAll();
+        foreach($datapoints as $thisKey => $onePoint) {
+            if( trim($onePoint->getName()) == "") {
+                $datapoints[$thisKey]->setName(">> ".substr($onePoint->getsubject(), -20));
+            }
+        }
         $this->view->assign('datapoints', $datapoints);
     }
     /**
@@ -1027,5 +1032,29 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     #TODO: delete this backport
     public function backportAction()
     {
+        try {
+            $ce_old = $resultSet = $this->collectionEntryRepository->findAll();
+            $ce = [];
+            foreach($ce_old as $entry) {
+                $myArray = [
+                    'CollectionId' => $entry->getCollectionID(),
+                    'DatapointId' => $entry->getDatapointId(),
+                    'Style_name' => $entry->getStyle_name(),
+                    'style' => $entry->getStyle(),
+                    'name' => $entry->getName(),
+                    'crdate' => $entry->getCrdate(),
+                    'position' => $entry->getPosition()
+                ];
+                $ce[] = $entry->convertToArray();
+            }
+        }
+        catch(\Exception $e) {
+            $error = array();
+            $error['message'] = $e->getMessage();
+            $error['code'] = $e->getCode();
+            $this->view->assign("trycatch", $error);
+        }
+        $this->view->assign("thisVar", $ce);
+        $this->view->assign("other", $this->collectionEntryRepository->fetchCorresponding($this->collectionRepository->findByIdentifier(2)));
     }
 }

@@ -227,4 +227,21 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $this->collectionID = $collectionID;
     }
+
+    /**
+     *
+     * @return array
+     */
+    public function convertToArray() {
+        $myArray = [
+            'CollectionId' => $this->getCollectionID(),
+            'DatapointId' => $this->getDatapointId(),
+            'Style_name' => $this->getStyle_name(),
+            'style' => $this->getStyle(),
+            'name' => $this->getName(),
+            'crdate' => $this->getCrdate(),
+            'position' => $this->getPosition()
+        ];
+        return $myArray;
+    }
 }

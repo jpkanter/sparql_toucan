@@ -1,23 +1,16 @@
 <html xmlns:f="https://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
-  <f:switch expression="{collectionEntry.style}">
-    <f:case value="0"><f:variable name="default_style" value="tx_sparqltoucan_ce_none"/></f:case>
-    <f:case value="1"><f:variable name="default_style" value="tx_sparqltoucan_ce_bold"/></f:case>
-    <f:case value="2"><f:variable name="default_style" value="tx_sparqltoucan_ce_italic"/></f:case>
-    <f:case value="3"><f:variable name="default_style" value="tx_sparqltoucan_ce_bold-italic"/></f:case>
-    <f:case value="4"><f:variable name="default_style" value="tx_sparqltoucan_ce_thin"/></f:case>
-    <f:case value="5"><f:variable name="default_style" value="tx_sparqltoucan_ce_thin-italic"/></f:case>
-    <f:defaultCase><f:variable name="default_style" value="tx_sparqltoucan_ce_none"/></f:defaultCase>
-  </f:switch>
-  <f:if condition="{collectionEntry.style_name} != ''">
-    <f:then>
-      <f:variable name="custom_style" value=" {collectionEntry.style_name}"/>
-    </f:then>
-    <f:else>
-      <f:variable name="custom_style" value=""/>
-    </f:else>
-  </f:if>
+<f:switch expression="{MyEntry.style}">
+  <f:case value="0"><f:variable name="default_style" value="tx_sparqltoucan_ce_none"/></f:case>
+  <f:case value="1"><f:variable name="default_style" value="tx_sparqltoucan_ce_bold"/></f:case>
+  <f:case value="2"><f:variable name="default_style" value="tx_sparqltoucan_ce_italic"/></f:case>
+  <f:case value="3"><f:variable name="default_style" value="tx_sparqltoucan_ce_bold-italic"/></f:case>
+  <f:case value="4"><f:variable name="default_style" value="tx_sparqltoucan_ce_thin"/></f:case>
+  <f:case value="5"><f:variable name="default_style" value="tx_sparqltoucan_ce_thin-italic"/></f:case>
+  <f:defaultCase><f:variable name="default_style" value="tx_sparqltoucan_ce_none"/></f:defaultCase>
+</f:switch>
 
-  <span class="{default_style}{custom_style}">
-    {collectionEntry.datapointId.cachedValue}
+
+  <span class="{default_style}{MyEntry.style_name}">
+    {MyEntry.datapointId.cachedValue}
   </span>
 </html>

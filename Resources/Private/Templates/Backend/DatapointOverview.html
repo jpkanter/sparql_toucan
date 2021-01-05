@@ -34,19 +34,6 @@
                                 </f:for>
                             </f:if>
                         </f:for>
-                        <f:if condition="{supplement.{for_key}} != NULL">
-                            <f:then>
-                                <f:for each="{supplement.{for_key}}" as="sub_points">
-                                    <strong>{sub_points.content}</strong>
-                                    <span class="tx_toucan_language_block">{sub_points.language}</span>
-                                    <br>
-                                </f:for>
-                            </f:then>
-                            <f:else>
-                                <span class="tx_sparqltoucan_monospaced">No Lang</span>
-                            </f:else>
-                        </f:if>
-
                     </td>
                 </tr>
             </f:for>

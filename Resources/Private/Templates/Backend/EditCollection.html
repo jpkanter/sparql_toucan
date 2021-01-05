@@ -23,17 +23,17 @@
             <th><f:translate key="tx_sparqltoucan_domain_model_collectionentry.style_name" /></th>
             <th colspan="2">Actions</th>
         </tr>
-        <f:for each="{collectionEntry}" as="collectionEntry">
+        <f:for each="{collectionEntry}" as="Entry">
             <tr style="border: 1px solid grey">
-                <td>{collectionEntry.position}</td>
-                <td>{collectionEntry.name} - <em>{collectionEntry.datapointId.name}</em></td>
+                <td>{Entry.position}</td>
+                <td>{Entry.name} - <em>{Entry.datapointId.name}</em></td>
                 <td>
-                    {collectionEntry.datapointId.predicate}
+                    {Entry.datapointId.predicate}
                 </td>
-                <td>{collectionEntry.style}</td>
-                <td>{collectionEntry.style_name}</td>
-                <td><f:link.action action="showCollectionEntry" arguments="{collectionEntry : collectionEntry}">Edit</f:link.action></td>
-                <td><f:link.action action="deleteCollectionEntry" arguments="{collectionEntry : collectionEntry}">Remove</f:link.action></td>
+                <td>{Entry.style}</td>
+                <td>{Entry.style_name}</td>
+                <td><f:link.action action="showCollectionEntry" arguments="{collectionEntry : Entry}">Edit</f:link.action></td>
+                <td><f:link.action action="deleteCollectionEntry" arguments="{collectionEntry : Entry}">Remove</f:link.action></td>
             </tr>
         </f:for>
         <tr>
@@ -51,7 +51,7 @@
                 1: '{f:translate(key:\'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_bold\')}',
                 2: '{f:translate(key:\'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_italic\')}',
                 3: '{f:translate(key:\'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_bolditalic\')}',
-                4: '{f:translate(key:\'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_thin\')},
+                4: '{f:translate(key:\'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_thin\')}',
                 5: '{f:translate(key:\'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_thinitalic\')}'
                 }"/>
                 </td>

@@ -7,7 +7,6 @@ use Ubl\SparqlToucan\Domain\Repository\CollectionRepository;
 use Ubl\SparqlToucan\Domain\Repository\CollectionEntryRepository;
 use Ubl\SparqlToucan\Domain\Repository\SourceRepository;
 use Ubl\SparqlToucan\Domain\Repository\DatapointRepository;
-use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use Psr\Http\Message\RequestFactoryInterface;
 /***
@@ -145,19 +144,21 @@ class FrontController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         }
         array_push($entries, $blankEntries);
 
-        $this->view->assign("test", $testint);
         $this->view->assign("collection", $collection);
         $this->view->assign("exceptions", $exceptionStack);
         $this->view->assign("entries", $entries);
     }
 
     public function PluginList( array &$config) {
+        /* Typo3 V8+ Variant, ConnectionPool Calls dont exist in V7 and below, we have to use Globals DB instead
         $connection = GeneralUtility::makeInstance(ConnectionPool::class) ->getConnectionForTable('tx_sparqltoucan_domain_model_collection');
         $queryBuilder = $connection->createQueryBuilder();
         $query = $queryBuilder
             ->select('*')
             ->from('tx_sparqltoucan_domain_model_collection');
         $collection = $query->execute()->fetchAll();
+         */
+        $collection = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_sparqltoucan_domain_model_collection', '');
         $config['items'] = array();
         foreach( $collection as $value ) {
             array_push($config['items'],[$value['name'], $value['uid']]);

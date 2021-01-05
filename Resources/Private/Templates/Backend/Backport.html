@@ -12,5 +12,26 @@
     <h2>form.select - options</h2>
 
     <f:form.select options="{nummer1: 'This is number1', nummer2: 'this is the second number'}"/>
+
+    <h2>Repository -> CollectionEntry</h2>
+    <table class="tx_sparqltoucan_paginator_table">
+        <f:for each="{thisVar}" as="entry" iteration="iter">
+            <f:if condition="{iter.isFirst} == 1">
+                <tr>
+                    <f:for each="{entry}" as="header" key="myKey">
+                        <th>{myKey}</th>
+                    </f:for>
+                </tr>
+            </f:if>
+            <tr>
+                <f:for each="{entry}" as="content">
+                    <td>{content}</td>
+                </f:for>
+            </tr>
+        </f:for>
+    </table>
+
+
+    <f:debug>{_all}</f:debug>
 </f:section>
 </html>
