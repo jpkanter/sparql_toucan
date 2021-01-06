@@ -27,7 +27,9 @@ After spending some time with the current (static) implementation and toying aro
 ## Backport to Typo3 7.6.33
 
 * *DatapointOverview.html*
+  
   * The double key `{supplement.{for_key}}` doesnt work as desired, i get an "array expected but got string instead" despite that dynamic array index should work since many versions. I replaced the it with another foreach loop, this seems quite inefficient if the engine didnt do that before anyway under the hood
+  
 * *BackendController.php*
   * Typo3 V7 does not have the PSR Guzzle Request Framework Versions 8+ do. Instead it uses a implementation of HTTP_Request2 which is slightly different in handling.
     
@@ -41,6 +43,17 @@ After spending some time with the current (static) implementation and toying aro
     
     `<f:form.select.option>` does not exist yet, therefore all options have to be defined in the `options` part of the original `<f:form.select>` tag
     
-    `<f:variable>` does not yet exists, its use has to be solved in other ways
+    ​	Used in Styling of collection entries, created new partial for uniform usage
+    
+    `<f:variable>` does not yet exists, instead `v:variable` from the vhs ViewHelper Package can be used but required another requirement. **CHECK IF THIS IS OKAY**
+    
+    While the fluid `f:switch` operation already exists `f:defaultCase` does not. Easily circumvented annoying and a bit less clean. Also there seems to be a *bug* that prevents templates from being cached if a `f:switch` exists. I moved the logic in the php-logic by manipulating the object.
+  
 * *FrontController.php*
-  * The Collection Choose Dialog in the plugin setup uses a ConnectionPool Query to get the avaible collections, for some reasons a normal storage query isnt possible in that case. I concede that i really dont know why that is the way it is. Replaced with `$GLOBALS['db']` connection query.
+  
+  * The Collection Choose Dialog in the plugin setup uses a ConnectionPool Query to get the available collections, for some reasons a normal storage query isn't possible in that case. I concede that i really don't know why that is the way it is. Replaced with `$GLOBALS['db']` connection query.
+  
+* *Styling*
+
+  * Styles can be included with a `<f:section>` in a single front end element/fluid template. This works since **Typo3 8.7**, therefor it wont work in 7.6.33 this  way.
+    * **ONGOING**

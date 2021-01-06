@@ -1056,5 +1056,6 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
         $this->view->assign("thisVar", $ce);
         $this->view->assign("other", $this->collectionEntryRepository->fetchCorresponding($this->collectionRepository->findByIdentifier(2)));
+        //$this->redirect("display", "Front", Null, array("choosenCollection" => 2));
     }
 }

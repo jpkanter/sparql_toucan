@@ -17,14 +17,7 @@
             <label for="position">Position</label>
                 <f:form.textfield property="position" size="4" type="integer" placeholder="[position]" maxlength="4" value="{ThisEntry.position}"/>
             <label for="style">Style</label>
-                <f:form.select property="style" value="{ThisEntry.style}">
-                    <f:form.select.option value="0"><f:translate key="LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style0" /></f:form.select.option>
-                    <f:form.select.option value="1"><f:translate key="LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_bold" /></f:form.select.option>
-                    <f:form.select.option value="2"><f:translate key="LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_italic" /></f:form.select.option>
-                    <f:form.select.option value="3"><f:translate key="LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_bolditalic" /></f:form.select.option>
-                    <f:form.select.option value="4"><f:translate key="LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_thin" /></f:form.select.option>
-                    <f:form.select.option value="5"><f:translate key="LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_thinitalic" /></f:form.select.option>
-                </f:form.select>
+                <f:render partial="Backend/CollectionEntryStyles" arguments="{style : ThisEntry.style}"/>
             <label for="style_name">CSS Style Name</label>
                 <f:form.textfield property="style_name" size="50" type="text" placeholder="[CSS Style Class Name" maxlength="128" value="{ThisEntry.style_name}"/>
             <label for="datapoint_id">Datapoint</label>

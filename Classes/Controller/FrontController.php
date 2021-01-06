@@ -93,6 +93,7 @@ class FrontController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
     public function DisplayAction() {
         $collectionId = $this->settings['choosenCollection'];
+        if($collectionId == null) {$collectionId = 2;}
         $collection = $this->collectionRepository->findByIdentifier($collectionId);
         $entries = $this->collectionEntryRepository->fetchCorresponding($collection)->toArray();
         /*
@@ -119,7 +120,7 @@ class FrontController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $cycleCounter = 1;
         $blankLines = 0;
 
-        foreach ($entries as &$entry) {
+        foreach ($entries as $myKey => $entry) {
             //adding empty elements
             while ($entry->getPosition() < $cycleCounter and $blankLines < 6) {
                 $tempDP = new Datapoint();
@@ -131,10 +132,27 @@ class FrontController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                 $cycleCounter++;
                 $blankLines++;
             }
+            //Style stuff, needed cause Typo V7 Fluid doesnt work properly in the frontend
+            switch( $entry->getStyle() ) {
+                case 1:
+                    $newStyle = "tx_sparqltoucan_ce_bold"; break;
+                case 2:
+                    $newStyle = "tx_sparqltoucan_ce_italic"; break;
+                case 3:
+                    $newStyle = "tx_sparqltoucan_ce_bold-italic"; break;
+                case 4:
+                    $newStyle = "tx_sparqltoucan_ce_thin"; break;
+                case 5:
+                    $newStyle = "tx_sparqltoucan_ce_thin-italic"; break;
+                default:
+                    $newStyle = "tx_sparqltoucan_ce_none"; break;
+            }
+            $entries[$myKey]->setStyle($newStyle);
+            //end of ugly style hack
             try {
                 $value = $this->languagepointRepository->fetchSpecificLanguage($entry->getDatapointId(), $sys_language_name);
-                $entry->SetTempValue($value);
-                $entry->getDatapointId()->setCachedValue($value);
+                $entries[$myKey]->SetTempValue($value);
+                $entries[$myKey]->getDatapointId()->setCachedValue($value);
             } catch (\Exception $e) {
                 $error['message'] = $e->getMessage();
                 $error['code'] = $e->getCode();

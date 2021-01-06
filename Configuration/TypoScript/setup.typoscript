@@ -1,5 +1,5 @@
 
-plugin.{extension.shortExtensionKey}_{plugin.key} {
+plugin.tx_sparqltoucan_sparqlfront {
     view {
         templateRootPaths.0 = EXT:{extension.extensionKey}/Resources/Private/Templates/
         templateRootPaths.1 = {$plugin.tx_sparqltoucan_sparqlfront.view.templateRootPath}
@@ -21,6 +21,11 @@ plugin.{extension.shortExtensionKey}_{plugin.key} {
     }
     mvc {
         #callDefaultActionIfActionCantBeResolved = 1
+    }
+    page {
+        includeCSS {
+            entrystyle = EXT:sparql_toucan/Resources/Public/Css/CollectionEntry.css
+        }
     }
 }
 
@@ -73,10 +78,12 @@ module.tx_sparqltoucan_web_sparqltoucansparqlbackend {
     }
     page {
         includeCSS {
-            datetimepicker = EXT:your_extension/Resources/Public/Css/jquery.datetimepicker.min.css
+            datetimepicker = EXT:sparql_toucan/Resources/Public/Css/jquery.datetimepicker.min.css
         }
         includeJS {
-            JqueryUITimepicker = EXT:your_extension/Resources/Public/javascript/jquery.datetimepicker.full.min.js
+            JqueryUITimepicker = EXT:sparql_toucan/Resources/Public/javascript/jquery.datetimepicker.full.min.js
         }
     }
 }
+
+page.includeCSS.sparql_toucan = {$plugin.tx_sparqltoucan.view.CollectionEntrycssFile}

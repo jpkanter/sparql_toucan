@@ -7,6 +7,9 @@ plugin.tx_sparqltoucan_sparqlfront {
         partialRootPath = EXT:sparql_toucan/Resources/Private/Partials/
         # cat=plugin.tx_sparqltoucan_sparqlfront/file; type=string; label=Path to template layouts (FE)
         layoutRootPath = EXT:sparql_toucan/Resources/Private/Layouts/
+        # customsubcategory=css=CSS
+        # cat=plugin.tx_sparqltoucan/css; type=string; label=CSS file
+        CollectionEntrycssFile = EXT:sparql_toucan/Resources/Public/CSS/CollectionEntry.css
     }
     persistence {
         # cat=plugin.tx_sparqltoucan_sparqlfront//a; type=string; label=Default storage PID

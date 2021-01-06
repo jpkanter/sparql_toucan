@@ -60,11 +60,13 @@ call_user_func(
                                     testSomething,
                                     remoteUpdateDatapoints,',
                     'Collection' => 'list, show, new, create, edit, update, delete','CollectionEntry.css' => 'list, show, new, create, edit, update, delete',
+                    'Front' => 'display'
                 ],
                 [
                     'access' => 'user,group',
                     'icon'   => 'EXT:sparql_toucan/Resources/Public/Icons/user_mod_sparqlbackend.svg',
                     'labels' => 'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_sparqlbackend.xlf',
+                    'navigationComponentId' => '',
                 ]
             );
             unset($GLOBALS['TBE_MODULES']['_configuration']['web_Ubl.SparqlToucanweb']['navigationComponentId']);

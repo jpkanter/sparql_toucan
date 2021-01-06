@@ -11,11 +11,10 @@
     <f:if condition="{collection.layout}==2">
         <f:render partial="CollectionDisplay/2row" arguments="{cEntries:entries}" />
     </f:if>
-    <f:debug>{_all}</f:debug>
 
-    <f:if condition="exceptions">
+    <f:if condition="{exceptions}">
         <pre>
-            <f:for each="exceptions" as="e">
+            <f:for each="{exceptions}" as="e">
                 ({e.code}) {e.message}\n
             </f:for>
         </pre>
@@ -23,8 +22,9 @@
 
 </f:section>
 
+<!-- things that work only in typo V8.7+ -->
 <f:section name="FooterAssets">
     <link rel="stylesheet" href="{f:uri.resource(path:'Css/CollectionEntry.css')}"/>
 </f:section>
 
-</htm
+</html>

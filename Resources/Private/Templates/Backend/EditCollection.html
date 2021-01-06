@@ -46,14 +46,7 @@
                 <td><f:form.textfield property="name" size="50"/></td>
                 <td><f:form.select property="datapointId" options="{datapoints}" optionValueField="uid" optionLabelField="name"/></td>
                 <td>
-                <f:form.select property="style" options="{
-                0: '{f:translate(key:\'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style0\')}',
-                1: '{f:translate(key:\'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_bold\')}',
-                2: '{f:translate(key:\'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_italic\')}',
-                3: '{f:translate(key:\'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_bolditalic\')}',
-                4: '{f:translate(key:\'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_thin\')}',
-                5: '{f:translate(key:\'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.style_thinitalic\')}'
-                }"/>
+                    <f:render partial="Backend/CollectionEntryStyles" arguments="{style : 0}"/>
                 </td>
                 <td><f:form.textfield property="style_name" /></td>
                 <td colspan="2"><f:form.submit value="Create" /></td>
