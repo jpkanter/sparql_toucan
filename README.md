@@ -55,5 +55,6 @@ After spending some time with the current (static) implementation and toying aro
   
 * *Styling*
 
+  * The iterator Check like `iterator % 3 == 0` isn't working, supposedly because the `%` Operation is not yet implemented in this version of Fluid
   * Styles can be included with a `<f:section>` in a single front end element/fluid template. This works since **Typo3 8.7**, therefor it wont work in 7.6.33 this  way.
     * **ONGOING**

@@ -3,23 +3,11 @@
 
 <f:section name="content">
 
+    <f:render partial="Backend/MenuBar" />
+
     <h1>Sparql Toucan Main Menu</h1>
 
     <f:flashMessages />
-
-    <div class="tx_sparqltoucan_menu">
-        <ul>
-            <li><f:link.action action="labelcacheOverview">Labelcache</f:link.action></li>
-            <li><f:link.action action="languagepointOverview">Languagepoint</f:link.action></li>
-            <li><f:link.action action="datapointOverview">Datapointpoint</f:link.action></li>
-            <li><f:link.action action="timemachine">Timemachine</f:link.action></li>
-            <li><f:link.action action="explore" class="tx_sparqltoucan_fatlink">Explore Sparql Endpoint</f:link.action></li>
-            <li><f:link.action action="backport">Backport Test</f:link.action></li>
-        </ul>
-    </div>
-
-    <br>
-    <br>
 
     <h2><f:translate key="tx_sparqltoucan_bck_overview_title" /></h2>
     <table  class="tx_sparqltoucan" >
