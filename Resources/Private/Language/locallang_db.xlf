@@ -93,6 +93,9 @@
 			<trans-unit id="tx_sparql_toucan_sparqlfront.description">
 				<source>Singular Addin that displays a collection of the sparql toucan extension. Needs additional setup</source>
 			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_sparqlbackend_explore.title">
+				<source>Explore choosen Sparql Endpoint</source>
+			</trans-unit>
 		</body>
 	</file>
 	<file source-language="de" datatype="plaintext" original="messages" date="2020-11-30T15:12:22Z" product-name="sparql_toucan">
@@ -187,6 +190,9 @@
 			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_sparqlfront.description">
 				<source>Selbststehendes Add-In das Linked Data anzeigt, benötigt weitere Einrichtung.</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_sparqlbackend_explore.title">
+				<source>Erkunden Sie den ausgewählten Sparql Endpunkt</source>
 			</trans-unit>
 		</body>
 	</file>

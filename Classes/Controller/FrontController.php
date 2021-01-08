@@ -176,7 +176,7 @@ class FrontController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             ->from('tx_sparqltoucan_domain_model_collection');
         $collection = $query->execute()->fetchAll();
          */
-        $collection = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_sparqltoucan_domain_model_collection', '');
+        $collection = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_sparqltoucan_domain_model_collection', 'deleted = 0');
         $config['items'] = array();
         foreach( $collection as $value ) {
             array_push($config['items'],[$value['name'], $value['uid']]);

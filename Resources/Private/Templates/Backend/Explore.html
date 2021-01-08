@@ -5,7 +5,8 @@
 
     <f:render partial="Backend/MenuBar" />
 
-    <h1>Explore choosen Sparql Endpoint</h1>
+    <h1><f:translate key="tx_sparql_toucan_sparqlbackend_explore.title" /></h1>
+
     <f:form action="explore"  name="postcontent" controller="Backend" enctype="multipart/form-data">
         <div class="tx_sparqltoucan_central">
             <table class="tx_sparqltoucan" align="center">
@@ -52,7 +53,7 @@
             <tr>
                 <td>{row.pre.display -> f:format.raw()}</td>
                 <td>
-                    <f:if condition="{row.form}=='uri'>">
+                    <f:if condition="{row.form} == 'uri'">
                         <f:then>
                             <f:link.action action="explore" arguments="{postcontent: {sourceId: form.sourceId, subject: row.obj.value}}">{row.obj.label}</f:link.action>
                         </f:then>
@@ -74,20 +75,24 @@
                     </f:else>
                 </f:if>
                 <td>
-                    <f:if condition="{row.form} != 'uri'">
-                        <f:form action="newDatapoint"  name="newDatapoint" object="{newDatapoint}">
-                            <f:form.hidden property="name" value=""/>
-                            <f:form.hidden property="subject" value="{form.subject}"/>
-                            <f:form.hidden property="predicate" value="{row.pre.value}"/>
-                            <f:form.hidden property="sourceId" value="{form.sourceId}"/>
-                            <f:form.submit value="Convert to Datapoint" />
-                        </f:form>
+                    <f:if condition="{row.form} == 'uri'">
+                        <f:then>
+                            <f:link.action action="explore" arguments="{postcontent: {sourceId: form.sourceId, subject: row.obj.value}}" >Explore object</f:link.action>
+                        </f:then>
+                        <f:else>
+                            <f:form action="newDatapoint"  name="newDatapoint" object="{newDatapoint}">
+                                <f:form.hidden property="name" value=""/>
+                                <f:form.hidden property="subject" value="{form.subject}"/>
+                                <f:form.hidden property="predicate" value="{row.pre.value}"/>
+                                <f:form.hidden property="sourceId" value="{form.sourceId}"/>
+                                <f:form.submit value="Convert to Datapoint" />
+                            </f:form>
+                        </f:else>
                     </f:if>
                 </td>
             </tr>
         </f:for>
     </table>
-    <f:debug>{debug}</f:debug>
-    <f:debug>{explorer}</f:debug>
+    <f:debug>{_all}</f:debug>
 </f:section>
 </html>
