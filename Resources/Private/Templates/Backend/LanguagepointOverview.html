@@ -5,16 +5,16 @@
 
     <f:render partial="Backend/MenuBar" />
 
-    <h1>All the Labels</h1>
+    <h1><f:translate key="tx_sparql_toucan_h1.alllabels" /></h1>
 
     <f:flashMessages />
 
     <table class="tx_sparqltoucan_paginator_table">
         <tr>
-            <th>Datapoint</th>
-            <th>Source</th>
-            <th>Language</th>
-            <th>Label</th>
+            <th><f:translate key="tx_sparqltoucan_domain_model_datapoint" /></th>
+            <th><f:translate key="tx_sparqltoucan_domain_model_datapoint.source_id" /></th>
+            <th><f:translate key="tx_sparql_toucan_general.language" /></th>
+            <th><f:translate key="tx_sparql_toucan_general.label" /></th>
         </tr>
         <f:widget.paginate objects="{languagepoints}" as="paginateLabel" configuration="{itemsPerPage: 30, insertAbove: 0, insertBelow: 1, maximumNumberOfLinks: 10}">
             <f:for each="{paginateLabel}" as="point">

@@ -72,7 +72,7 @@
 			<trans-unit id="tx_sparqltoucan_bck_overview_title">
 				<source>Listing of Collections</source>
 			</trans-unit>
-			<trans-unit id="tx_sparql_toucan_sparqlbackend_explore.title">
+			<trans-unit id="tx_sparql_toucan_sparqlbackend_explore_title">
 				<source>Explore choosen Sparql Endpoint</source>
 			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_sparqlfront.name">
@@ -98,6 +98,79 @@
 			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_sparqlfront.description">
 				<source>Singular Addin that displays a collection of the sparql toucan extension. Needs additional setup</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_sparqlfront.description">
+				<source>Singular Addin that displays a collection of the sparql toucan extension. Needs additional setup</source>
+			</trans-unit>
+
+			<trans-unit id="tx_sparql_toucan_general.endpoint">
+				<source>Endpoint</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.endpoints">
+				<source>Endpoints</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.language">
+				<source>Language</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.label">
+				<source>Label</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.createnew">
+				<source>Create New</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.rawquery">
+				<source>Raw Query</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.explore">
+				<source>Explore</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_datapoint.object">
+				<source>Object</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.extrainformation">
+				<source>Extra Information</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.newdatapoint">
+				<source>New Datapoint</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_menubar.overview">
+				<source>Overview</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_menubar.exploreendpoint">
+				<source>Explore Endpoints</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_menubar.labelcache">
+				<source>Labelcache</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_menubar.languagepoint">
+				<source>Languagepoints</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_menubar.datapoint">
+				<source>Datapoints</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_menubar.timemachine">
+				<source>Timemachine</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_h1.newcollection">
+				<source>New Collection</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_h1.editcollection">
+				<source>Edit Collection</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_h1.newdatapoint">
+				<source>New Datapoint</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_h1.newsource">
+				<source>New Source</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_h1.editsource">
+				<source>Edit Source</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_h1.alllabels">
+				<source>All Labels</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_h2.assignedentries">
+				<source>Assigned Entries</source>
 			</trans-unit>
 		</body>
 	</file>
@@ -173,7 +246,7 @@
 			<trans-unit id="tx_sparqltoucan_bck_overview_title">
 				<source>Listing of Collections</source>
 			</trans-unit>
-			<trans-unit id="tx_sparql_toucan_sparqlbackend_explore.title">
+			<trans-unit id="tx_sparql_toucan_sparqlbackend_explore_title">
 				<source>Erkunden Sie den ausgewählten Sparql Endpunkt</source>
 			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_sparqlfront.name">
@@ -189,16 +262,86 @@
 				<source>Kursiv</source>
 			</trans-unit>
 			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.style_bolditalic">
-				<source>Fett & Kursiv</source>
+				<source>Fett &amp; Kursiv</source>
 			</trans-unit>
 			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.style_thin">
 				<source>Dünn</source>
 			</trans-unit>
 			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.style_thinitalic">
-				<source>Dünn & Kursiv</source>
+				<source>Dünn &amp; Kursiv</source>
 			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_sparqlfront.description">
 				<source>Alleinstehendes Addin das Daten aus einer Linked Data Quelle mittels eines oder mehrer Sparql Endpunkte darstellt.</source>
+			</trans-unit>
+
+			<trans-unit id="tx_sparql_toucan_general.endpoint">
+				<source>Endpunkt</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.endpoints">
+				<source>Endpunkte</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.language">
+				<source>Sprache</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.label">
+				<source>Bezeichnung</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.createnew">
+				<source>Erstellen</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.rawquery">
+				<source>Roher Query</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.explore">
+				<source>Erkunden</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_datapoint.object">
+				<source>Objekt</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.extrainformation">
+				<source>Zusatzinformationen</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.newdatapoint">
+				<source>Neuer Datenpunkt</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_menubar.overview">
+				<source>Überblick</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_menubar.exploreendpoint">
+				<source>Endpunkterkundung</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_menubar.labelcache">
+				<source>Bezeichnungszwischenspeicher</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_menubar.languagepoint">
+				<source>Sprachpunkte</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_menubar.datapoint">
+				<source>Datenpunkte</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_menubar.timemachine">
+				<source>Zeitmaschine</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_h1.newcollection">
+				<source>Neue Kollektion</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_h1.editcollection">
+				<source>Kollektion bearbeiten</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_h1.newdatapoint">
+				<source>Neuer Datenpunkt</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_h1.newsource">
+				<source>Neue Quelle</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_h1.editsource">
+				<source>Quelle bearbeiten</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_h1.alllabels">
+				<source>Alle Beschriftungen</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_h2.assignedentries">
+				<source>Zugeordnete Einträge</source>
 			</trans-unit>
 		</body>
 	</file>

@@ -5,7 +5,7 @@
 
     <f:render partial="Backend/MenuBar" />
 
-    <h1>New Collection</h1>
+    <h1><f:translate key="tx_sparql_toucan_h1.newcollection" /></h1>
 
     <f:flashMessages />
 
@@ -13,7 +13,7 @@
 
     <f:form action="createCollection"  name="newCollection" object="{newCollection}">
         <f:render partial="Collection/FormFields" />
-        <f:form.submit value="Create new" />
+        <f:form.submit value="{f:translate(key:'tx_sparql_toucan_general.createnew')}" />
     </f:form>
 </f:section>
 </html>

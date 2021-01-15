@@ -24,6 +24,14 @@ I have additional doubts regarding the way i am doing CollectionEntry Styles. I 
 
 After spending some time with the current (static) implementation and toying around with my own structure i am quite certain that i thought to simple in the ways i planned to integrate my plug-in into the existing website structure. There are actually some tricks i could pull with custom CSS-classes which are already possible in my current design but i doubt it would ultimately lead to any desired outcome. There is the almost certain chance that the plug-in will be used by people not very knowledgeable in general web technologies, even less than me. For the moment i will put the front-end questions aside and rather concentrate on the tree-structure of the data itself. There are some unsuspecting challenges here as well. 
 
+*07.01.2020 - ~14:00*
+
+Backporting to Typo3 Version 7.6.33 was easier than expected in most parts. There were some major functions that behaved differently in this version but i was able to overcome those challenges. Some of my mitigations did not worked out they way i planned and i am still baffled by this. Every piece of information i could find indicated that it should the work the way it doesn't. Especially the Fluid `f:variable` component stings, it should have been replaceable with `vhs` but fluid script doesn't want to accept it. In a sense this isn't all that terrible cause it keeps the amount of 3rd party plugins needed down. Still, the implementation is now in the php part which is a tiny bit dirty.
+
+*15.01.2020 - 11:21*
+
+The actual coding progress slowed down as i encountered a new kind of problem. I knew that there will always be a usability problem ahead but it seems bigger than i thought. The general way this plugin functions is quite simple and apart from the front end part which might need some additional tweaking i could easily call it finished and be done with it. Unfortunately this would not meet my own standards as i aim to make the thing actual usable by the common folk. As of now it would be quite cumbersome to get any meaningful data displayed on a website without having looked deeply in the source you want to mirror. There is a huge need for easy to use functions, to create those i need time that i not measure in written lines of code.
+
 ## Backport to Typo3 7.6.33
 
 * *DatapointOverview.html*

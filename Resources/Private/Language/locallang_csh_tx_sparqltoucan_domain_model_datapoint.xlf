@@ -48,7 +48,7 @@
 				<source>Automatisch aktualisieren</source>
 			</trans-unit>
 			<trans-unit id="source_id.description">
-				<source>Datenquelle des Datenpunkts/source>
+				<source>Datenquelle des Datenpunkts</source>
 			</trans-unit>
 		</body>
 	</file>
