@@ -50,6 +50,7 @@ call_user_func(
                                     updateSource,
                                     showSource,
                                     deleteSource,
+                                    finalDeleteSource,
                                     
                                     labelcacheOverview,
                                     languagepointOverview,

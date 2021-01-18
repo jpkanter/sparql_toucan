@@ -166,15 +166,26 @@
 			<trans-unit id="tx_sparql_toucan_h1.editsource">
 				<source>Edit Source</source>
 			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_h1.deletesource">
+				<source>Delete this Source</source>
+			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_h1.alllabels">
 				<source>All Labels</source>
 			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_h2.assignedentries">
 				<source>Assigned Entries</source>
 			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_longtexts_deleteexplanation">
+				<source>Every source is linked to a number of datapoints which in turn have languagepoints which serve
+				as de-facto cache for the information stored there. Without an available source those information might
+				degrade over time and is not directly linked to its source anymore, therefore the deletion of a source
+				is to be done with care. There is also the option to delete any linked datapoint, languagepoint and entry
+				which will probably tear holes in any existing structure but offers a clear way in abandoning a specific
+				datasource.</source>
+			</trans-unit>
 		</body>
 	</file>
-	<file source-language="en" datatype="plaintext" original="messages" date="2020-10-27T14:00:28Z" product-name="sparql_toucan">
+	<file source-language="de" datatype="plaintext" original="messages" date="2020-10-27T14:00:28Z" product-name="sparql_toucan">
 		<header/>
 		<body>
 			<trans-unit id="tx_sparqltoucan_domain_model_source">
@@ -337,11 +348,17 @@
 			<trans-unit id="tx_sparql_toucan_h1.editsource">
 				<source>Quelle bearbeiten</source>
 			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_h1.deletesource">
+				<source>Diese Quelle löschen</source>
+			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_h1.alllabels">
 				<source>Alle Beschriftungen</source>
 			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_h2.assignedentries">
 				<source>Zugeordnete Einträge</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_longtexts_deleteexplanation">
+				<source>TODO Erklärung</source>
 			</trans-unit>
 		</body>
 	</file>

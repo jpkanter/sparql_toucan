@@ -24,7 +24,7 @@
                     <td>{datapoint.uid}</td>
                     <td>{datapoint.name}</td>
                     <td>{datapoint.sourceId.name}</td>
-                    <td>{datapoint.subject}</td>
+                    <td><f:link.action action="explore" arguments="{postcontent: {sourceId: datapoint.sourceId, subject: datapoint.subject}}">{datapoint.subject}</f:link.action></td>
                     <td>{datapoint.predicate}</td>
                     <td>
                         <f:for each="{supplement}" as="info" key="more_key">

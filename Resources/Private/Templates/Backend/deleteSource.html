@@ -1,0 +1,79 @@
+<html xmlns:f="https://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:layout name="Backend" />
+
+<f:section name="content">
+
+    <f:render partial="Backend/MenuBar" />
+
+    <h1><f:translate key="tx_sparql_toucan_h1.deletesource" />: <strong>{source.name}</strong></h1>
+
+    <f:flashMessages />
+
+    <f:render partial="FormErrors" />
+
+    <p class="tx_sparqltoucan_maxwidthblock ">
+        <f:translate key="tx_sparql_toucan_longtexts_deleteexplanation"/>
+    </p>
+
+    <h2>Affected tables</h2>
+
+    <table class="tx_sparqltoucan_paginator_table">
+        <tr>
+            <th>Datapoint</th>
+            <th>Subject</th>
+            <th>Predicate</th>
+            <th>Languagepoints</th>
+        </tr>
+
+        <f:for each="{datapoints}" as="dpoint">
+            <tr>
+                <td>{dpoint.name}</td>
+                <td>{dpoint.subject}</td>
+                <td>{dpoint.predicate}</td>
+                <f:if condition="{dpoint.cachedValue} != ''">
+                    <f:then>
+                        <td>
+                            <f:for each="{dpoint.cachedValue}" as="languagePoint" iteration="ital12">
+                                <f:if condition="{ital12.index} > 0"><br></f:if>
+                                <span class="tx_toucan_language_block">{languagePoint.language}</span>
+                                {languagePoint.content -> f:format.crop(maxCharacters: 32)}
+                            </f:for>
+                        </td>
+                    </f:then>
+                    <f:else>
+                        <td><em>No Languagepoints</em></td>
+                    </f:else>
+                </f:if>
+            </tr>
+        </f:for>
+    </table>
+
+    <h2>Affected Collections</h2>
+
+    <table class="tx_sparqltoucan">
+        <tr>
+            <th><f:translate key="tx_sparqltoucan_domain_model_collection"/></th>
+            <th>Entries</th>
+            <th>orphaned Entries</th>
+            <th>Proportion</th>
+        </tr>
+        <f:for each="{collections}" as="entry">
+            <tr>
+                <td>{entry.name}</td>
+                <td>{entry.entries}</td>
+                <td>{entry.deleteEntries}</td>
+                <td>{entry.percentage} %</td>
+            </tr>
+        </f:for>
+        <tr>
+            <td colspan="4"><em>{statistics.notAffectedCollections} Collection(s) not affected</em></td>
+        </tr>
+    </table>
+
+    <h2>Delete Options</h2>
+
+    <f:link.action action="finalDeleteSource" arguments="{source:source}" class="tx_sparqltoucan_srslink">i18n:Delete Source without any Regard of relationships</f:link.action>
+
+    <f:debug>{_all}</f:debug>
+</f:section>
+</html>

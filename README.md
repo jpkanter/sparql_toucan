@@ -32,6 +32,10 @@ Backporting to Typo3 Version 7.6.33 was easier than expected in most parts. Ther
 
 The actual coding progress slowed down as i encountered a new kind of problem. I knew that there will always be a usability problem ahead but it seems bigger than i thought. The general way this plugin functions is quite simple and apart from the front end part which might need some additional tweaking i could easily call it finished and be done with it. Unfortunately this would not meet my own standards as i aim to make the thing actual usable by the common folk. As of now it would be quite cumbersome to get any meaningful data displayed on a website without having looked deeply in the source you want to mirror. There is a huge need for easy to use functions, to create those i need time that i not measure in written lines of code.
 
+*18.01.2020 13:00*
+
+By now there is more than instance where i used an old value to do things that are originally not planned to be done. In the `datapoint` Model is a field named `cachedValue`, originally this was where the displayed text for the entry was held. Later on i realized that there is more than one universal language on this world and i changed the system, but the database model and all the other things where already modeled. In the database description the field is a text and will be always empty, in PHP on the other hand it can be whatever it want to be. I cannot persist it to be saved in the database obviously, that would clash with its definition. But it turns out that i got a nice avenue to seed requests with additional data. I could do it the hard way with a lot of ifs and additional loops in the front end, but the way i am using it right now is that, every time i got a datapoint and some other stuff i want to show i put those additional data as an array to the specific datapoint. This works way to well, and i really fear  that there is some update that will break this. And yet, it feels good in a simple way, it does what its supposed to do in a clean way. But its still a dirty solution.
+
 ## Backport to Typo3 7.6.33
 
 * *DatapointOverview.html*

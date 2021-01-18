@@ -95,6 +95,10 @@ h1, h2, h3, h4, h5, h6 { color: var(--tou_red); font-weight: bold;}
     font-family: var(--tou_impact);
 }
 
+.tx_sparqltoucan_maxwidthblock {
+    max-width: 75rem;
+}
+
 div.tx_sparqltoucan_central {
     width: 60%;
     margin: auto;
@@ -108,7 +112,7 @@ div.tx_sparqltoucan_central {
     font-weight: bolder;
     border: 1px solid var(--tou_black);
     font-size: 0.8rem;
-    font-family: "Courier 10 Pitch";
+    font-family: "Courier 10 Pitch", monospace;
     padding: 0.05rem 0.2rem
 }
 

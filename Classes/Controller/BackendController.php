@@ -346,18 +346,73 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
     }
     /**
-     * action deleteSource
+     * action , doesnt delete anything but displays the view with the usage of that source and gives a bunch of options
      *
      * @param \Ubl\SparqlToucan\Domain\Model\Source $source
      * @return void
      */
     public function deleteSourceAction(\Ubl\SparqlToucan\Domain\Model\Source $source)
     {
-        $datapoints = $this->datapointRepository->findSourcesUsage($source);
+        $this->view->assign("source", $source); //mirror mirror
+        $statistics = [
+            'overall' => 0,
+            'affectedDatapoints' => 0,
+            'affectedLanguagepoints' => 0,
+            'affectedCollections' => 0,
+            'notAffectedCollections' => 0]
+        ;
+        //affected datapoints, uses cachedValue as avenue for more data
+        $datapoints = $this->datapointRepository->findUsedSource($source);
+        foreach($datapoints as $thisKey => $onePoint) {
+            if( trim($onePoint->getName()) == "") {
+                $datapoints[$thisKey]->setName(">> ".substr($onePoint->getsubject(), -20));
+            }
+            $statistics['overall']+=1; $statistics['affectedDatapoints']+=1;
+            $localLanguagePoints = $this->languagepointRepository->fetchCorresponding($onePoint)->toArray();
+            if( !empty($localLanguagePoints)) {
+                $datapoints[$thisKey]->setCachedValue($localLanguagePoints);
+                foreach( $localLanguagePoints as $nothing) {
+                    $statistics['affectedLanguagepoints']+=1;$statistics['overall']+=1;
+                }
+            }
+        }
         $this->view->assign("datapoints", $datapoints);
+        // affected collections
+        $allCollections = $this->collectionRepository->findAll();
+        $phantomCollection = [];
+        foreach($allCollections as $singleCollection ) {
+            $tempEntries = $this->collectionEntryRepository->fetchCorresponding($singleCollection);
+            $stat['del'] = 0;
+            $stat['all'] = 0;
+            foreach( $tempEntries as $entry ) {
+                $stat['all']+= 1;
+                if( $entry->getDatapointId()->getSourceId() == $source ) {
+                    $stat['del']+= 1;
+                }
+            }
+            if( $stat['del'] > 0 ) {
+                $airArray['name'] = $singleCollection->getName();
+                $airArray['entries'] = $stat['all'];
+                $airArray['deleteEntries'] = $stat['del'];
+                $airArray['percentage'] = strval(round($stat['del'] / $stat['all'], 3)*100);
+                $phantomCollection[] = $airArray;
+                $statistics['affectedCollections']+= 1; $statistics['overall']+= 1;
+            }
+            else {
+                $statistics['notAffectedCollections']+= 1;
+            }
+        }
+        $this->view->assign("collections", $phantomCollection);
+        $this->view->assign("statistics", $statistics);
+
         // $this->addFlashMessage('The object was deleted.', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
         //check for corresponding entries
-        #$this->SourceRepository->remove($Source);
+    }
+
+    public function finalDeleteSourceAction(\Ubl\SparqlToucan\Domain\Model\Source $source)
+    {
+        $this->addFlashMessage('The choosen source with name '.$source->getName().' was deleted without regard of any data consistency.', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
+        $this->sourceRepository->remove($source);
         $this->redirect('overview');
     }
 
