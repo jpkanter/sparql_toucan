@@ -610,8 +610,6 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             }
         }
 
-
-
         $addressCondition = [
             "http://www.w3.org/2000/01/rdf-schema#label",
             "http://schema.org/email",
@@ -895,23 +893,22 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     }
 
     /**
-     * @param $url URL of the sparql endpoint
-     * @param $subject subject of the standard sparql query involved
-     * @param $predicate predicate of the standard sparql query
-     * @return array containing the jsoned result of the endpoint
-     * @throws \Exception Code 10 - other than status Code 200
+     * @param string $url URL of the sparql endpoint api
+     * @param string $query a valid sparql query
+     * @param string $return_format kind of returned data (eg. json, xml...)
+     * @param string[] $sub_array list of strings that describe the tree where the returned data lays in list format
+     * @param string $query_interface parameter/appended part to the url to perform the query
+     * @return array as list of arrays
+     * @throws \Exception
      */
-    private function simpleQuery($url, $subject, $predicate) {
-        //$requestFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Http\RequestFactory::class); #V8.7
-
+    private function genericSparqlQuery($url, $query, $return_format = "json", $sub_array=['results', 'bindings'], $query_interface="query") {
         $additionalOptions = [
             'headers' => ['Cache-Control' => 'no-cache'],
             'form_params' => [
-                'query' => 'SELECT * WHERE {'.$subject.' '.$predicate.' ?obj}',
-                'format' => 'json'
+                $query_interface => $query,
+                'format' => $return_format
             ]
         ];
-        // $response = $requestFactory->request($url, 'POST', $additionalOptions); #V8.7
         $request = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             'TYPO3\\CMS\\Core\\Http\\HttpRequest',
             $url);
@@ -923,34 +920,119 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             $content = $response->getBody(); #getBody()->getContents() for V8.7+
             try {
                 $jsoned = json_decode($content, True);
-                return $jsoned['results']['bindings'];
+                $returnedArray = $jsoned;
+                try { //scales down the array structure to the part that is the result
+                    foreach( $sub_array as $key) {
+                        $returnedArray = $returnedArray[$key];
+                    }
+                    return $returnedArray;
+                }
+                catch(OutOfBoundsException  $e) {
+                    throw new \Exception("Given Array Structure doesnt match results retrieved", 9);
+                }
             }
             catch(\Exception $e) {
                 throw $e;
             }
 
         }
-        else {
-            throw new \Exception("Couldnt interpret returned server message", 10);
+        else { //TODO: extend this to proper status handling
+            throw new \Exception("Couldnt interpret returned server message
+            \n Status Code: ".$response->getStatus()."
+            \n Query: ".$query, 10);
         }
     }
+
+    /**
+     * Wrapper for query, used to be something else
+     * @param $url URL of the sparql endpoint
+     * @param $subject subject of the standard sparql query involved
+     * @param $predicate predicate of the standard sparql query
+     * @return array
+     * @throws \Exception
+     */
+    private function simpleQuery($url, $subject, $predicate) {
+        return $this->genericSparqlQuery($url, "SELECT * WHERE {".$subject." ".$predicate." ?obj}");
+    }
+
+    private function explorativeQuery($url, $subject) {
+        $timeSet = [];
+        $timeSet[] = ['time' => microtime(), 'msg' => 'start'];
+        $defaultLanguage = "en";
+
+        if( preg_match("^<.*>$^", $subject) == 0) {
+            $subject = "<" . $subject . ">";
+        }
+
+        $query = "SELECT * 
+                  WHERE { ".$subject." ?pre ?obj 
+                    OPTIONAL { ?obj <http://www.w3.org/2000/01/rdf-schema#label> ?objLabel }
+                    OPTIONAL { ?obj <http://www.w3.org/2000/01/rdf-schema#comment> ?objComment }
+                    OPTIONAL { ?pre <http://www.w3.org/2000/01/rdf-schema#label> ?preLabel }
+                    OPTIONAL { ?pre <http://www.w3.org/2000/01/rdf-schema#comment> ?preComment }
+                  }";
+        $labelNames = ["obj" => "objLabel", "pre" => "preLabel"];
+
+        $resultList = $this->genericSparqlQuery($url, $query); //other stuff stays default for now
+        $timeSet[] = ['time' => microtime(), 'msg' => 'query'];
+        $label = array();
+        $elements = array();
+
+        foreach( $resultList as $singularEntry ) {
+            $pre = $singularEntry['pre']['value'];
+
+            if( $singularEntry['obj']['type'] == "uri" && $singularEntry['pre']['type'] == "uri") {
+                //label maker
+
+                $obj = $singularEntry['obj']['value'];
+                //TODO: label for $obj & $pre same thingy, same check, use loop
+                if( !isset($label[$obj]) ) {
+                    $label[$obj] = array();
+                }
+                if( isset($singularEntry['objLabel']['xml:lang']) ) {
+                    if( !isset($label[$obj][$singularEntry['objLabel']['xml:lang']]) ) {
+                        $label[$obj][$singularEntry['objLabel']['xml:lang']] = $singularEntry['objLabel']['value'];
+                    }
+                }
+                else {
+                    if( !isset($label[$obj][$defaultLanguage]) ) {
+                        $label[$obj][$defaultLanguage] = $singularEntry['objLabel']['value'];
+                    }
+                }
+            }
+
+            if( !isset($elements[$pre]) ) {
+                $elements[$pre] = array();
+                $elements[$pre][] = $singularEntry['obj'];
+                continue;
+            }
+            else {
+                $goAhead = True;
+                foreach( $elements[$pre] as $thisPre ) {
+                    if( $singularEntry['obj']['value'] == $thisPre['value']) {
+                        $goAhead = False; //crutch
+                        continue 2; //jumps ahead in main loop and ignores the rest of the stuff here
+                    }
+                }
+                //if we actually get here
+                if( $goAhead) $elements[$pre][] = $singularEntry['obj'];
+            }
+        }
+        $timeSet[] = ['time' => microtime(), 'msg' => 'foreach'];
+        return [$label, $elements, $timeSet];
+    }
+
     //overload
+
+    /** TODO replace this
+     * @param $url
+     * @param $query
+     * @return array
+     * @throws \Exception
+     */
     private function directQuery($url, $query) {
         //$requestFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Http\RequestFactory::class); #V8.7
-        $requestFactory = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Http\\HttpRequest', 'http://typo3.org/');
-        $additionalOptions = [
-            'headers' => ['Cache-Control' => 'no-cache'],
-            'form_params' => [
-                'query' => $query,
-                'format' => 'json'
-            ]
-        ];
-        $response = $requestFactory->request($url, 'POST', $additionalOptions);
-        if ($response->getStatusCode() === 200) {
-            $content = $response->getBody()->getContents();
-            $jsoned = json_decode($content, True);
-            return $jsoned['results']['bindings'];
-        }
+        return $this->genericSparqlQuery($url, $query);
     }
 
     private function parseSparqlJson($query, $SourceID = null, $predicate_name = 'pre', $object_name = 'obj') {
@@ -969,21 +1051,21 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 else {
                     $label = $pre['value'];
                 }
-                $line['pre'] = array();
-                $line['pre']['display'] = $a_pre . $pre['value'] . $a_mid . $label . $a_end;
-                $line['pre']['value'] = $pre['value'];
+                $line[$predicate_name] = array();
+                $line[$predicate_name]['display'] = $a_pre . $pre['value'] . $a_mid . $label . $a_end;
+                $line[$predicate_name]['value'] = $pre['value'];
             }
             else {
-                $line['pre'] = $pre['type']. " - ". $pre['value'];
+                $line[$predicate_name] = $pre['type']. " - ". $pre['value'];
             }
             if( $obj['type'] == "literal" or $obj['type'] == "typed-literal") {
-                $line['obj']['value'] = $obj['value'];
-                $line['obj']['label'] = $obj['value'];
+                $line[$object_name]['value'] = $obj['value'];
+                $line[$object_name]['label'] = $obj['value'];
 
             }
             elseif( $obj['type'] == "uri") {
-                $line['obj']['value'] = $obj['value'];
-                $line['obj']['label'] = $label = $this->findLabels($SourceID, $obj['value']);
+                $line[$object_name]['value'] = $obj['value'];
+                $line[$object_name]['label'] = $label = $this->findLabels($SourceID, $obj['value']);
                 $line['form'] = "uri";
             }
             foreach( $obj as $property => $value ) {
@@ -1075,13 +1157,14 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     }
 
     public function testSomethingAction() {
-        $datapoint = $this->datapointRepository->findByIdentifier(11);
-        $this->view->assign("debug9", $this->languagepointRepository->fetchCorresponding($datapoint));
-        $this->view->assign("debug7", $datapoint);
+        //$datapoint = $this->datapointRepository->findByIdentifier(11);
+        //$this->view->assign("debug9", $this->languagepointRepository->fetchCorresponding($datapoint));
+        //$this->view->assign("debug7", $datapoint);
         //$this->languagepointRepository->deleteCorresponding($datapoint);
         //$this->view->assign("debug1", $this->updateDatapointLanguagepoints($datapoint));
         //$datapoint = $this->datapointRepository->findByIdentifier(9);
         //$this->view->assign("debug2", $this->updateDatapointLanguagepoints($datapoint));
+        $this->view->assign("majorDebug", $this->explorativeQuery("https://data.finc.info/sparql", "https://data.finc.info/resource/organisation/DE-15"));
     }
 
     #TODO: delete this backport
