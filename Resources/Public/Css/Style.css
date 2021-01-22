@@ -35,6 +35,10 @@ table.tx_sparqltoucan td:not(:last-child) {
     padding: 0.25em 0.25em;
 }
 
+table.tx_sparqltoucan_explorer_tr tr {
+    border-bottom: 2px solid var(--tou_purplered)
+}
+
 html {
     overflow: auto;
 }

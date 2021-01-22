@@ -536,8 +536,8 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             }
             // ^<.*>$
 
-            $predicate = trim($formdata['postcontent']['predicate']);
-            if( $predicate == "") { $predicate = "?pre"; }
+            //$predicate = trim($formdata['postcontent']['predicate']);
+            //if( $predicate == "") { $predicate = "?pre"; }
 
             $this->view->assign("form", $formdata['postcontent']);
 
@@ -547,9 +547,30 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 return void;
             }
 
-            $content = $this->simpleQuery($url, $subject, $predicate);
-            $this->view->assign("explorer", $this->parseSparqlJson($content, $formdata['postcontent']['sourceId']));
-            $this->view->assign("debug", $content);
+            $explorative_result = $this->explorativeQuery($url, $subject);
+            /** Pre backing lines for Type V7
+             Otherwise stuff like this would work in Fluid: <f:if condition="{labels.{lineItem}}">
+             Fluid in Typo7 doesnt support this kind of behaviour, therefore i need to do it in php, annoying
+             */
+
+            foreach( $explorative_result[1] as $key => $predicate ) {
+                if( isset($explorative_result[0][$key]) ) {
+                    $explorative_result[1][$key]['display'] = $explorative_result[0][$key];
+                } else {
+                    $explorative_result[1][$key]['display'] = $key;
+                }
+                foreach( $predicate as $subKey => $object ) {
+                    if( isset($explorative_result[0][$subKey]) ) {
+                        $explorative_result[1][$key][$subKey]['display'] = $explorative_result[0][$subKey];
+                    } else {
+                        $explorative_result[1][$key][$subKey]['display'] = $object['value'];
+                    }
+                }
+            }
+            /**End of PreBacking Processing*/
+            $this->view->assign("explorer", $explorative_result[1]);
+            $this->view->assign("times", $explorative_result[2]);
+            $this->view->assign("debug", $explorative_result);
         }
 
     }
@@ -955,7 +976,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         return $this->genericSparqlQuery($url, "SELECT * WHERE {".$subject." ".$predicate." ?obj}");
     }
 
-    private function explorativeQuery($url, $subject) {
+    private function explorativeQuery($url, $subject, $filter=True) {
         $timeSet = [];
         $timeSet[] = ['time' => microtime(), 'msg' => 'start'];
         $defaultLanguage = "en";
@@ -975,28 +996,32 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
         $resultList = $this->genericSparqlQuery($url, $query); //other stuff stays default for now
         $timeSet[] = ['time' => microtime(), 'msg' => 'query'];
-        $label = array();
+        $allLabels = array();
         $elements = array();
 
         foreach( $resultList as $singularEntry ) {
             $pre = $singularEntry['pre']['value'];
 
-            if( $singularEntry['obj']['type'] == "uri" && $singularEntry['pre']['type'] == "uri") {
-                //label maker
+            //label maker
+            foreach( $labelNames as $key => $fieldName) {
+                if( $singularEntry[$key]['type'] == "uri") {
 
-                $obj = $singularEntry['obj']['value'];
-                //TODO: label for $obj & $pre same thingy, same check, use loop
-                if( !isset($label[$obj]) ) {
-                    $label[$obj] = array();
-                }
-                if( isset($singularEntry['objLabel']['xml:lang']) ) {
-                    if( !isset($label[$obj][$singularEntry['objLabel']['xml:lang']]) ) {
-                        $label[$obj][$singularEntry['objLabel']['xml:lang']] = $singularEntry['objLabel']['value'];
+                    if( !isset($singularEntry[$fieldName]) ) {
+                        continue; //in case there is no label anyway
                     }
-                }
-                else {
-                    if( !isset($label[$obj][$defaultLanguage]) ) {
-                        $label[$obj][$defaultLanguage] = $singularEntry['objLabel']['value'];
+                    $keyValue = $singularEntry[$key]['value'];
+                    if( !isset($allLabels[$keyValue]) ) {
+                        $allLabels[$keyValue] = array();
+                    }
+                    if( isset($singularEntry[$fieldName]['xml:lang']) ) {
+                        if( !isset($allLabels[$keyValue][$singularEntry[$fieldName]['xml:lang']]) ) {
+                            $allLabels[$keyValue][$singularEntry[$fieldName]['xml:lang']] = $singularEntry[$fieldName]['value'];
+                        }
+                    }
+                    else {
+                        if( !isset($allLabels[$keyValue][$defaultLanguage]) ) {
+                            $allLabels[$keyValue][$defaultLanguage] = $singularEntry[$fieldName]['value'];
+                        }
                     }
                 }
             }
@@ -1018,8 +1043,41 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 if( $goAhead) $elements[$pre][] = $singularEntry['obj'];
             }
         }
-        $timeSet[] = ['time' => microtime(), 'msg' => 'foreach'];
-        return [$label, $elements, $timeSet];
+        $timeSet[] = ['time' => microtime(), 'msg' => 'main loop'];
+        //at this point we have all unfiltered information, to many for normal use cases
+        if( $filter ) {
+            if (TYPO3_MODE === 'FE') {
+                if (isset($GLOBALS['TSFE']->config['config']['language'])) {
+                    $desiredLanguage = $GLOBALS['TSFE']->config['config']['language'];
+                }
+            } elseif (strlen($GLOBALS['BE_USER']->uc['lang']) > 0) {
+                $desiredLanguage =  $GLOBALS['BE_USER']->uc['lang'];
+            }
+            else {
+                $desiredLanguage = $defaultLanguage; //default
+            }
+            $oneLanguageLabel = array();
+            foreach( $allLabels as $key => $entry) {
+                if( isset($entry[$desiredLanguage]) ) {
+                    $oneLanguageLabel[$key] = $entry[$desiredLanguage];
+                }
+                elseif( isset($entry[$defaultLanguage])) {
+                    $oneLanguageLabel[$key] = $entry[$defaultLanguage];
+                }
+                else {//any language that might be left, i just take the first entry i get, we could integrate priority here
+                    foreach( $entry as $anyLanguage) {
+                        $oneLanguageLabel[$key] = $anyLanguage;
+                        continue 2;
+                    }
+                }
+            }
+
+            $timeSet[] = ['time' => microtime(), 'msg' => 'language loop'];
+            return [$oneLanguageLabel, $elements, $timeSet];
+        }
+
+
+        return [$allLabels, $elements, $timeSet];
     }
 
     //overload
