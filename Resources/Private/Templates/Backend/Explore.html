@@ -42,128 +42,52 @@
         <f:form.submit value="Collection Creation" />
     </f:form>
 
-    <table class="tx_sparqltoucan tx_sparqltoucan_explorer_tr">
+    <table class="tx_sparqltoucan">
         <tr>
             <th><f:translate key="tx_sparqltoucan_domain_model_datapoint.predicate" /></th>
             <th><f:translate key="tx_sparqltoucan_domain_model_datapoint.object" /></th>
             <th><f:translate key="tx_sparql_toucan_general.extrainformation" /></th>
             <th><f:translate key="tx_sparql_toucan_general.newdatapoint" /></th>
         </tr>
-
-        <f:for each="{explorer}" as="lineItem" key="itemKey">
+        <f:for each="{trueExplore}" as="predicate">
             <tr>
-                <td>
-                    <f:link.action action="explore" arguments="{postcontent: {sourceId: form.sourceId, subject: itemKey}}">{lineItem.display}</f:link.action>
-                </td>
-                <td>
-                    <f:for each="{lineItem}" as="obj" key="notDisplay" iteration="iterator">
-                        <f:if condition="{iterator.index} > 0"><br></f:if>
+                <td rowspan="{predicate.rowspan}"><f:link.action action="explore" arguments="{postcontent: {sourceId: form.sourceId, subject: predicate.value}}">{predicate.label}</f:link.action></td>
+                <f:for each="{predicate.objects}" as="obj" iteration="iterator">
+                    <f:if condition="{iterator.index} > 0"></tr><tr></f:if>
+                    <td>
                         <f:if condition="{obj.type} == 'uri'">
                             <f:then>
-                                <f:link.action action="explore" arguments="{postcontent: {sourceId: form.sourceId, subject: obj.value}}">{obj.display}</f:link.action>
+                                <f:link.action action="explore" arguments="{postcontent: {sourceId: form.sourceId, subject: obj.value}}">{obj.label}</f:link.action>
                             </f:then>
                             <f:else>
-                                {obj.display}
+                                {obj.label}
                             </f:else>
                         </f:if>
-                    </f:for>
-                </td>
-                <td>
-                    <f:for each="{lineItem}" as="obj" iteration="secondIterator">
-                        <f:if condition="{secondIterator.index} > 0"><br></f:if>
-                        <f:for each="{obj" as="subobj" key="thingy">
-                            <f:if condition="{thingy} != 'type'">
-                                <f:if condition="{thingy} != 'value'">
-                                    <span class="tx_sparqltoucan_monospaced">{thingy}:</span> {obj} ~
-                                </f:if>
-                            </f:if>
-                        </f:for>
-                    </f:for>
-                </td>
-                <td>
-                    <f:for each="{lineItem}" as="obj" iteration="thirdIterator" key="thirdKey">
-                        <f:if condition="{thirdKey} == 'display'">
-                            <f:then>{obj.value}</f:then>
+                    </td>
+                    <td>
+                        {obj.adda}
+                    </td>
+                    <td>
+                        <f:if condition="{obj.type} == 'uri'">
+                            <f:then>
+                                <f:link.action action="explore" arguments="{postcontent: {sourceId: form.sourceId, subject: obj.value}}">Explore object</f:link.action>
+                            </f:then>
                             <f:else>
-                                <f:if condition="{thirdIterator.index} > 0"><br></f:if>
-                                <f:if condition="{obj.type} == 'uri'">
-                                    <f:then>
-                                        <em>URI</em>
-                                    </f:then>
-                                    <f:else>
-                                        <f:form action="newDatapoint"  name="newDatapoint" object="{newDatapoint}">
-                                            <f:form.hidden property="name" value=""/>
-                                            <f:form.hidden property="subject" value="{form.subject}"/>
-                                            <f:form.hidden property="predicate" value="{itemKey}"/>
-                                            <f:form.hidden property="sourceId" value="{form.sourceId}"/>
-                                            <f:form.submit value="Convert to Datapoint" />
-                                        </f:form>
-                                    </f:else>
-                                </f:if>
+                                <f:form action="newDatapoint"  name="newDatapoint" object="{newDatapoint}">
+                                    <f:form.hidden property="name" value=""/>
+                                    <f:form.hidden property="subject" value="{form.subject}"/>
+                                    <f:form.hidden property="predicate" value="{predicate.value}"/>
+                                    <f:form.hidden property="sourceId" value="{form.sourceId}"/>
+                                    <f:form.submit value="Convert to Datapoint" />
+                                </f:form>
                             </f:else>
                         </f:if>
-                    </f:for>
-                </td>
+                    </td>
+                </f:for>
             </tr>
         </f:for>
     </table>
 
-    <table class="tx_sparqltoucan">
-        <tr>
-            <th><f:translate key="tx_sparqltoucan_domain_model_datapoint.predicate" /></th>
-            <th><f:translate key="tx_sparqltoucan_domain_model_datapoint.object" /></th>
-            <th><f:translate key="tx_sparql_toucan_general.extrainformation" /></th>
-            <th><f:translate key="tx_sparql_toucan_general.newdatapoint" /></th>
-        </tr>
-
-        <f:for each="{explorer}" as="row">
-            <tr>
-                <td>{row.pre.display -> f:format.raw()}</td>
-                <td>
-                    <f:if condition="{row.form} == 'uri'">
-                        <f:then>
-                            <f:link.action action="explore" arguments="{postcontent: {sourceId: form.sourceId, subject: row.obj.value}}">{row.obj.label}</f:link.action>
-                        </f:then>
-                        <f:else>
-                            {row.obj.value -> f:format.raw()}
-                        </f:else>
-                    </f:if>
-                </td>
-                <f:if condition="<tou:isarray var='{row.extra}'/> ==1">
-                    <f:then>
-                        <td>
-                            <f:for each="{row.extra}" as="line">
-                                {line} </br>
-                            </f:for>
-                        </td>
-                    </f:then>
-                    <f:else>
-                        <td>{row.extra -> f:format.crop(maxCharacters: 100)}</td>
-
-    <table class="tx_sparqltoucan">
-        <tr>
-            <th><f:translate key="tx_sparqltoucan_domain_model_datapoint.predicate" /></t
-                    </f:else>
-                </f:if>
-                <td>
-                    <f:if condition="{row.form} == 'uri'">
-                        <f:then>
-                            <f:link.action action="explore" arguments="{postcontent: {sourceId: form.sourceId, subject: row.obj.value}}" >Explore object</f:link.action>
-                        </f:then>
-                        <f:else>
-                            <f:form action="newDatapoint"  name="newDatapoint" object="{newDatapoint}">
-                                <f:form.hidden property="name" value=""/>
-                                <f:form.hidden property="subject" value="{form.subject}"/>
-                                <f:form.hidden property="predicate" value="{row.pre.value}"/>
-                                <f:form.hidden property="sourceId" value="{form.sourceId}"/>
-                                <f:form.submit value="Convert to Datapoint" />
-                            </f:form>
-                        </f:else>
-                    </f:if>
-                </td>
-            </tr>
-        </f:for>
-    </table>
     <f:debug>{_all}</f:debug>
 </f:section>
 </html>

@@ -553,24 +553,38 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
              Fluid in Typo7 doesnt support this kind of behaviour, therefore i need to do it in php, annoying
              */
 
+            $explore_table = array();
             foreach( $explorative_result[1] as $key => $predicate ) {
                 if( isset($explorative_result[0][$key]) ) {
-                    $explorative_result[1][$key]['display'] = $explorative_result[0][$key];
-                } else {
-                    $explorative_result[1][$key]['display'] = $key;
+                    $label = $explorative_result[0][$key];
                 }
-                foreach( $predicate as $subKey => $object ) {
-                    if( isset($explorative_result[0][$subKey]) ) {
-                        $explorative_result[1][$key][$subKey]['display'] = $explorative_result[0][$subKey];
-                    } else {
-                        $explorative_result[1][$key][$subKey]['display'] = $object['value'];
+                else {
+                    $label = $key;
+                }
+                $objects = array();
+                foreach( $predicate as $object) {
+                    $label_key = $object['value'];
+                    if( isset($explorative_result[0][$label_key]) ) { //never works if type!=uri
+                        $object_label = $explorative_result[0][$label_key];
                     }
+                    else {
+                        $object_label = $object['value'];
+                    }
+                    $adda = "";
+                    foreach( $object as $objkey => $objvalue) {
+                        if( $objkey != "value" && $objkey != "type" ) {
+                            $adda.= $objkey.": ".$objvalue."; ";
+                        }
+                    }
+                    if( empty($adda)) { $adda = "N/A";} //TODO: i18n here
+                    $objects[] = ["value" => $label_key, "label" => $object_label, "type" => $object['type'], "adda" => $adda];
                 }
+                $explore_table[] = ["value" => $key, "label" => $label, "rowspan" => count($predicate), "objects" => $objects];
+
             }
+
             /**End of PreBacking Processing*/
-            $this->view->assign("explorer", $explorative_result[1]);
-            $this->view->assign("times", $explorative_result[2]);
-            $this->view->assign("debug", $explorative_result);
+            $this->view->assign("trueExplore", $explore_table);
         }
 
     }
