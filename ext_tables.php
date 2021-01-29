@@ -59,7 +59,9 @@ call_user_func(
                                     deleteTimemachine,
                                     explore,
                                     testSomething,
-                                    remoteUpdateDatapoints,',
+                                    remoteUpdateDatapoints,
+                                    
+                                    ajaxTestCall',
                     'Collection' => 'list, show, new, create, edit, update, delete','CollectionEntry.css' => 'list, show, new, create, edit, update, delete',
                     'Front' => 'display'
                 ],

@@ -29,40 +29,6 @@ plugin.tx_sparqltoucan_sparqlfront {
     }
 }
 
-# these classes are only used in auto-generated templates
-plugin.tx_sparqltoucan._CSS_DEFAULT_STYLE (
-    textarea.f3-form-error {
-        background-color:#FF9F9F;
-        border: 1px #FF0000 solid;
-    }
-
-    input.f3-form-error {
-        background-color:#FF9F9F;
-        border: 1px #FF0000 solid;
-    }
-
-    .tx-sparql-toucan table {
-        border-collapse:separate;
-        border-spacing:10px;
-    }
-
-    .tx-sparql-toucan table th {
-        font-weight:bold;
-    }
-
-    .tx-sparql-toucan table td {
-        vertical-align:top;
-    }
-
-    .typo3-messages .message-error {
-        color:red;
-    }
-
-    .typo3-messages .message-ok {
-        color:green;
-    }
-)
-
 # Module configuration
 module.tx_sparqltoucan_web_sparqltoucansparqlbackend {
     persistence {
@@ -81,9 +47,41 @@ module.tx_sparqltoucan_web_sparqltoucansparqlbackend {
             datetimepicker = EXT:sparql_toucan/Resources/Public/Css/jquery.datetimepicker.min.css
         }
         includeJS {
-            JqueryUITimepicker = EXT:sparql_toucan/Resources/Public/javascript/jquery.datetimepicker.full.min.js
+            JqueryUITimepicker = EXT:sparql_toucan/Resources/Public/JavaScript/jquery.datetimepicker.full.min.js
+            jQuery = EXT:sparql_toucan/Resources/Public/JavaScript/jquery-3.5.1.min.js
         }
+        includeJSFoooter {
+            jQuery = EXT:sparql_toucan/Resources/Public/JavaScript/jquery-3.5.1.min.js
+        }
+    }
+
+    settings {
+        typeNum = {$module.tx_sparqltoucan_sparqlbackend.settings.typeNum}
+        useAjaxwithJQuery = {$module.tx_sparqltoucan_sparqlbackend.settings.useAjaxwithJquery}
     }
 }
 
-page.includeCSS.sparql_toucan = {$plugin.tx_sparqltoucan.view.CollectionEntrycssFile}
+page.includeJS.sparql_toucan = {$plugin.tx_sparqltoucan.page.includeJS}
+page.includeCSS.sparql_toucan = {$plugin.tx_sparqltoucan.page.CollectionEntrycssFile}
+
+//ajax call page
+ajaxtoucancall_page = PAGE
+ajaxtoucancall_page {
+    typeNum = 674523
+
+    config {
+        disableAllHeaderCode = 1
+        additionalHeaders = Content-type: application/json, utf-8
+        xhtml_cleaning = 0
+        debug = 1
+        no_cache = 1
+        admPanel = 0
+    }
+
+    20 = RECORDS
+    20 {
+        source = 20,21
+        dontCheckPid = 1
+        tables = tt_content
+    }
+}

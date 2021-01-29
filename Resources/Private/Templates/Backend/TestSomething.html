@@ -2,9 +2,53 @@
 <f:layout name="Backend" />
 
 <f:section name="content">
+    <script src="{f:uri.resource(path: 'JavaScript/jquery-3.5.1.min.js')}"></script><!---this is definetly the most unclean way of all-->
     <h1>Debug Page</h1>
     <em>This Page can contain different things at different points in time. Its content will always be two variables with different content.</em>
-    <f:debug>{_all}</f:debug>
+
     <f:link.action action="testSomething" class="tx_sparqltoucan_fatlink">Test it again</f:link.action>
+
+    <br><br>
+
+    random terxt?
+    <input type="button" id="blafasel" value="this is it"/>
+    <div id="texthere">this is the div you cannot see</div>
+    <script>
+        jQuery('#blafasel').on('click',function (){
+            jQuery('#texthere').html("<b>Text</b>");
+        });
+    </script>
+
+    <br><br>
+
+    <f:form
+            action="ajaxCallTest"
+            object="{collection}"
+            name="collection"
+            id="ajaxselectlist-form">
+
+        <f:form.select
+                options="{collection}"
+                optionLabelField="name"
+                class="ajaxFormOption"
+                name="collection" />
+
+        <f:form.hidden name="action" value="ajaxCallTest"/>
+        <input type="hidden" name="type" value="674523"/>
+        <input type="hidden" name="L" value="{sysLanguageUid}">
+    </f:form>
+
+    <f:comment>The record entry is loaded inside this element.</f:comment>
+    <div id="ajaxCallResult">this is inside the ajax result div</div>
+
+    <em>THis is after the first form block</em>
+
+    <script src="{f:uri.resource(path: 'JavaScript/localTest.js')}">
+
+    </script>
+    <em>This is some more text that for some reason wont get rendered</em>
+
+
+    <f:debug>{_all}</f:debug>
 </f:section>
 </html>

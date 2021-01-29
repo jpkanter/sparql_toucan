@@ -1236,7 +1236,19 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         //$this->view->assign("debug1", $this->updateDatapointLanguagepoints($datapoint));
         //$datapoint = $this->datapointRepository->findByIdentifier(9);
         //$this->view->assign("debug2", $this->updateDatapointLanguagepoints($datapoint));
-        $this->view->assign("majorDebug", $this->explorativeQuery("https://data.finc.info/sparql", "https://data.finc.info/resource/organisation/DE-15"));
+        //$this->view->assign("majorDebug", $this->explorativeQuery("https://data.finc.info/sparql", "https://data.finc.info/resource/organisation/DE-15"));
+        $this->view->assign("collection", $this->collectionRepository->findAll());
+        //apparently language is finicky
+        if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_version) >= 9004000) {
+            $languageAspect = GeneralUtility::makeInstance(Context::class)->getAspect('language');
+            $this->view->assign("sysLanguageUid", $languageAspect->getId());
+        } else {
+            $this->view->assign("sysLanguageUid", $GLOBALS['TSFE']->sys_language_uid);
+        }
+    }
+
+    public function ajaxCallTestAction(Collection $collection) {
+        $this->view->assign("collection", $collection);
     }
 
     #TODO: delete this backport

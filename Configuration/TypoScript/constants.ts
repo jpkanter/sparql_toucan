@@ -30,4 +30,9 @@ module.tx_sparqltoucan_sparqlbackend {
         # cat=module.tx_sparqltoucan_sparqlbackend//a; type=string; label=Default storage PID
         storagePid =
     }
+
+    settings {
+        useAjaxwithJQuery = 1
+        typeNum = 674523
+    }
 }
