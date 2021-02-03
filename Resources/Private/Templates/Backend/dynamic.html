@@ -1,0 +1,38 @@
+<html xmlns:f="https://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:layout name="Backend" />
+
+<f:section name="content">
+
+    <f:render partial="Backend/MenuBar" />
+
+    <f:flashMessages />
+
+    <f:render partial="FormErrors" />
+
+    <script src="{f:uri.resource(path: 'JavaScript/jquery-3.5.1.min.js')}"></script>
+
+    <script src="{f:uri.resource(path: 'JavaScript/TestCall.js')}"></script>
+
+    <span style="font-family: 'Courier 10 Pitch', monospace; font-style: italic; color: darkgrey;" id="version_number"></span>
+
+    <div class="tx_sparqltoucan_formworld">
+        <form action="explore"  name="postcontent" controller="Backend" enctype="multipart/form-data" id="explorerForm">
+            <label><f:translate key="tx_sparql_toucan_general.endpoints" />:</label>
+            <f:form.select property="sourceId" options="{sources}" optionValueField="uid" optionLabelField="name" value="{form.sourceId}" id="sourceSelect"/>
+            <f:form.select property="sourceId" options="{sources}" optionValueField="uid" optionLabelField="url" value="{form.sourceId}" id="sourceUri" style="display: none"/>
+            <em id="randoText"></em>
+            <label><f:translate key="tx_sparqltoucan_domain_model_datapoint.subject" /></label>
+            <f:form.textfield property="subject" value="{form.subject}" size="90"/>
+            <label><f:translate key="tx_sparqltoucan_domain_model_datapoint.predicate" /></label>
+            <f:form.textfield property="predicate" value="{form.subject}" size="90"/>
+            <f:form.submit value="Create Datapoint"/>
+        </form>
+        <f:form.button value="Button" id="dynamicButton">Button</f:form.button>
+    </div>
+
+    <div id="testArea">
+        This is the default text that shouldnt be around for long
+    </div>
+
+</f:section>
+</html>

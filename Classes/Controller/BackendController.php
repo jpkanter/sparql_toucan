@@ -1228,6 +1228,11 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
     }
 
+    public function dynamicAction() {
+        $sources = $this->sourceRepository->findAll();
+        $this->view->assign("sources", $sources);
+    }
+
     public function testSomethingAction() {
         //$datapoint = $this->datapointRepository->findByIdentifier(11);
         //$this->view->assign("debug9", $this->languagepointRepository->fetchCorresponding($datapoint));

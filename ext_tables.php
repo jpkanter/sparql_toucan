@@ -30,6 +30,8 @@ call_user_func(
                                     updateCollectionLanguagepoints,
                                     
                                     backport,
+                                    testSomething,
+                                    dynamic,
                                     
                                     createCollectionEntry, 
                                     deleteCollectionEntry, 
@@ -58,7 +60,6 @@ call_user_func(
                                     timemachine,
                                     deleteTimemachine,
                                     explore,
-                                    testSomething,
                                     remoteUpdateDatapoints,
                                     
                                     ajaxTestCall',
