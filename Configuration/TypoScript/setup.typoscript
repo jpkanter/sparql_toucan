@@ -85,3 +85,4 @@ ajaxtoucancall_page {
         tables = tt_content
     }
 }
+config.contentObjectExceptionHandler = 0

@@ -36,16 +36,10 @@ class CollectionEntryRepository extends \TYPO3\CMS\Extbase\Persistence\Repositor
      * @param \Ubl\SparqlToucan\Domain\Model\Collection $collection
      * @return \Ubl\SparqlToucan\Domain\Model\CollectionEntry $collectionEntry
      */
-    public function fetchCorresponding(\Ubl\SparqlToucan\Domain\Model\Collection $collection, $sort = "ASC") {
+    public function fetchCorresponding(\Ubl\SparqlToucan\Domain\Model\Collection $collection) {
         $GLOBALS['TYPO3_DB']->debugOutput = true;
         $query = $this->createQuery();
         $query->matching($query->equals('collection_i_d', $collection));
-        if( $sort == "ASC" ) {
-            $query->setOrderings(['position' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING]);
-        }
-        elseif( $sort == "DESC" ) {
-            $query->setOrderings(['position' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING]);
-        }
         return $query->execute();
     }
 

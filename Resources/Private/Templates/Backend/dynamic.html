@@ -11,7 +11,7 @@
 
     <script src="{f:uri.resource(path: 'JavaScript/jquery-3.5.1.min.js')}"></script>
 
-    <script src="{f:uri.resource(path: 'JavaScript/TestCall.js')}"></script>
+    <script src="{f:uri.resource(path: 'JavaScript/TestCall.js')}"></script>s
 
     <span style="font-family: 'Courier 10 Pitch', monospace; font-style: italic; color: darkgrey;" id="version_number"></span>
 
@@ -22,9 +22,9 @@
             <f:form.select property="sourceId" options="{sources}" optionValueField="uid" optionLabelField="url" value="{form.sourceId}" id="sourceUri" style="display: none"/>
             <em id="randoText"></em>
             <label><f:translate key="tx_sparqltoucan_domain_model_datapoint.subject" /></label>
-            <f:form.textfield property="subject" value="{form.subject}" size="90"/>
+            <f:form.textfield property="subject" value="{form.subject}" size="90" id="form_subject"/>
             <label><f:translate key="tx_sparqltoucan_domain_model_datapoint.predicate" /></label>
-            <f:form.textfield property="predicate" value="{form.subject}" size="90"/>
+            <f:form.textfield property="predicate" value="{form.subject}" size="90" id="form_predicate"/>
             <f:form.submit value="Create Datapoint"/>
         </form>
         <f:form.button value="Button" id="dynamicButton">Button</f:form.button>

@@ -6,8 +6,11 @@
 			<trans-unit id="name.description">
 				<source>name</source>
 			</trans-unit>
-			<trans-unit id="position.description">
-				<source>position</source>
+			<trans-unit id="gridcolumn.description">
+				<source>column</source>
+			</trans-unit>
+			<trans-unit id="gridrow.description">
+				<source>row</source>
 			</trans-unit>
 			<trans-unit id="style.description">
 				<source>style</source>
@@ -30,8 +33,11 @@
 			<trans-unit id="name.description">
 				<source>Name</source>
 			</trans-unit>
-			<trans-unit id="position.description">
-				<source>Position in der Kollektion</source>
+			<trans-unit id="gridcolumn.description">
+				<source>Spalte</source>
+			</trans-unit>
+			<trans-unit id="gridrow.description">
+				<source>Zeile</source>
 			</trans-unit>
 			<trans-unit id="style.description">
 				<source>Erscheinung</source>

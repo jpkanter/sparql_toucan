@@ -25,12 +25,18 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     protected $name = '';
 
     /**
-     * position
+     * grid_column
      *
      * @var int
      */
-    protected $position = 0;
+    protected $gridColumn = 1; //CSS Grids start at 1
 
+    /**
+     * grid_row
+     *
+     * @var int
+     */
+    protected $gridRow = 1; //CSS Grids start at 1
     /**
      * style
      *
@@ -43,7 +49,7 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var string
      */
-    protected $style_name = '';
+    protected $styleName = '';
 
     /**
      * tempValue
@@ -102,24 +108,45 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     * Returns the position
+     * Returns the gridColumn
      *
-     * @return int $position
+     * @return int $grid_column
      */
-    public function getPosition()
+    public function getGridColumn()
     {
-        return $this->position;
+        return $this->gridColumn;
     }
 
     /**
-     * Sets the position
+     * Sets the gridColumn
      *
-     * @param int $position
+     * @param int $column
      * @return void
      */
-    public function setPosition($position)
+    public function setGridColumn($column)
     {
-        $this->position = $position;
+        $this->gridColumn = $column;
+    }
+
+    /**
+     * Returns the gridRow
+     *
+     * @return int $grid_row
+     */
+    public function getGridRow()
+    {
+        return $this->gridRow;
+    }
+
+    /**
+     * Sets the gridRow
+     *
+     * @param int $row
+     * @return void
+     */
+    public function setGridRow($row)
+    {
+        $this->grid_row = $row;
     }
 
     /**
@@ -148,9 +175,9 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return string $styleName
      */
-    public function getStyle_name()
+    public function getStyleName()
     {
-        return $this->style_name;
+        return $this->styleName;
     }
 
     /**
@@ -159,9 +186,9 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @param string $style_name
      * @return void
      */
-    public function setStyle_name($style_name)
+    public function setStyleName($style_name)
     {
-        $this->style_name = $style_name;
+        $this->styleName = $style_name;
     }
 
     /**

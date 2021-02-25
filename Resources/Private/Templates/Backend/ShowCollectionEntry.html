@@ -16,12 +16,14 @@
 
             <label for="name">Name</label>
                 <f:form.textfield property="name" size="50" type="text" placeholder="[Name]" maxlength="128" value="{ThisEntry.name}"/>
-            <label for="position">Position</label>
-                <f:form.textfield property="position" size="4" type="integer" placeholder="[position]" maxlength="4" value="{ThisEntry.position}"/>
+            <label for="grid_column"><f:translate key="tx_sparqltoucan_domain_model_collectionentry.gridcolumn" /></label>
+                <f:form.textfield property="gridColumn" size="4" type="integer" placeholder="[{f:translate(key:'tx_sparqltoucan_domain_model_collectionentry.gridcolumn')}]" maxlength="4" value="{ThisEntry.gridColumn}"/>
+            <label for="grid_row"><f:translate key="tx_sparqltoucan_domain_model_collectionentry.gridrow" /></label>
+                <f:form.textfield property="gridRow" size="4" type="integer" placeholder="[{f:translate(key:'tx_sparqltoucan_domain_model_collectionentry.gridrow')}]" maxlength="4" value="{ThisEntry.gridRow}"/>
             <label for="style">Style</label>
                 <f:render partial="Backend/CollectionEntryStyles" arguments="{style : ThisEntry.style}"/>
             <label for="style_name">CSS Style Name</label>
-                <f:form.textfield property="style_name" size="50" type="text" placeholder="[CSS Style Class Name" maxlength="128" value="{ThisEntry.style_name}"/>
+                <f:form.textfield property="styleName" size="50" type="text" placeholder="[CSS Style Class Name" maxlength="128" value="{ThisEntry.styleName}"/>
             <label for="datapoint_id">Datapoint</label>
                 <f:form.select property="datapointId" options="{Datapoints}" optionValueField="uid" optionLabelField="name" value="{ThisEntry.datapointId}"/>
             <div class="additional_data">

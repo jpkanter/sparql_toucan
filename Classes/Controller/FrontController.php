@@ -110,7 +110,7 @@ class FrontController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         $lastElement = end($entries);
         reset($entries);
         if( $lastElement != False) {
-            $lastCounter = $lastElement->getPosition();
+            $lastCounter = $lastElement->getGridColumn();
         }
 
         /****DEBUG****/
@@ -122,12 +122,12 @@ class FrontController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
         foreach ($entries as $myKey => $entry) {
             //adding empty elements
-            while ($entry->getPosition() < $cycleCounter and $blankLines < 6) {
+            while ($entry->getGridColumn() < $cycleCounter and $blankLines < 6) {
                 $tempDP = new Datapoint();
                 $tempDP->setCachedValue("");
                 $tempCEntry = new CollectionEntry();
                 $tempCEntry->setDatapointId($tempDP);
-                $tempCEntry->setPosition($cycleCounter);
+                $tempCEntry->setGridColumn($cycleCounter);
                 $blankEntries[] = clone $tempCEntry;
                 $cycleCounter++;
                 $blankLines++;

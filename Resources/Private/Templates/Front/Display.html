@@ -5,6 +5,13 @@
 <f:section name="content">
 
     <h2>Kollektion: "{collection.name}"</h2>
+    <div style="display: grid">
+        <f:for each="{entries}" as="gridElement">
+            <div style="display: inline-grid; grid-column-start: {gridElement.gridColumn}; grid-row-start:{gridElement.gridRow}">{gridElement.datapointId.cachedValue}</div>
+        </f:for>
+    </div>
+
+
     <f:if condition="{collection.layout}==1">
         <f:render partial="CollectionDisplay/1row" arguments="{cEntries:entries}" />
     </f:if>

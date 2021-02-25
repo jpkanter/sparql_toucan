@@ -791,9 +791,9 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                     if( $DP->getPredicate() == $key ) {
                         $tempEntry = new CollectionEntry();
                         $tempEntry->setName($key);
-                        $tempEntry->setPosition($position);
+                        $tempEntry->setGridColumn($position);
                         $tempEntry->setStyle(0);
-                        $tempEntry->setStyle_name("");
+                        $tempEntry->setStyleName("");
                         $tempEntry->setCollectionID($newCollection);
                         $tempEntry->setDatapointId($DP);
                         $newCollectionEntries[] = clone $tempEntry;
@@ -805,9 +805,9 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                         if( $DP->getPredicate() == $predicate ) {
                             $tempEntry = new CollectionEntry();
                             $tempEntry->setName($predicate);
-                            $tempEntry->setPosition($subPosition);
+                            $tempEntry->setGridColumn($subPosition);
                             $tempEntry->setStyle(0);
-                            $tempEntry->setStyle_name("");
+                            $tempEntry->setStyleName("");
                             $tempEntry->setCollectionID($newCollection);
                             $tempEntry->setDatapointId($DP);
                             $newCollectionEntries[] = clone $tempEntry;
@@ -824,9 +824,9 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                     if( $DP->getPredicate() == $key ) {
                         $tempEntry = new CollectionEntry();
                         $tempEntry->setName($key);
-                        $tempEntry->setPosition($position);
+                        $tempEntry->setGridColumn($position);
                         $tempEntry->setStyle(0);
-                        $tempEntry->setStyle_name("");
+                        $tempEntry->setStyleName("");
                         $tempEntry->setCollectionID($newCollection);
                         $tempEntry->setDatapointId($DP);
                         $newCollectionEntries[] = clone $tempEntry;
@@ -838,9 +838,9 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                         if( $DP->getPredicate() == $key2 ) {
                             $tempEntry = new CollectionEntry();
                             $tempEntry->setName($key2);
-                            $tempEntry->setPosition($position);
+                            $tempEntry->setGridColumn($position);
                             $tempEntry->setStyle(0);
-                            $tempEntry->setStyle_name("");
+                            $tempEntry->setStyleName("");
                             $tempEntry->setCollectionID($newCollection);
                             $tempEntry->setDatapointId($DP);
                             $newCollectionEntries[] = clone $tempEntry;

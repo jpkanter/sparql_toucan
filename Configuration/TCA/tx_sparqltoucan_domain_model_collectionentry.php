@@ -129,9 +129,18 @@ return [
                 'eval' => 'trim'
             ],
         ],
-        'position' => [
+        'grid_column' => [
             'exclude' => true,
-            'label' => 'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.position',
+            'label' => 'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.gridcolumn',
+            'config' => [
+                'type' => 'input',
+                'size' => 4,
+                'eval' => 'trim'
+            ],
+        ],
+        'grid_row' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.gridrow',
             'config' => [
                 'type' => 'input',
                 'size' => 4,

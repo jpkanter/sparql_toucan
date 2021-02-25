@@ -54,8 +54,11 @@
 			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.name">
 				<source>Name</source>
 			</trans-unit>
-			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.position">
-				<source>Position</source>
+			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.gridcolumn">
+				<source>Column</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.gridrow">
+				<source>Row</source>
 			</trans-unit>
 			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.style">
 				<source>Style</source>
@@ -239,8 +242,11 @@
 			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.name">
 				<source>Name</source>
 			</trans-unit>
-			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.position">
-				<source>Position</source>
+			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.gridcolumn">
+				<source>Spalte</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.gridrow">
+				<source>Zeile</source>
 			</trans-unit>
 			<trans-unit id="tx_sparqltoucan_domain_model_collectionentry.style">
 				<source>Stil</source>

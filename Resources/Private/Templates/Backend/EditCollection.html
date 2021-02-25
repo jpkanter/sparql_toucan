@@ -19,7 +19,8 @@
     <h2><f:translate key="tx_sparql_toucan_h2.assignedentries" /></h2>
     <table class="tx_sparqltoucan">
         <tr>
-            <th><f:translate key="tx_sparqltoucan_domain_model_collectionentry.position" /></th>
+            <th><f:translate key="tx_sparqltoucan_domain_model_collectionentry.gridcolumn" /></th>
+            <th><f:translate key="tx_sparqltoucan_domain_model_collectionentry.gridrow" /></th>
             <th><f:translate key="tx_sparqltoucan_domain_model_collectionentry.name" /></th>
             <th><f:translate key="tx_sparqltoucan_domain_model_collectionentry.datapoint_id" /></th>
             <th><f:translate key="tx_sparqltoucan_domain_model_collectionentry.style" /></th>
@@ -28,7 +29,8 @@
         </tr>
         <f:for each="{collectionEntry}" as="Entry">
             <tr style="border: 1px solid grey">
-                <td>{Entry.position}</td>
+                <td>{Entry.gridColumn}</td>
+                <td>{Entry.gridRow}</td>
                 <td>{Entry.name} - <em>{Entry.datapointId.name}</em></td>
                 <td>
                     {Entry.datapointId.predicate}
@@ -45,7 +47,8 @@
         <tr>
             <f:form action="createCollectionEntry" name="newCollectionEntry" object="{newCollectionEntry}" >
                 <f:form.hidden property="collectionID" value="{collection.uid}"/>
-                <td><f:form.textfield property="position" size="4"/></td> <!--Fill with open Positions Function-->
+                <td><f:form.textfield property="gridColumn" size="4"/></td>
+                <td><f:form.textfield property="gridRow" size="4"/></td>
                 <td><f:form.textfield property="name" size="50"/></td>
                 <td><f:form.select property="datapointId" options="{datapoints}" optionValueField="uid" optionLabelField="name"/></td>
                 <td>

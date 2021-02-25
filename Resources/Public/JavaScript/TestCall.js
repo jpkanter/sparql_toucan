@@ -1,4 +1,4 @@
-var REVISION = 7;
+var REVISION = 9;
 jQuery(document).ready(function(){
     jQuery('#version_number').text("Revision "+REVISION);
 
@@ -8,7 +8,10 @@ jQuery(document).ready(function(){
     let formSelect = jQuery('#sourceSelect');
 
     activateButton.on('click', function() {
-        contentArea.html("<em>Things happened</em>");
+        SparqlQuery(contentArea,
+            jQuery('#sourceUri option:selected').text(),
+            jQuery('#form_subject').val(),
+            jQuery('#form_predicate').val());
     });
 
     formSelect.on('change', function() {
@@ -23,4 +26,29 @@ jQuery(document).ready(function(){
 
 function EventHandler1(someText = "default") {
     console.log(someText);
+}
+
+function SparqlQuery(drawTarget, endpointURL, subject, predicate = "") {
+    if( predicate === "" ) {
+        predicate = "?pre";
+    }
+    else {
+        predicate = "<" + predicate + ">";
+    }
+    myQuery = {
+        'format': 'json',
+        'query': 'SELECT * WHERE { <'+subject+'> <'+predicate+'> ?obj }'
+    }
+    jQuery.ajax({
+        url: endpointURL,
+        cache: false,
+        data: myQuery,
+        success: function(result) {
+            drawTarget.html("<pre>"+result+"</pre>")
+        },
+        error: function( jqXHR, textStatus, errorThrow) {
+            console.log('Ajax request - ' + textStatus + ': ' + errorThrow);
+            // throw some exceptions por favor
+        }
+    });
 }
