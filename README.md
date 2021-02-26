@@ -24,17 +24,21 @@ I have additional doubts regarding the way i am doing CollectionEntry Styles. I 
 
 After spending some time with the current (static) implementation and toying around with my own structure i am quite certain that i thought to simple in the ways i planned to integrate my plug-in into the existing website structure. There are actually some tricks i could pull with custom CSS-classes which are already possible in my current design but i doubt it would ultimately lead to any desired outcome. There is the almost certain chance that the plug-in will be used by people not very knowledgeable in general web technologies, even less than me. For the moment i will put the front-end questions aside and rather concentrate on the tree-structure of the data itself. There are some unsuspecting challenges here as well. 
 
-*07.01.2020 - ~14:00*
+*07.01.2021 - ~14:00*
 
 Backporting to Typo3 Version 7.6.33 was easier than expected in most parts. There were some major functions that behaved differently in this version but i was able to overcome those challenges. Some of my mitigations did not worked out they way i planned and i am still baffled by this. Every piece of information i could find indicated that it should the work the way it doesn't. Especially the Fluid `f:variable` component stings, it should have been replaceable with `vhs` but fluid script doesn't want to accept it. In a sense this isn't all that terrible cause it keeps the amount of 3rd party plugins needed down. Still, the implementation is now in the php part which is a tiny bit dirty.
 
-*15.01.2020 - 11:21*
+*15.01.2021 - 11:21*
 
 The actual coding progress slowed down as i encountered a new kind of problem. I knew that there will always be a usability problem ahead but it seems bigger than i thought. The general way this plugin functions is quite simple and apart from the front end part which might need some additional tweaking i could easily call it finished and be done with it. Unfortunately this would not meet my own standards as i aim to make the thing actual usable by the common folk. As of now it would be quite cumbersome to get any meaningful data displayed on a website without having looked deeply in the source you want to mirror. There is a huge need for easy to use functions, to create those i need time that i not measure in written lines of code.
 
-*18.01.2020 13:00*
+*18.01.2021 13:00*
 
 By now there is more than instance where i used an old value to do things that are originally not planned to be done. In the `datapoint` Model is a field named `cachedValue`, originally this was where the displayed text for the entry was held. Later on i realized that there is more than one universal language on this world and i changed the system, but the database model and all the other things where already modeled. In the database description the field is a text and will be always empty, in PHP on the other hand it can be whatever it want to be. I cannot persist it to be saved in the database obviously, that would clash with its definition. But it turns out that i got a nice avenue to seed requests with additional data. I could do it the hard way with a lot of ifs and additional loops in the front end, but the way i am using it right now is that, every time i got a datapoint and some other stuff i want to show i put those additional data as an array to the specific datapoint. This works way to well, and i really fear  that there is some update that will break this. And yet, it feels good in a simple way, it does what its supposed to do in a clean way. But its still a dirty solution.
+
+*26.02.2021 10:00*
+
+As i chart my course in the realms of the practicability i see myself challenged with a set of new task. The current state of the data display is unsatisfactory and i need to change something. My first try included a grid bases layout which solves some problems but opens up another can of worms. Namely they need to fit content exactly next to each other. My most recent example was the `adressLocality` and `postalCode` field. It reads like this `04109 Leipzig` but in truth its two data fields. I cannot phantom if this problem arises again in the future but if i find one use case after a short thought there might be more to it. My grid layout prototype cannot press those fields together, regardless what variant i am trying, it will not work. Something even more new is called for. I had the idea of a *"branch"*-entry in the past but i think now it has to become reality. An entry that contains more entries, although there are some limits to it like that i don't feel like making it recursive which in turn feels bad, but the complexity of such a task would be immense. All this just sails around on  the great white whale that is *opening hours*, i fierce beast for which i do not posses any weapon to even scratch its ugly hide. One step after another, i will deal with it, eventually.
 
 ## Backport to Typo3 7.6.33
 

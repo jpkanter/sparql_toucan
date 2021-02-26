@@ -20,10 +20,10 @@ return [
         'iconfile' => 'EXT:sparql_toucan/Resources/Public/Icons/tx_sparqltoucan_domain_model_collectionentry.gif'
     ],
     'interface' => [
-        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, position, style, style_name, datapoint_id, collection_i_d',
+        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, gridArea, position, style, style_name, datapoint_id, collection_i_d, parent_entry, is_branch',
     ],
     'types' => [
-        '1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, position, style, style_name, datapoint_id, collection_i_d, --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access, starttime, endtime'],
+        '1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, position, grid_area, style, style_name, datapoint_id, collection_i_d, parent_entry,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access, starttime, endtime'],
     ],
     'columns' => [
         'sys_language_uid' => [
@@ -129,18 +129,18 @@ return [
                 'eval' => 'trim'
             ],
         ],
-        'grid_column' => [
+        'gridArea' => [
             'exclude' => true,
-            'label' => 'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.gridcolumn',
+            'label' => 'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.gridarea',
             'config' => [
                 'type' => 'input',
-                'size' => 4,
+                'size' => 24,
                 'eval' => 'trim'
             ],
         ],
-        'grid_row' => [
+        'position' => [
             'exclude' => true,
-            'label' => 'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.gridrow',
+            'label' => 'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.position',
             'config' => [
                 'type' => 'input',
                 'size' => 4,
@@ -192,6 +192,27 @@ return [
                 'foreign_table' => 'tx_sparqltoucan_domain_model_collection',
                 'minitems' => 0,
                 'maxitems' => 1,
+            ],
+        ],
+        'parent_entry' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.parententry',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'foreign_table' => 'tx_sparqltoucan_domain_model_collectionentry',
+                'minitems' => 0,
+                'maxitems' => 1,
+            ],
+        ],
+        'is_branch' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.isbranch',
+            'config' => [
+                'type' => 'check',
+                'item' => [
+                    ['LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.isbranch','']
+                ]
             ],
         ],
     

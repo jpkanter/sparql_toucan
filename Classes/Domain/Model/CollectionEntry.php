@@ -22,21 +22,23 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var string
      */
+
     protected $name = '';
 
     /**
-     * grid_column
+     * gridArea
      *
-     * @var int
+     * @var string
      */
-    protected $gridColumn = 1; //CSS Grids start at 1
+    protected $gridArea = ''; //CSS Grids start at 1
 
     /**
-     * grid_row
+     * position
      *
      * @var int
      */
-    protected $gridRow = 1; //CSS Grids start at 1
+    protected $position = 1; //CSS Grids start at 1
+
     /**
      * style
      *
@@ -49,6 +51,7 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var string
      */
+
     protected $styleName = '';
 
     /**
@@ -57,6 +60,13 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @var string
      */
     protected $tempValue = '';
+
+    /**
+     * crdate
+     *
+     * @var int
+     */
+    protected $crdate;
 
     /**
      * the referenced datapoint
@@ -72,131 +82,174 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $collectionID = null;
 
-    /** @var int */
-    protected $crdate;
+    /**
+     * the branch entry, this only goes one level, not further
+     *
+     * @var \Ubl\SparqlToucan\Domain\Model\CollectionEntry
+     */
+    protected $parentEntry = null;
 
     /**
-     * Returns the crdate
+     * isBranch
      *
-     * @return int
+     * @var boolean
      */
-    public function getCrdate()
+    protected $isBranch;
+
+    public function getCrdate(): int
     {
         return $this->crdate;
     }
 
-    /**
-     * Returns the name
-     *
-     * @return string $name
-     */
 
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * Sets the name
-     *
-     * @param string $name
-     * @return void
-     */
     public function setName($name)
     {
         $this->name = $name;
     }
 
-    /**
-     * Returns the gridColumn
-     *
-     * @return int $grid_column
-     */
-    public function getGridColumn()
+    public function getPosition(): int
     {
-        return $this->gridColumn;
+        return $this->position;
     }
 
-    /**
-     * Sets the gridColumn
-     *
-     * @param int $column
-     * @return void
-     */
-    public function setGridColumn($column)
+    public function setPosition($position)
     {
-        $this->gridColumn = $column;
+        $this->position = $position;
     }
 
-    /**
-     * Returns the gridRow
-     *
-     * @return int $grid_row
-     */
-    public function getGridRow()
+    public function getGridArea(): string
     {
-        return $this->gridRow;
+        return $this->gridArea;
     }
 
-    /**
-     * Sets the gridRow
-     *
-     * @param int $row
-     * @return void
-     */
+    public function setGridArea($cssGridArea)
+    {
+        //validation needed
+        $this->gridArea = $cssGridArea;
+    }
+
+    public function getGridColumn(): int
+    {
+        if( trim($this->gridArea) != "" ) {
+            $parts = explode("/", $this->gridArea);
+            return intval($parts[1]);
+        }
+        else { return 0;}
+    }
+
+    public function setGridColumn($column): bool
+    {
+        $insert = intval($column);
+        if( $insert == 0 ) { return false; } //luckily 0 isnt a viable grid position anyway
+        if( $insert >= 500) { return false; } //magic number sanity check
+        if( trim($this->gridArea) != "" ) {
+            $parts = explode("/", $this->gridArea);
+        }
+        else {
+            $parts = [0 => 1, 1 => 1, 2 =>  2, 3 =>  2]; //default grid
+        }
+        $this->gridArea = "{$parts[0]} / {$insert} / {$parts[2]} / {$parts[3]}";
+        return true;
+    }
+
+    public function getGridRow(): int
+    {   // '1 / 1 / 2 / 2'
+        if( trim($this->gridArea) != "" ) {
+            $parts = explode("/", $this->gridArea);
+            return intval($parts[0]);
+        }
+        else { return 0;}
+    }
+
     public function setGridRow($row)
     {
-        $this->grid_row = $row;
+        $insert = intval($row);
+        if( $insert == 0 ) { return false; } //luckily 0 isnt a viable grid position anyway
+        if( $insert >= 500) { return false; } //magic number sanity check
+        if( trim($this->gridArea) != "" ) {
+            $parts = explode("/", $this->gridArea);
+        }
+        else {
+            $parts = [0 => 1, 1 => 1, 2 =>  2, 3 =>  2]; //default grid
+        }
+        $this->gridArea = "{$insert} / {$parts[1]} / {$parts[2]} / {$parts[3]}";
+        return true;
     }
 
-    /**
-     * Returns the style
-     *
-     * @return int $style
-     */
-    public function getStyle()
+    public function getGridRowEnd(): int
+    {   // '1 / 1 / 2 / 2'
+        if( trim($this->gridArea) != "" ) {
+            $parts = explode("/", $this->gridArea);
+            return intval($parts[2]);
+        }
+        else { return 0;}
+    }
+
+    public function setGridRowEnd($row)
+    {
+        $insert = intval($row);
+        if( $insert == 0 ) { return false; } //luckily 0 isnt a viable grid position anyway
+        if( $insert >= 500) { return false; } //magic number sanity check
+        if( trim($this->gridArea) != "" ) {
+            $parts = explode("/", $this->gridArea);
+        }
+        else {
+            $parts = [0 => 1, 1 => 1, 2 =>  2, 3 =>  2]; //default grid
+        }
+        $this->gridArea = "{$parts[0]} / {$parts[1]} / {$insert} / {$parts[3]}";
+        return true;
+    }
+
+    public function getGridColumnEnd(): int
+    {
+        if( trim($this->gridArea) != "" ) {
+            $parts = explode("/", $this->gridArea);
+            return intval($parts[3]);
+        }
+        else { return 0;}
+    }
+
+    public function setGridColumnEnd($column)
+    {
+        $insert = intval($column);
+        if( $insert == 0 ) { return false; } //luckily 0 isnt a viable grid position anyway
+        if( $insert >= 500) { return false; } //magic number sanity check
+        if( trim($this->gridArea) != "" ) {
+            $parts = explode("/", $this->gridArea);
+        }
+        else {
+            $parts = [0 => 1, 1 => 1, 2 =>  2, 3 =>  2]; //default grid
+        }
+        $this->gridArea = "{$parts[0]} / {$parts[1]} / {$parts[2]} / {$insert}";
+        return true;
+    }
+
+    public function getStyle(): int
     {
         return $this->style;
     }
 
-    /**
-     * Sets the style
-     *
-     * @param int $style
-     * @return void
-     */
     public function setStyle($style)
     {
         $this->style = $style;
     }
 
-    /**
-     * Returns the style_name
-     *
-     * @return string $styleName
-     */
-    public function getStyleName()
+    public function getStyleName(): string
     {
         return $this->styleName;
     }
 
-    /**
-     * Sets the style_name
-     *
-     * @param string $style_name
-     * @return void
-     */
     public function setStyleName($style_name)
     {
         $this->styleName = $style_name;
     }
 
-    /**
-     * Returns the tempValue
-     *
-     * @return string $tempValue
-     */
-    public function getTempValue()
+    public function getTempValue(): string
     {
         return $this->tempValue;
     }
@@ -218,7 +271,7 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return \Ubl\SparqlToucan\Domain\Model\Datapoint $datapointId
      */
-    public function getDatapointId()
+    public function getDatapointId(): ?Datapoint
     {
         return $this->datapointId;
     }
@@ -239,7 +292,7 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @return \Ubl\SparqlToucan\Domain\Model\Collection $collectionID
      */
-    public function getCollectionID()
+    public function getCollectionID(): ?Collection
     {
         return $this->collectionID;
     }
@@ -256,19 +309,67 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
+     * Returns the branching entry if there is any
+     *
+     * @return \Ubl\SparqlToucan\Domain\Model\CollectionEntry $parentEntry
+     */
+    public function getParentEntry()
+    {
+        return $this->parentEntry;
+    }
+
+    /**
+     * Sets the parent Entry if its a branch
+     *
+     * @param \Ubl\SparqlToucan\Domain\Model\CollectionEntry
+     * @return boolean
+     */
+    public function setParentEntry(\Ubl\SparqlToucan\Domain\Model\CollectionEntry $branchEntry): bool
+    {
+        if( $branchEntry->getIsBranch() === true ) {
+            $this->parentEntry = $branchEntry;
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    /**
+     * gets the Status of the entry, if its a branch or not
+     *
+     * @return bool
+     */
+    public function getIsBranch(): bool
+    {
+        return $this->isBranch;
+    }
+
+    /**
+     *
+     *
+     * @param bool $state
+     * @return void
+     */
+    public function setIsBranch($state)
+    {
+        $this->isBranch = $state;
+    }
+
+    /**
      *
      * @return array
      */
     public function convertToArray() {
-        $myArray = [
+        return [
             'CollectionId' => $this->getCollectionID(),
             'DatapointId' => $this->getDatapointId(),
-            'Style_name' => $this->getStyle_name(),
+            'StyleName' => $this->getStyleName(),
             'style' => $this->getStyle(),
             'name' => $this->getName(),
             'crdate' => $this->getCrdate(),
-            'position' => $this->getPosition()
+            'position' => $this->getPosition(),
+            'gridArea' => $this->getGridArea()
         ];
-        return $myArray;
     }
 }

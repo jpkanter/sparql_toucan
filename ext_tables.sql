@@ -138,12 +138,14 @@ CREATE TABLE tx_sparqltoucan_domain_model_collectionentry (
 	pid int(11) DEFAULT '0' NOT NULL,
 
 	name varchar(255) DEFAULT '' NOT NULL,
-	grid_row int(11) DEFAULT '0' NOT NULL,
-	grid_column int(11) DEFAULT '0' NOT NULL,
+	grid_area varchar(255) DEFAULT '' NOT NULL,
 	style int(11) DEFAULT '0' NOT NULL,
 	style_name varchar(255) DEFAULT '' NOT NULL,
 	datapoint_id int(11) unsigned DEFAULT '0',
 	collection_i_d int(11) unsigned DEFAULT '0',
+	is_branch boolean DEFAULT false,
+    position int(11) DEFAULT '0' NOT NULL,
+	sub_entry int(11) DEFAULT '0' NOT NULL,
 
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,

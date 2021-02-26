@@ -108,6 +108,10 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     {
         $this->view->assign('collection', $collection);
         $entries = $this->collectionEntryRepository->fetchCorresponding($collection);
+        foreach($entries as $key => $entry) {
+            $entries[$key]->gridColumn = $entry->getGridColumn();
+            $entries[$key]->setPosition($entry->getGridRow());
+        }
         $this->view->assign('collectionEntry', $entries);
         $datapoints = $this->datapointRepository->findAll();
         foreach($datapoints as $thisKey => $onePoint) {
@@ -791,7 +795,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                     if( $DP->getPredicate() == $key ) {
                         $tempEntry = new CollectionEntry();
                         $tempEntry->setName($key);
-                        $tempEntry->setGridColumn($position);
+                        $tempEntry->setGridRow($position);
                         $tempEntry->setStyle(0);
                         $tempEntry->setStyleName("");
                         $tempEntry->setCollectionID($newCollection);
@@ -805,7 +809,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                         if( $DP->getPredicate() == $predicate ) {
                             $tempEntry = new CollectionEntry();
                             $tempEntry->setName($predicate);
-                            $tempEntry->setGridColumn($subPosition);
+                            $tempEntry->setGridRow($subPosition);
                             $tempEntry->setStyle(0);
                             $tempEntry->setStyleName("");
                             $tempEntry->setCollectionID($newCollection);
@@ -824,7 +828,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                     if( $DP->getPredicate() == $key ) {
                         $tempEntry = new CollectionEntry();
                         $tempEntry->setName($key);
-                        $tempEntry->setGridColumn($position);
+                        $tempEntry->setGridRow($position);
                         $tempEntry->setStyle(0);
                         $tempEntry->setStyleName("");
                         $tempEntry->setCollectionID($newCollection);
@@ -838,7 +842,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                         if( $DP->getPredicate() == $key2 ) {
                             $tempEntry = new CollectionEntry();
                             $tempEntry->setName($key2);
-                            $tempEntry->setGridColumn($position);
+                            $tempEntry->setGridRow($position);
                             $tempEntry->setStyle(0);
                             $tempEntry->setStyleName("");
                             $tempEntry->setCollectionID($newCollection);
