@@ -108,10 +108,6 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     {
         $this->view->assign('collection', $collection);
         $entries = $this->collectionEntryRepository->fetchCorresponding($collection);
-        foreach($entries as $key => $entry) {
-            $entries[$key]->gridColumn = $entry->getGridColumn();
-            $entries[$key]->setPosition($entry->getGridRow());
-        }
         $this->view->assign('collectionEntry', $entries);
         $datapoints = $this->datapointRepository->findAll();
         foreach($datapoints as $thisKey => $onePoint) {
@@ -1254,6 +1250,10 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         } else {
             $this->view->assign("sysLanguageUid", $GLOBALS['TSFE']->sys_language_uid);
         }
+
+        $ce = $this->collectionEntryRepository->findByUid(13);
+        $stuff = ["collection" => $ce, "Col" => $ce->getGridColumn(), "row" => $ce->getGridColumn()];
+        $this->view->assign("ce", $stuff);
     }
 
     public function ajaxCallTestAction(Collection $collection) {
@@ -1270,11 +1270,12 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 $myArray = [
                     'CollectionId' => $entry->getCollectionID(),
                     'DatapointId' => $entry->getDatapointId(),
-                    'Style_name' => $entry->getStyle_name(),
+                    'Style_name' => $entry->getStyleName(),
                     'style' => $entry->getStyle(),
                     'name' => $entry->getName(),
-                    'crdate' => $entry->getCrdate(),
-                    'position' => $entry->getPosition()
+                    'crdate' => $entry->getCrDate(),
+                    'position' => $entry->getPosition(),
+                    'gridArea' => $entry->getGridArea()
                 ];
                 $ce[] = $entry->convertToArray();
             }

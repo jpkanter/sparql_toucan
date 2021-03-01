@@ -30,14 +30,14 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var string
      */
-    protected $gridArea = ''; //CSS Grids start at 1
+    protected $gridArea = '';
 
     /**
      * position
      *
      * @var int
      */
-    protected $position = 1; //CSS Grids start at 1
+    protected $position = 1;
 
     /**
      * style
@@ -66,7 +66,7 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var int
      */
-    protected $crdate;
+    protected $crdate = 0;
 
     /**
      * the referenced datapoint
@@ -94,7 +94,33 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var boolean
      */
-    protected $isBranch;
+    protected $isBranch = false;
+
+    //fake entries without database representation
+    /**
+     * gridColumn
+     *
+     * @var int
+     */
+    protected $gridColumn;
+    /**
+     * gridRow
+     *
+     * @var int
+     */
+    protected $gridRow;
+    /**
+     * gridColumnEnd
+     *
+     * @var int
+     */
+    protected $gridColumnEnd;
+    /**
+     * gridRowEnd
+     *
+     * @var int
+     */
+    protected $gridRowEnd;
 
     public function getCrdate(): int
     {
@@ -229,7 +255,7 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return true;
     }
 
-    public function getStyle(): int
+    public function getStyle()
     {
         return $this->style;
     }

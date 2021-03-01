@@ -20,10 +20,10 @@ return [
         'iconfile' => 'EXT:sparql_toucan/Resources/Public/Icons/tx_sparqltoucan_domain_model_collectionentry.gif'
     ],
     'interface' => [
-        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, gridArea, position, style, style_name, datapoint_id, collection_i_d, parent_entry, is_branch',
+        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, grid_area, position, style, style_name, datapoint_id, collection_i_d, parent_entry, is_branch',
     ],
     'types' => [
-        '1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, position, grid_area, style, style_name, datapoint_id, collection_i_d, parent_entry,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access, starttime, endtime'],
+        '0' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, grid_area, position, style, style_name, datapoint_id, collection_i_d, parent_entry, is_branch,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access, starttime, endtime'],
     ],
     'columns' => [
         'sys_language_uid' => [
@@ -129,7 +129,7 @@ return [
                 'eval' => 'trim'
             ],
         ],
-        'gridArea' => [
+        'grid_area' => [
             'exclude' => true,
             'label' => 'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_collectionentry.gridarea',
             'config' => [

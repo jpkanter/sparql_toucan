@@ -20,6 +20,15 @@
                             </config>
                         </TCEforms>
                     </settings.choosenCollection>
+                    <settings.collection2>
+                        <TCEforms>
+                            <label>Collection but with search</label>
+                            <config>
+                                <type>user</type>
+                                <userFunc>Ubl\SparqlToucan\Utility\SearchLoading->customfield</userFunc>
+                            </config>
+                        </TCEforms>
+                    </settings.collection2>
                 </el>
             </ROOT>
         </sDEF>

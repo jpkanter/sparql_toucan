@@ -7,7 +7,7 @@
     <h2>Kollektion: "{collection.name}"</h2>
     <div style="display: grid">
         <f:for each="{entries}" as="gridElement">
-            <div style="display: inline-grid; grid-column-start: {gridElement.gridColumn}; grid-row-start:{gridElement.gridRow}">{gridElement.datapointId.cachedValue}</div>
+            <div style="display: inline-grid; grid-area: {gridElement.gridArea};">{gridElement.datapointId.cachedValue}</div>
         </f:for>
     </div>
 
