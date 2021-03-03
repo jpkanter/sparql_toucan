@@ -251,3 +251,31 @@ div.tx_sparqltoucan_formworld .additional_data {
     color: var(--tou_darkgrey);
     margin-left: 2rem;
 }
+
+.tx_sparqltoucan_interactive_button {
+    display: inline-block;
+    min-width: 20rem;
+    min-height: 3rem;
+    margin: auto;
+    font-size: 1.8rem;
+}
+
+.tx_sparqltoucan_float_right {
+    float: right;
+}
+
+.tx_sparqltoucan_layouter {
+    display: grid;
+    grid-gap: 1rem;
+    border-top: 4px crimson solid;
+    margin-right: auto;
+    width: 700px;
+}
+
+.tx_sparqltoucan_layouter div,
+.tx_sparqltoucan_layouter_free div{
+    outline: 1px var(--tou_lightgrey) solid;
+    width: 250px;
+    height: 30px;
+    overflow: hidden;
+}

@@ -87,7 +87,7 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var \Ubl\SparqlToucan\Domain\Model\CollectionEntry
      */
-    protected $parentEntry = null;
+    protected $parentEntry = 0;
 
     /**
      * isBranch
@@ -153,10 +153,20 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return $this->gridArea;
     }
 
-    public function setGridArea($cssGridArea)
+    /**
+     * @param $cssGridArea
+     * @return bool
+     */
+    public function setGridArea($cssGridArea) : bool
     {
         //validation needed
-        $this->gridArea = $cssGridArea;
+        if( preg_match('/^[0-9]*\s*\/\s*[0-9]*\s*\/\s*[0-9]*\s*\/\s*[0-9]*$/', $cssGridArea) ) {
+            //makes sure we get a somewhat clean grid-area format
+            $parts = explode("/", $cssGridArea);
+            $this->gridArea = trim($parts[0]) ." / ". trim($parts[1]) ." / ". trim($parts[2]) ." / ". trim($parts[3]);
+            return true;
+        }
+        return false;
     }
 
     public function getGridColumn(): int

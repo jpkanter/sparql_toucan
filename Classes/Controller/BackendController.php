@@ -110,6 +110,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $entries = $this->collectionEntryRepository->fetchCorresponding($collection);
         $this->view->assign('collectionEntry', $entries);
         $datapoints = $this->datapointRepository->findAll();
+        //TODO: Fix this to the same method used in DynamicLayout
         foreach($datapoints as $thisKey => $onePoint) {
             if( trim($onePoint->getName()) == "") {
                 $datapoints[$thisKey]->setName(">> ".substr($onePoint->getsubject(), -20));
@@ -117,6 +118,50 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
         $this->view->assign('datapoints', $datapoints);
     }
+
+    /**
+     * action editCollectionDynamicLayout
+     * View to get the layouting for a collection right
+     *
+     * @param Collection $collection
+     */
+    public function editCollectionDynamicLayoutAction(\Ubl\SparqlToucan\Domain\Model\Collection  $collection)
+    {
+        $this->view->assign('collection', $collection);
+        $entries = $this->collectionEntryRepository->fetchCorresponding($collection);
+        $freeEntries = [];
+        $chainedEntries = [];
+
+        foreach($entries as $thisKey => $onePoint) {
+            if( trim($onePoint->getDatapointId()->getName()) == "") {
+                $entries[$thisKey]->getDatapointId()->setName(">> ".substr($onePoint->getDatapointId()->getpredicate(), -20));
+            }
+            try {
+                $value = $this->languagepointRepository->fetchSpecificLanguage($onePoint->getDatapointId(), "en");
+            } catch (\Exception $e) {
+                $value = "<[NO LP]>";
+            }
+            $entries[$thisKey]->SetTempValue($value);
+            $entries[$thisKey]->getDatapointId()->setCachedValue($value);
+            if( trim($onePoint->getGridArea()) == "" && $onePoint->getParentEntry == 0 ) {
+                $freeEntries[] = $onePoint;
+            }
+            if( trim($onePoint->getGridArea()) != "" && $onePoint->getParentEntry == 0) {
+                $chainedEntries[] = $onePoint;
+            }
+        }
+        $this->view->assign('collectionEntry', $entries);
+        $this->view->assign('freeEntries', $freeEntries);
+        $this->view->assign('chainedEntries', $chainedEntries);
+    }
+
+    public function editCollectionRearrangeAction() {
+        //expects formData regardless
+        $formdata = $this->request->getArguments();
+        $this->view->assign("echo", $formdata['editCollectioNRearrange']);
+        //redirect to editCollectionDynamic
+    }
+
     /**
      * action newCollection
      *
@@ -124,7 +169,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     public function newCollectionAction()
     {
-
+        //just displays the form, not db interaction required
     }
 
     /**
@@ -432,7 +477,6 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
         }
         $this->view->assign("languagepoints", $totallist);
-
     }
 
     public function timemachineAction() {
@@ -1254,6 +1298,10 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $ce = $this->collectionEntryRepository->findByUid(13);
         $stuff = ["collection" => $ce, "Col" => $ce->getGridColumn(), "row" => $ce->getGridColumn()];
         $this->view->assign("ce", $stuff);
+        $entry = $this->collectionEntryRepository->findByUid(15);
+        echo("Test 1 - wrong Area:".intval($entry->setGridArea("23 / 23/ 23 / kl"))."<br>");
+        echo("Test 2 - right Area but weird: ".intval($entry->setGridArea("1   / 211/2 /   2")));
+        $this->view->assign("entry", $entry);
     }
 
     public function ajaxCallTestAction(Collection $collection) {

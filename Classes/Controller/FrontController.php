@@ -122,16 +122,6 @@ class FrontController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
         foreach ($entries as $myKey => $entry) {
             //adding empty elements
-            while ($entry->getGridColumn() < $cycleCounter and $blankLines < 6) {
-                $tempDP = new Datapoint();
-                $tempDP->setCachedValue("");
-                $tempCEntry = new CollectionEntry();
-                $tempCEntry->setDatapointId($tempDP);
-                $tempCEntry->setGridColumn($cycleCounter);
-                $blankEntries[] = clone $tempCEntry;
-                $cycleCounter++;
-                $blankLines++;
-            }
             //Style stuff, needed cause Typo V7 Fluid doesnt work properly in the frontend
             switch( $entry->getStyle() ) {
                 case 1:

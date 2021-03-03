@@ -11,10 +11,20 @@
 
     <f:render partial="FormErrors" />
 
-    <f:form action="updateCollection" name="collection" object="{collection}" >
-        <f:render partial="Collection/FormFields" arguments="{collection:collection}" />
-        <f:form.submit value="Save" />
-    </f:form>
+    <div style="display: grid; grid-template-columns: 20rem 20rem;margin-right: auto;">
+        <div style="display: flex;">
+            <f:form action="updateCollection" name="collection" object="{collection}" >
+                <f:render partial="Collection/FormFields" arguments="{collection:collection}" />
+                <f:form.submit value="Save" />
+            </f:form>
+        </div>
+        <div style="display: flex;" >
+            <f:link.action action="editCollectionDynamicLayout" arguments="{collection:collection}" class="tx_sparqltoucan_interactive_button">Interactive Layouting</f:link.action>
+        </div>
+    </div>
+
+
+
 
     <h2><f:translate key="tx_sparql_toucan_h2.assignedentries" /></h2>
     <table class="tx_sparqltoucan">

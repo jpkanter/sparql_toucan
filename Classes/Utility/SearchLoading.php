@@ -6,6 +6,7 @@ namespace Ubl\SparqlToucan\Utility;
 
 class SearchLoading
 {
+    //TODO: writer a proper select field here
     function customfield($PA, $fobj) {
         return '<input
      name="'.$PA['itemFormElName'].'"

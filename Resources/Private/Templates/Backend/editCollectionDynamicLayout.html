@@ -1,0 +1,50 @@
+<html xmlns:f="https://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:layout name="Backend" />
+
+<f:section name="content">
+
+    <f:render partial="Backend/MenuBar" />
+
+    <f:flashMessages />
+
+    <f:render partial="FormErrors" />
+
+    <h1>i18n:Layouting {collection.name}</h1>
+
+    <f:form action="editCollectionRearrange" name="editCollectioNRearrange">
+
+
+        <h2>Items in Grid</h2>
+
+        <div class="tx_sparqltoucan_layouter">
+            <f:for each="{chainedEntries}" as="entry">
+                <div style="grid-area: {entry.gridArea}">{entry.tempValue}
+                    <em>{entry.datapointId.name}</em>
+                    <f:form.hidden property="{entry.uid}" value="{entry.gridArea}"/>
+                </div>
+            </f:for>
+
+        </div>
+
+        <h2>Items without Grid</h2>
+        <!--Area without grid interaction-->
+        <div class="tx_sparqltoucan_layouter_free">
+            <f:for each="{freeEntries}" as="entry">
+                <div>{entry.tempValue}
+                    <em>{entry.datapointId.name}
+                    <f:form.hidden property="{entry.uid}" value="{entry.gridArea}"/>
+                </div>
+            </f:for>
+
+        </div>
+
+        <f:form.submit value="Save" />
+
+    </f:form>
+
+    <f:debug>{_all}</f:debug>
+
+    <f:link.action action="editCollectionDynamicLayout" arguments="{collection:collection}" class="tx_sparqltoucan_interactive_button">Debug F5</f:link.action>
+
+</f:section>
+</html>
