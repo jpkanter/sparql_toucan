@@ -1,7 +1,7 @@
 <?php
 return [
     'ctrl' => [
-        'title' => 'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_languagepoint',
+        'title' => 'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_textpoint.name',
         'label' => 'name',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
@@ -16,14 +16,14 @@ return [
             'starttime' => 'starttime',
             'endtime' => 'endtime',
         ],
-        'searchFields' => 'content, language, datapoint_id',
-        'iconfile' => 'EXT:sparql_toucan/Resources/Public/Icons/tx_sparqltoucan_domain_model_languagepoint.gif'
+        'searchFields' => 'name,description',
+        'iconfile' => 'EXT:sparql_toucan/Resources/Public/Icons/tx_sparqltoucan_domain_model_textpoint.gif'
     ],
     'interface' => [
-        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, content, language, datapoint_id, textpoint',
+        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, description',
     ],
     'types' => [
-        '1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, content, language, datapoint_id, textpoint, --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access, starttime, endtime'],
+        '1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, description, --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access, starttime, endtime'],
     ],
     'columns' => [
         'sys_language_uid' => [
@@ -54,8 +54,8 @@ return [
                 'items' => [
                     ['', 0],
                 ],
-                'foreign_table' => 'tx_sparqltoucan_domain_model_languagepoint',
-                'foreign_table_where' => 'AND tx_sparqltoucan_domain_model_languagepoint.pid=###CURRENT_PID### AND tx_sparqltoucan_domain_model_languagepoint.sys_language_uid IN (-1,0)',
+                'foreign_table' => 'tx_sparqltoucan_domain_model_source',
+                'foreign_table_where' => 'AND tx_sparqltoucan_domain_model_source.pid=###CURRENT_PID### AND tx_sparqltoucan_domain_model_source.sys_language_uid IN (-1,0)',
             ],
         ],
         'l10n_diffsource' => [
@@ -120,44 +120,22 @@ return [
             ],
         ],
 
-        'content' => [
-            'exclude' => true,
-            'label' => 'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_languagepoint.content',
-            'config' => [
-                'type' => 'input',
-                'size' => 750,
-                'eval' => 'trim'
-            ],
-        ],
-        'language' => [
-            'exclude' => true,
-            'label' => 'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_languagepoint.language',
-            'config' => [
-                'type' => 'input',
-                'size' => 4,
-                'eval' => 'trim'
-            ],
-        ],
-        'datapoint_id' => [
-            'exclude' => true,
-            'label' => 'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_languagepoint.datapoint_id',
-            'config' => [
-                'type' => 'select',
-                'renderType' => 'selectSingle',
-                'foreign_table' => 'tx_sparqltoucan_domain_model_datapoint',
-                'minitems' => 0,
-                'maxitems' => 1,
-            ],
-        ],
-        'textpoint' => [
+        'name' => [
             'exclude' => true,
             'label' => 'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_textpoint.name',
             'config' => [
-                'type' => 'select',
-                'renderType' => 'selectSingle',
-                'foreign_table' => 'tx_sparqltoucan_domain_model_textpoint',
-                'minitems' => 0,
-                'maxitems' => 1,
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim'
+            ],
+        ],
+        'url' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_textpoint.description',
+            'config' => [
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim'
             ],
         ],
     

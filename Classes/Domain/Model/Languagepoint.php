@@ -37,7 +37,14 @@ class Languagepoint extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var \Ubl\SparqlToucan\Domain\Model\Datapoint
      */
-    protected $datapointId = null;
+    protected $datapointId = 0;
+
+    /**
+     * Id of the source that is used for the datapoint
+     *
+     * @var \Ubl\SparqlToucan\Domain\Model\Textpoint
+     */
+    protected $textpoint = 0;
 
     /** @var int */
     protected $crdate;
@@ -124,5 +131,26 @@ class Languagepoint extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setSourceId(\Ubl\SparqlToucan\Domain\Model\Datapoint $datapointId)
     {
         $this->datapointId = $datapointId;
+    }
+
+    /**
+     * Returns the branching entry if there is any
+     *
+     * @return \Ubl\SparqlToucan\Domain\Model\Textpoint $textpoint
+     */
+    public function getTextpoint()
+    {
+        return $this->textpoint;
+    }
+
+    /**
+     * Sets the parent Entry if its a branch
+     *
+     * @param \Ubl\SparqlToucan\Domain\Model\Textpoint
+     * @return void
+     */
+    public function setTextpoint(\Ubl\SparqlToucan\Domain\Model\Textpoint $textpoint): void
+    {
+        $this->textpoint = $textpoint;
     }
 }

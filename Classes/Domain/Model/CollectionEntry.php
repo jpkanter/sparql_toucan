@@ -96,6 +96,13 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $isBranch = false;
 
+    /**
+     * the branch entry, this only goes one level, not further
+     *
+     * @var \Ubl\SparqlToucan\Domain\Model\Textpoint
+     */
+    protected $textpoint = 0;
+
     //fake entries without database representation
     /**
      * gridColumn
@@ -159,8 +166,7 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     public function setGridArea($cssGridArea) : bool
     {
-        //validation needed
-        if( preg_match('/^[0-9]*\s*\/\s*[0-9]*\s*\/\s*[0-9]*\s*\/\s*[0-9]*$/', $cssGridArea) ) {
+        if( preg_match('/^[0-9]*\s*\/\s*[0-9]*\s*\/\s*[0-9]*\s*\/\s*[0-9]*$/', trim($cssGridArea)) ) {
             //makes sure we get a somewhat clean grid-area format
             $parts = explode("/", $cssGridArea);
             $this->gridArea = trim($parts[0]) ." / ". trim($parts[1]) ." / ". trim($parts[2]) ." / ". trim($parts[3]);
@@ -369,6 +375,27 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
             return false;
         }
 
+    }
+
+    /**
+     * Returns the branching entry if there is any
+     *
+     * @return \Ubl\SparqlToucan\Domain\Model\Textpoint $textpoint
+     */
+    public function getTextpoint()
+    {
+        return $this->textpoint;
+    }
+
+    /**
+     * Sets the parent Entry if its a branch
+     *
+     * @param \Ubl\SparqlToucan\Domain\Model\Textpoint
+     * @return void
+     */
+    public function setTextpoint(\Ubl\SparqlToucan\Domain\Model\Textpoint $textpoint): void
+    {
+       $this->textpoint = $textpoint;
     }
 
     /**

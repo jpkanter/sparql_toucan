@@ -12,6 +12,15 @@
 			<trans-unit id="tx_sparqltoucan_domain_model_source.url">
 				<source>Url</source>
 			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_textpoint">
+				<source>Textpoint</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_textpoint.name">
+				<source>Name</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_textpoint.description">
+				<source>Description</source>
+			</trans-unit>
 			<trans-unit id="tx_sparqltoucan_domain_model_datapoint">
 				<source>Datapoint</source>
 			</trans-unit>
@@ -105,6 +114,9 @@
 			<trans-unit id="tx_sparql_toucan_sparqlbackend_explore.title">
 				<source>Explore choosen Sparql Endpoint</source>
 			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_textpoint.name">
+				<source>Textpoint</source>
+			</trans-unit>
 		</body>
 	</file>
 	<file source-language="de" datatype="plaintext" original="messages" date="2020-11-30T15:12:22Z" product-name="sparql_toucan">
@@ -118,6 +130,15 @@
 			</trans-unit>
 			<trans-unit id="tx_sparqltoucan_domain_model_source.url">
 				<source>Url</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_textpoint">
+				<source>Textpunkt</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_textpoint.name">
+				<source>Name</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_textpoint.description">
+				<source>Beschreibung</source>
 			</trans-unit>
 			<trans-unit id="tx_sparqltoucan_domain_model_datapoint">
 				<source>Datenpunkt</source>
@@ -211,6 +232,9 @@
 			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_sparqlbackend_explore.title">
 				<source>Erkunden Sie den ausgewählten Sparql Endpunkt</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_textpoint.name">
+				<source>Textpunkt</source>
 			</trans-unit>
 		</body>
 	</file>

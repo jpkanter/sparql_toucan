@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2021-03-05T10:48:22Z" product-name="sparql_toucan">
+		<header/>
+		<body>
+			<trans-unit id="name.description">
+				<source>name</source>
+			</trans-unit>
+			<trans-unit id="description.description">
+				<source>Description of the textpoint</source>
+			</trans-unit>
+		</body>
+	</file>
+	<file source-language="de" datatype="plaintext" original="messages" date="2021-03-05T10:48:22Z" product-name="sparql_toucan">
+		<header/>
+		<body>
+			<trans-unit id="name.description">
+				<source>Name</source>
+			</trans-unit>
+			<trans-unit id="description.description">
+				<source>Beschreibung des Textpunktes</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
