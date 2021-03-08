@@ -6,6 +6,7 @@ use Ubl\SparqlToucan\Domain\Model\Collection;
 use Ubl\SparqlToucan\Domain\Model\CollectionEntry;
 use Ubl\SparqlToucan\Domain\Model\Datapoint;
 use Ubl\SparqlToucan\Domain\Model\Languagepoint;
+use Ubl\SparqlToucan\Domain\Model\Textpoint;
 use Ubl\SparqlToucan\Domain\Repository\CollectionRepository;
 use Ubl\SparqlToucan\Domain\Repository\CollectionEntryRepository;
 use Ubl\SparqlToucan\Domain\Repository\SourceRepository;
@@ -73,6 +74,13 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @inject
      */
     protected $languagepointRepository = null;
+    /**
+     * textpointRepository
+     *
+     * @var Ubl\SparqlToucan\Domain\Repository\TextpointRepository
+     * @inject
+     */
+    protected $textpointRepository = null;
 
     public function OverviewAction() {
         $collections = $this->collectionRepository->findAll();
@@ -633,6 +641,51 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
     }
 
+    public function textpointOverviewAction() {
+        $textpoints = $this->textpointRepository->findAll();
+        //$textpoints = $textpoints->toArray();
+        foreach($textpoints as $key => $item) {
+            if( unserialize($item->getLanguages()) ) {
+                $languages = unserialize($item->getLanguages());
+            }else { $languages = [];}
+            $textpoints[$key]->setTemplang($languages);
+        }
+        $this->view->assign("textpoints", $textpoints);
+    }
+
+    public function createTextpointAction(Textpoint $textpoint) {
+        $persistenceManager = $this->objectManager->get("TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager");
+        $this->textpointRepository->add($textpoint);
+        $persistenceManager->persistAll();
+
+        $formdata = $this->request->getArguments();
+        if( array_key_exists('btn_createedit', $formdata) ) {
+            $this->redirect('editTextpoint', Null, Null, array('textpoint' => $textpoint));
+        } else {
+            $this->redirect('textpointOverview');
+        }
+    }
+
+    public function editTextpointAction(Textpoint $textpoint) {
+        $this->view->assign("textpoint", $textpoint);
+        $this->view->assign("languagepoints", $this->languagepointRepository->fetchCorresponding($textpoint));
+    }
+
+    public function updateTextpointAction(Textpoint $textpoint) {
+        $formdata = $this->request->getArguments();
+        $this->textpointRepository->update($textpoint);
+        if( array_key_exists('btn_saveedit', $formdata) ) {
+            $this->redirect('editTextpoint', Null, Null, array('textpoint' => $textpoint));
+        } else {
+            $this->redirect('textpointOverview');
+        }
+    }
+
+    public function updateTextpointLangAction(Textpoint $textpoint) {
+        $this->textpointRepository->updateLanguages($textpoint);
+        $this->redirect('textpointOverview');
+    }
+
     /**
      * action labelcache
      * shows all the labels
@@ -654,6 +707,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     public function languagepointOverviewAction() {
         $languagepoints = $this->languagepointRepository->findAll();
+
         $this->view->assign("languagepoints", $languagepoints);
     }
 
@@ -1278,6 +1332,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     }
 
     public function testSomethingAction() {
+        $persistenceManager = $this->objectManager->get("TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager");
         //$datapoint = $this->datapointRepository->findByIdentifier(11);
         //$this->view->assign("debug9", $this->languagepointRepository->fetchCorresponding($datapoint));
         //$this->view->assign("debug7", $datapoint);
@@ -1302,6 +1357,12 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         echo("Test 1 - wrong Area:".intval($entry->setGridArea("23 / 23/ 23 / kl"))."<br>");
         echo("Test 2 - right Area but weird: ".intval($entry->setGridArea("1   / 211/2 /   2")));
         $this->view->assign("entry", $entry);
+        $tp = $this->textpointRepository->findByUid(1);
+        echo $this->textpointRepository->updateLanguages($tp);
+        echo $tp->getLanguages();
+        $persistenceManager->persistAll();
+        $this->view->assign("tp", $tp);
+
     }
 
     public function ajaxCallTestAction(Collection $collection) {

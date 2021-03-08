@@ -9,6 +9,9 @@
 			<trans-unit id="description.description">
 				<source>Description of the textpoint</source>
 			</trans-unit>
+			<trans-unit id="languages.description">
+				<source>Internal language field, dont touch</source>
+			</trans-unit>
 		</body>
 	</file>
 	<file source-language="de" datatype="plaintext" original="messages" date="2021-03-05T10:48:22Z" product-name="sparql_toucan">
@@ -19,6 +22,9 @@
 			</trans-unit>
 			<trans-unit id="description.description">
 				<source>Beschreibung des Textpunktes</source>
+			</trans-unit>
+			<trans-unit id="languages.description">
+				<source>Internes Feld, nicht berühren.</source>
 			</trans-unit>
 		</body>
 	</file>

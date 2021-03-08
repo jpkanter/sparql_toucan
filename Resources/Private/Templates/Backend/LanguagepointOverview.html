@@ -11,20 +11,34 @@
 
     <table class="tx_sparqltoucan_paginator_table">
         <tr>
-            <th><f:translate key="tx_sparqltoucan_domain_model_datapoint" /></th>
-            <th><f:translate key="tx_sparqltoucan_domain_model_datapoint.source_id" /></th>
-            <th><f:translate key="tx_sparqltoucan_domain_model_source" /></th>
-            <th><f:translate key="tx_sparql_toucan_general.language" /></th>
             <th><f:translate key="tx_sparql_toucan_general.label" /></th>
+            <th><f:translate key="tx_sparql_toucan_general.language" /></th>
+            <th colspan="2"><f:translate key="tx_sparqltoucan_domain_model_datapoint" /> / <f:translate key="tx_sparqltoucan_domain_model_textpoint" /></th>
+            <th><f:translate key="tx_sparqltoucan_domain_model_source" /></th>
         </tr>
         <f:widget.paginate objects="{languagepoints}" as="paginateLabel" configuration="{itemsPerPage: 30, insertAbove: 0, insertBelow: 1, maximumNumberOfLinks: 10}">
             <f:for each="{paginateLabel}" as="point">
                 <tr>
-                    <td class="tx-sparql-toucan_mini_id">{point.datapointId.uid}</td>
-                    <td>{point.datapointId.name}</td>
-                    <td>{point.datapointId.sourceId.name}</td>
-                    <td><span class="tx_toucan_language_block">{point.language}</span></td>
                     <td>{point.content}</td>
+                    <td><span class="tx_toucan_language_block">{point.language}</span></td>
+                    <td>
+                        <f:if condition="{point.datapointId} != 0">
+                            <f:then><span class="tx_toucan_language_block">data</span></f:then>
+                            <f:else><span class="tx_toucan_language_block">text</span></f:else>
+                        </f:if>
+                    </td>
+                    <td class="tx-sparql-toucan_mini_id">
+                        <f:if condition="{point.datapointId} != 0">
+                            <f:then>
+                                <f:if condition="{point.datapointId.name} == ''">
+                                    <f:then>{point.datapointId.uid} - {point.datapointId.name}</f:then>
+                                    <f:else>{point.datapointId.uid} - <em>{point.datapointId.predicate -> f:format.crop(maxCharacters: 40)}</em></f:else>
+                                </f:if>
+                            </f:then>
+                            <f:else>{point.textpoint.uid} - {point.textpoint.name}</f:else>
+                        </f:if>
+                    </td>
+                    <td>{point.datapointId.sourceId.name}</td>
                 </tr>
             </f:for>
         </f:widget.paginate>

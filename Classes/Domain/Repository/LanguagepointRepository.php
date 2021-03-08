@@ -3,6 +3,7 @@ namespace Ubl\SparqlToucan\Domain\Repository;
 
 use TYPO3\CMS\Extbase\Persistence\Repository;
 use Ubl\SparqlToucan\Domain\Model\Datapoint;
+use Ubl\SparqlToucan\Domain\Model\Textpoint;
 
 /***
  *
@@ -32,7 +33,30 @@ class LanguagepointRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     //fetch language point by language and datapoint
     //show available languages
 
-    public function fetchCorresponding(Datapoint $datapoint) {
+    /**
+     * i have choosen to make datapoints and textpoints to be avaible terminations for a languagepoint, therefore i have
+     * to do some trickery so it works flawlessly, i am quite unsure if this is the way in overloading the method
+     * @param $method
+     * @param $args
+     * @return mixed
+     */
+    public function __call($method, $args) {
+        if ( $method === 'fetchCorresponding' ) {
+            if( count($args) === 1 && $args[0] instanceof Datapoint) {
+                return $this->fetchCorrespondingDP($args[0]);
+            }
+            if( count($args) === 1 && $args[0] instanceof Textpoint) {
+                return $this->fetchCorrespondingTP($args[0]);
+            }
+        }
+        if ( $method === 'deleteCorresponding' ) {
+            if( count($args) === 1 && $args[0] instanceof Datapoint) {
+                $this->deleteCorrespondingDP($args[0]);
+            }
+        }
+    }
+
+    public function fetchCorrespondingDP(Datapoint $datapoint) {
         //findBy('datapoint_id', $datapoint)
         $query = $this->createQuery();
         $query->matching($query->equals('datapoint_id', $datapoint));
@@ -40,7 +64,13 @@ class LanguagepointRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         return $query->execute();
     }
 
-    public function deleteCorresponding(Datapoint $datapoint) {
+    public function fetchCorrespondingTP(Textpoint $textpoint) {
+        $query = $this->createQuery();
+        $query->matching($query->equals('textpoint', $textpoint));
+        return $query->execute();
+    }
+
+    public function deleteCorrespondingDP(Datapoint $datapoint) {
         $persistenceManager = $this->objectManager->get("TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager");
         $points = $this->fetchCorresponding($datapoint);
         foreach($points as $point) {

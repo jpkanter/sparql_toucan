@@ -1,0 +1,47 @@
+<html xmlns:f="https://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:layout name="Backend" />
+
+<f:section name="content">
+
+    <f:render partial="Backend/MenuBar" />
+
+    <f:flashMessages />
+
+    <f:render partial="FormErrors" />
+
+    <table class="tx_sparqltoucan_paginator_table">
+        <tr>
+            <th colspan="2"><f:translate key="tx_sparqltoucan_domain_model_textpoint" /></th>
+            <th><f:translate key="tx_sparqltoucan_domain_model_textpoint.description" /></th>
+            <th><f:translate key="tx_sparql_toucan_general.languages" /></th>
+            <th colspan="3"><f:translate key="tx_sparql_toucan_general.control" /></th>
+        </tr>
+        <f:widget.paginate objects="{textpoints}" as="paginateLabel" configuration="{itemsPerPage: 30, insertAbove: 0, insertBelow: 1, maximumNumberOfLinks: 10}">
+            <f:for each="{paginateLabel}" as="point">
+                <tr>
+                    <td><em>{point.uid}</em></td>
+                    <td>{point.name}</td>
+                    <td>{point.description -> f:format.crop(maxCharacters: 160)}</td>
+                    <td>
+                        <f:for each="{point.templang}" as="lan">
+                            <span class="tx_toucan_language_block">{lan}</span>
+                        </f:for>
+                    </td>
+                    <td><f:link.action action="editTextpoint" arguments="{textpoint : point}"><f:translate key="tx_sparql_toucan_general.edit" /></f:link.action></td>
+                    <td><f:link.action action="deleteTextpoint" arguments="{textpoint : point}"><f:translate key="tx_sparql_toucan_general.delete" /></f:link.action></td>
+                    <td><span style="font-size: 0.4rem"><f:link.action action="updateTextpointLang" arguments="{textpoint : point}"><f:translate key="tx_sparql_toucan_general.update" /></f:link.action></span></td>
+                </tr>
+            </f:for>
+        </f:widget.paginate>
+    </table>
+
+    <f:form action="createTextpoint" name="textpoint" object="{textpoint}" >
+        <f:render partial="Textpoint/FormFields" arguments="{textpoint:textpoint}" />
+        <f:form.submit value="{f:translate(key:'tx_sparql_toucan_general.createedit')}" name="btn_createedit"/>
+        <f:form.submit value="{f:translate(key:'tx_sparql_toucan_general.create')}" name="btn_create"/>
+    </f:form>
+
+    <f:debug>{_all}</f:debug>
+
+</f:section>
+</html>

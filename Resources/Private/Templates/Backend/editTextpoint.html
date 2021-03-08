@@ -1,0 +1,21 @@
+<html xmlns:f="https://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:layout name="Backend" />
+
+<f:section name="content">
+
+    <f:render partial="Backend/MenuBar" />
+
+    <f:flashMessages />
+
+    <f:render partial="FormErrors" />
+
+    <f:form action="editTextpoint" name="textpoint" object="{textpoint}" >
+        <f:render partial="Textpoint/FormFields" arguments="{textpoint:textpoint}" />
+        <f:form.submit value="{f:translate(key:'tx_sparql_toucan_general.save')}" name="btn_save"/>
+        <f:form.submit value="{f:translate(key:'tx_sparql_toucan_general.saveedit')}" name="btn_saveedit"/>
+    </f:form>
+
+    <f:debug>{_all}</f:debug>
+
+</f:section>
+</html>

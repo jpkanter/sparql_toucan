@@ -195,7 +195,7 @@ ul.f3-widget-paginator li a:hover {
     color: var(--tou_white);
 }
 
-table.tx_sparqltoucan_paginator_table tr th {
+table.tx_sparqltoucan_paginator_table th {
     background-color: var(--tou_darkblue);
     color: var(--tou_purewhite);
     padding: 0.5rem;
@@ -215,6 +215,11 @@ table.tx_sparqltoucan_paginator_table tr:hover, table.tx_sparqltoucan_paginator_
     background: var(--tou_blue);
     color: var(--tou_purewhite);
 }
+
+table.tx_sparqltoucan_paginator_table tr:hover a {
+    color: var(--tou_red);
+}
+
 .tx-sparql-toucan.mini_id {
     font-size: 0.8rem;
     color: var(--tou_lightgrey);

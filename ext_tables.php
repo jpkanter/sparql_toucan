@@ -56,7 +56,13 @@ call_user_func(
                                     deleteSource,
                                     finalDeleteSource,
                                     
-                                    labelcacheOverview,
+                                    textpointOverview,
+                                    editTextpoint,
+                                    updateTextpoint,
+                                    createTextpoint,
+                                    deleteTextpoint,
+                                    updateTextpointLang,
+                                    
                                     languagepointOverview,
                                     
                                     timemachine,

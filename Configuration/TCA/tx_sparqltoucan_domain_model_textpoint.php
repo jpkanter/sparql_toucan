@@ -20,10 +20,10 @@ return [
         'iconfile' => 'EXT:sparql_toucan/Resources/Public/Icons/tx_sparqltoucan_domain_model_textpoint.gif'
     ],
     'interface' => [
-        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, description',
+        'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, description, languages',
     ],
     'types' => [
-        '1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, description, --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access, starttime, endtime'],
+        '1' => ['showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, description, languages, --div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access, starttime, endtime'],
     ],
     'columns' => [
         'sys_language_uid' => [
@@ -129,13 +129,22 @@ return [
                 'eval' => 'trim'
             ],
         ],
-        'url' => [
+        'description' => [
             'exclude' => true,
             'label' => 'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_textpoint.description',
             'config' => [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim'
+            ],
+        ],
+        'languages' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:sparql_toucan/Resources/Private/Language/locallang_db.xlf:tx_sparqltoucan_domain_model_textpoint.languages',
+            'config' => [
+                'type' => 'text',
+                'cols' => 20,
+                'rows' => 5,
             ],
         ],
     

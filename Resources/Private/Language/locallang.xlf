@@ -12,6 +12,21 @@
 			<trans-unit id="tx_sparqltoucan_domain_model_source.url">
 				<source>Url</source>
 			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_textpoint">
+				<source>Textpoint</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_textpoint.name">
+				<source>Name</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_textpoint.description">
+				<source>Description</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_textpoint.descriptionplaceholder">
+				<source>Some words that describe for what this textpoint is used or where it can be used and what in what context</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_textpoint.nameplaceholder">
+				<source>A mostly unique name describing the nature of this textpoint in short words</source>
+			</trans-unit>
 			<trans-unit id="tx_sparqltoucan_domain_model_datapoint">
 				<source>Datapoint</source>
 			</trans-unit>
@@ -121,6 +136,9 @@
 			<trans-unit id="tx_sparql_toucan_general.language">
 				<source>Language</source>
 			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.languages">
+				<source>Languages</source>
+			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_general.label">
 				<source>Label</source>
 			</trans-unit>
@@ -132,6 +150,33 @@
 			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_general.explore">
 				<source>Explore</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.edit">
+				<source>Edit</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.duplicate">
+				<source>Duplicate</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.delete">
+				<source>Delete</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.control">
+				<source>Control</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.save">
+				<source>Save</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.saveedit">
+				<source>Save &amp; continue edit</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.update">
+				<source>Update</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.create">
+				<source>Create</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.createedit">
+				<source>Create &amp; Edit</source>
 			</trans-unit>
 			<trans-unit id="tx_sparqltoucan_domain_model_datapoint.object">
 				<source>Object</source>
@@ -156,6 +201,9 @@
 			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_menubar.datapoint">
 				<source>Datapoints</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_menubar.textpoint">
+				<source>Textpoints</source>
 			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_menubar.timemachine">
 				<source>Timemachine</source>
@@ -205,6 +253,21 @@
 			</trans-unit>
 			<trans-unit id="tx_sparqltoucan_domain_model_source.url">
 				<source>Url</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_textpoint">
+				<source>Textpunkt</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_textpoint.name">
+				<source>Name</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_textpoint.description">
+				<source>Beschreibung</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_textpoint.descriptionplaceholder">
+				<source>Etwas ausführlichere Beschreibung dieses Textpunktes um einen zusätzlichen Kontext zu ermöglichen wann und unter welchen Bedigungen dieser Textpunkt benutzt werden  kann</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_textpoint.nameplaceholder">
+				<source>Ein möglichst eindeutiger Name um diesen Textpunkt zu beschreiben</source>
 			</trans-unit>
 			<trans-unit id="tx_sparqltoucan_domain_model_datapoint">
 				<source>Datenpunkt</source>
@@ -312,6 +375,9 @@
 			<trans-unit id="tx_sparql_toucan_general.language">
 				<source>Sprache</source>
 			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.languages">
+				<source>Sprachen</source>
+			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_general.label">
 				<source>Bezeichnung</source>
 			</trans-unit>
@@ -333,6 +399,33 @@
 			<trans-unit id="tx_sparql_toucan_general.newdatapoint">
 				<source>Neuer Datenpunkt</source>
 			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.edit">
+				<source>Editieren</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.duplicate">
+				<source>Duplizieren</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.delete">
+				<source>Löschen</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.control">
+				<source>Bearbeiten</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.save">
+				<source>Speichern</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.saveedit">
+				<source>Speichern &amp; Weiterbearbeiten</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.create">
+				<source>Erschaffen</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.createedit">
+				<source>Erschaffen &amp; Bearbeiten</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.update">
+				<source>Aktualisieren</source>
+			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_menubar.overview">
 				<source>Überblick</source>
 			</trans-unit>
@@ -347,6 +440,9 @@
 			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_menubar.datapoint">
 				<source>Datenpunkte</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_menubar.textpoint">
+				<source>Textpunkte</source>
 			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_menubar.timemachine">
 				<source>Zeitmaschine</source>

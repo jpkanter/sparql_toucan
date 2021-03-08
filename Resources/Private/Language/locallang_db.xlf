@@ -21,6 +21,9 @@
 			<trans-unit id="tx_sparqltoucan_domain_model_textpoint.description">
 				<source>Description</source>
 			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_textpoint.languages">
+				<source>Internal language field, dont touch</source>
+			</trans-unit>
 			<trans-unit id="tx_sparqltoucan_domain_model_datapoint">
 				<source>Datapoint</source>
 			</trans-unit>
@@ -139,6 +142,9 @@
 			</trans-unit>
 			<trans-unit id="tx_sparqltoucan_domain_model_textpoint.description">
 				<source>Beschreibung</source>
+			</trans-unit>
+			<trans-unit id="tx_sparqltoucan_domain_model_textpoint.languages">
+				<source>Internes Feld, nicht berühren.</source>
 			</trans-unit>
 			<trans-unit id="tx_sparqltoucan_domain_model_datapoint">
 				<source>Datenpunkt</source>
