@@ -211,13 +211,25 @@ table.tx_sparqltoucan_paginator_table tr.tx_sparqltoucan_table_temp td {
     color: var(--tou_darkgrey);
 }
 
-table.tx_sparqltoucan_paginator_table tr:hover, table.tx_sparqltoucan_paginator_table tr.tx_sparqltoucan_table_temp:hover td {
+/* , table.tx_sparqltoucan_paginator_table tr.tx_sparqltoucan_table_temp:hover > td  */
+table.tx_sparqltoucan_paginator_table tr:hover{
     background: var(--tou_blue);
     color: var(--tou_purewhite);
 }
 
+table.tx_sparqltoucan_paginator_table tr:hover input {
+    color: var(--tou_black);
+}
+
 table.tx_sparqltoucan_paginator_table tr:hover a {
     color: var(--tou_red);
+}
+
+tr.tx_sparqltoucan_important_tr th{
+    background: var(--tou_red);
+    color: var(--tou_white);
+    font-weight: 600;
+    font-size: 1.6rem
 }
 
 .tx-sparql-toucan.mini_id {
@@ -267,6 +279,24 @@ div.tx_sparqltoucan_formworld .additional_data {
 
 .tx_sparqltoucan_float_right {
     float: right;
+}
+
+.tx_sparqltoucan_tworowgrid {
+    display: grid;
+    grid-template-columns: fit-content(100%) auto;
+    grid-column-gap: 2rem;
+    margin-right: auto;
+}
+
+.tx_sparqltoucan_tworowgrid div {
+    display: flex;
+    margin-bottom: auto;
+}
+
+tr.x_sparqltoucan_hiddentr{
+    display: none;
+    vertical-align: middle;
+    height: 1.75rem;
 }
 
 .tx_sparqltoucan_layouter {

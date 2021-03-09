@@ -187,6 +187,9 @@
 			<trans-unit id="tx_sparql_toucan_general.newdatapoint">
 				<source>New Datapoint</source>
 			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.content">
+				<source>Content</source>
+			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_menubar.overview">
 				<source>Overview</source>
 			</trans-unit>
@@ -365,10 +368,6 @@
 			<trans-unit id="tx_sparql_toucan_sparqlfront.description">
 				<source>Alleinstehendes Addin das Daten aus einer Linked Data Quelle mittels eines oder mehrer Sparql Endpunkte darstellt.</source>
 			</trans-unit>
-
-			<trans-unit id="tx_sparql_toucan_general.endpoint">
-				<source>Endpunkt</source>
-			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_general.endpoints">
 				<source>Endpunkte</source>
 			</trans-unit>
@@ -425,6 +424,9 @@
 			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_general.update">
 				<source>Aktualisieren</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.content">
+				<source>Inhalt</source>
 			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_menubar.overview">
 				<source>Überblick</source>
