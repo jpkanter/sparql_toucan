@@ -61,9 +61,13 @@ call_user_func(
                                     updateTextpoint,
                                     createTextpoint,
                                     deleteTextpoint,
+                                    forceDeleteTextpoint,
                                     updateTextpointLang,
                                     
                                     languagepointOverview,
+                                    deleteLanguagepoint,
+                                    updateLanguagepoint,
+                                    createLanguagepoint,
                                     
                                     timemachine,
                                     deleteTimemachine,

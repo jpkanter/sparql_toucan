@@ -1,0 +1,43 @@
+<html xmlns:f="https://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:layout name="Backend" />
+
+<f:section name="content">
+
+    <f:render partial="Backend/MenuBar" />
+
+    <f:flashMessages />
+
+    <f:render partial="FormErrors" />
+
+    <h2><f:translate key="tx_sparql_toucan_messages.deletefulltextpointh2"/>really delete?</h2><!--TODO: i18n-->
+
+    <p><f:translate key="tx_sparql_toucan_messages.deletefulltextpoint"/>explanation why this not easy</p>
+
+    <h3>{textpoint.name}</h3>
+
+    <p>{textpoint.description}</p>
+
+    <table class="tx_sparqltoucan_paginator_table">
+        <tr>
+            <th>UID</th>
+            <th><f:translate key="tx_sparql_toucan_general.language"/></th>
+            <th><f:translate key="tx_sparql_toucan_general.content"/></th>
+        </tr>
+        <f:for each="{languagepoints}" as="lang">
+            <tr>
+                <td>{lang.uid}</td>
+                <td><span class="tx_sparqltoucan_language_block">{lang.language}</span></td>
+                <td>{lang.content}</td>
+            </tr>
+        </f:for>
+    </table>
+
+    <f:link.action action="forceDeleteTextpoint" arguments="{textpoint : textpoint}" class="tx_sparqltoucan_fakebutton">
+        <f:translate key="tx_sparql_toucan_general.deleteall"/>
+    </f:link.action>
+    <f:link.action action="textpointOverview" class="tx_sparqltoucan_fakebutton">
+        <f:translate key="tx_sparql_toucan_menubar.overview"/>
+    </f:link.action>
+
+</f:section>
+</html>

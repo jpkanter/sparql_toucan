@@ -53,6 +53,9 @@ class LanguagepointRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             if( count($args) === 1 && $args[0] instanceof Datapoint) {
                 $this->deleteCorrespondingDP($args[0]);
             }
+            if( count($args) === 1 && $args[0] instanceof Textpoint) {
+                $this->deleteCorrespondingTP($args[0]);
+            }
         }
     }
 
@@ -73,6 +76,16 @@ class LanguagepointRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     public function deleteCorrespondingDP(Datapoint $datapoint) {
         $persistenceManager = $this->objectManager->get("TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager");
         $points = $this->fetchCorresponding($datapoint);
+        foreach($points as $point) {
+            $this->remove($point);
+
+        }
+        $persistenceManager->persistAll();
+    }
+
+    public function deleteCorrespondingTP(Textpoint $textpoint) {
+        $persistenceManager = $this->objectManager->get("TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager");
+        $points = $this->fetchCorresponding($textpoint);
         foreach($points as $point) {
             $this->remove($point);
 

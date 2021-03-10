@@ -672,9 +672,10 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     }
 
     public function updateTextpointAction(Textpoint $textpoint) {
+        $this->addFlashMessage('The object was updated.', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
         $formdata = $this->request->getArguments();
         $this->textpointRepository->update($textpoint);
-        if( array_key_exists('btn_saveedit', $formdata) ) {
+        if( array_key_exists('btn_save', $formdata) ) {
             $this->redirect('editTextpoint', Null, Null, array('textpoint' => $textpoint));
         } else {
             $this->redirect('textpointOverview');
@@ -682,7 +683,27 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     }
 
     public function updateTextpointLangAction(Textpoint $textpoint) {
+        $this->addFlashMessage('Languageinfo was manually updated.', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
         $this->textpointRepository->updateLanguages($textpoint);
+        $this->redirect('textpointOverview');
+    }
+
+    public function deleteTextpointAction(Textpoint $textpoint) {
+        $langPoints = $this->languagepointRepository->fetchCorresponding($textpoint);
+        if( $langPoints->count() > 0 ) {
+            $this->view->assign("languagepoints", $langPoints);
+            $this->view->assign("textpoint", $textpoint);
+        }
+        else {
+            $this->textpointRepository->remove($textpoint);
+            $this->redirect('textpointOverview');
+        }
+    }
+
+    public function forceDeleteTextpointAction(Textpoint $textpoint) {
+        $this->addFlashMessage('Deleted Textpoint '.$textpoint->getName()." and all corresponding Languagepoints.", '', \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
+        $this->languagepointRepository->deleteCorresponding($textpoint);
+        $this->textpointRepository->remove($textpoint);
         $this->redirect('textpointOverview');
     }
 
@@ -709,6 +730,51 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $languagepoints = $this->languagepointRepository->findAll();
 
         $this->view->assign("languagepoints", $languagepoints);
+    }
+
+    public function createLanguagepointAction(Languagepoint $newLanguagepoint) {
+            $persistenceManager = $this->objectManager->get("TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager");
+        $this->addFlashMessage('The object was created.', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
+        $this->languagepointRepository->add($newLanguagepoint);
+            $persistenceManager->persistAll();
+        //failsafe, direct languagepoint edits should only be avaible in textpoints but anyway
+        if( $newLanguagepoint->getTextpoint() !== 0 ) {
+            $this->textpointRepository->updateLanguages($newLanguagepoint->getTextpoint());
+            $this->redirect('editTextpoint', null, null, array('textpoint' => $newLanguagepoint->getTextpoint()));
+        }
+        else {
+            $this->redirect('overview');
+        }
+
+    }
+
+    public function deleteLanguagepointAction(Languagepoint $oldLanguagepoint) {
+            $persistenceManager = $this->objectManager->get("TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager");
+        $this->addFlashMessage('The object was removed.', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
+        $this->languagepointRepository->remove($oldLanguagepoint);
+            $persistenceManager->persistAll();
+        if( $oldLanguagepoint->getTextpoint() !== 0 ) {
+            $this->textpointRepository->updateLanguages($oldLanguagepoint->getTextpoint());
+            $this->redirect('editTextpoint', null, null, array('textpoint' => $oldLanguagepoint->getTextpoint()));
+        }
+        else {
+            $this->redirect('overview');
+        }
+
+    }
+
+    public function updateLanguagepointAction(Languagepoint $languagepoint) {
+            $persistenceManager = $this->objectManager->get("TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager");
+        $this->addFlashMessage('The object was updated.', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
+        $this->languagepointRepository->update($languagepoint);
+            $persistenceManager->persistAll();
+        if( $languagepoint->getTextpoint() !== 0 ) {
+            $this->textpointRepository->updateLanguages($languagepoint->getTextpoint());
+            $this->redirect('editTextpoint', null, null, array('textpoint' => $languagepoint->getTextpoint()));
+        }
+        else {
+            $this->redirect('overview');
+        }
     }
 
     public function datapointOverviewAction() {

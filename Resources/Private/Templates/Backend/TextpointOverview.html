@@ -24,12 +24,13 @@
                     <td>{point.description -> f:format.crop(maxCharacters: 160)}</td>
                     <td>
                         <f:for each="{point.templang}" as="lan">
-                            <span class="tx_toucan_language_block">{lan}</span>
+                            <span class="tx_sparqltoucan_language_block">{lan}</span>
                         </f:for>
                     </td>
                     <td><f:link.action action="editTextpoint" arguments="{textpoint : point}"><f:translate key="tx_sparql_toucan_general.edit" /></f:link.action></td>
                     <td><f:link.action action="deleteTextpoint" arguments="{textpoint : point}"><f:translate key="tx_sparql_toucan_general.delete" /></f:link.action></td>
                     <td><span style="font-size: 0.4rem"><f:link.action action="updateTextpointLang" arguments="{textpoint : point}"><f:translate key="tx_sparql_toucan_general.update" /></f:link.action></span></td>
+
                 </tr>
             </f:for>
         </f:widget.paginate>

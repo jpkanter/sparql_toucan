@@ -111,7 +111,7 @@ div.tx_sparqltoucan_central {
     padding: 2em;
 }
 
-.tx_toucan_language_block {
+.tx_toucan_language_block, .tx_sparqltoucan_language_block{
     display: inline-block;
     font-weight: bolder;
     border: 1px solid var(--tou_black);
@@ -313,4 +313,9 @@ tr.x_sparqltoucan_hiddentr{
     width: 250px;
     height: 30px;
     overflow: hidden;
+}
+
+.tx_sparqltoucan_fakebutton {
+    font-size: 1.4rem;
+    padding: 0.4rem
 }

@@ -160,6 +160,9 @@
 			<trans-unit id="tx_sparql_toucan_general.delete">
 				<source>Delete</source>
 			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.deleteall">
+				<source>Delete All</source>
+			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_general.control">
 				<source>Control</source>
 			</trans-unit>
@@ -406,6 +409,9 @@
 			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_general.delete">
 				<source>Löschen</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.deleteall">
+				<source>alle Löschen</source>
 			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_general.control">
 				<source>Bearbeiten</source>

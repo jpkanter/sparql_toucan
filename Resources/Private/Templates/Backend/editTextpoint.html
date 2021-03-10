@@ -34,24 +34,32 @@
                         <td><a href="#"><f:translate key="tx_sparql_toucan_general.edit"/></a></td>
                     </tr>-->
                     <tr class="tx_sparqltoucan_hiddentr" id="lang_{lang.uid}">
-                        <form action="editLanguagepoint" name="languagepoint" object="{lang}">
+                        <f:form action="updateLanguagepoint" name="languagepoint" object="{lang}">
                             <td>{lang.uid}</td>
                             <td><f:form.textfield property="language" value="{lang.language}" size="5"/></td>
                             <td><f:form.textfield property="content" value="{lang.content}" size="40"/></td>
                             <td><f:form.submit value="{f:translate(key:'tx_sparql_toucan_general.save')}"/></td>
-                        </form>
+                            <td>
+                                <f:link.action action="deleteLanguagepoint" arguments="{oldLanguagepoint : lang}" class="tx_sparqltoucan_fakebutton">
+                                    <f:translate key="tx_sparql_toucan_general.delete"/>
+                                </f:link.action>
+                            </td>
+                        </f:form>
                     </tr>
                 </f:for>
                 <tr class="tx_sparqltoucan_important_tr">
                     <th colspan="4"><f:translate key="tx_sparql_toucan_general.create"/></th>
                 </tr>
-                <tr class="tx_sparqltoucan_hiddentr">
-                    <form action="newLanguagepoint" name="languagepoint" object="{lang}">
+                <tr>
+                    <f:form action="createLanguagepoint" name="newLanguagepoint" object="{newLanguagepoint}">
+                        <f:form.hidden property="textpoint" value="{textpoint.uid}"/>
                         <td>New</td><!-- TODO: i18n-->
-                        <td><f:form.textfield property="language" value="" placeholder="{f:translate(key:'tx_sparql_toucan_general.language')}" size="5"/></td>
-                        <td><f:form.textfield property="content" value="" placeholder="{f:translate(key:'tx_sparql_toucan_general.content')}"size="40"/></td>
+                        <td><f:form.textfield property="language" placeholder="{f:translate(key:'tx_sparql_toucan_general.language')}" size="5"/></td>
+                        <td><f:form.textfield property="content" placeholder="{f:translate(key:'tx_sparql_toucan_general.content')}" size="40"/></td>
+
                         <td><f:form.submit value="{f:translate(key:'tx_sparql_toucan_general.create')}"/></td>
-                    </form>
+                    </f:form>
+                </tr>
             </table>
         </div>
     </div>
