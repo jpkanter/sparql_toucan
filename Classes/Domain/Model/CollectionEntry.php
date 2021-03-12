@@ -17,6 +17,29 @@ namespace Ubl\SparqlToucan\Domain\Model;
  */
 class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
+    //the lenghts of my frankenstein constructions scares me a lot
+    /**
+     * datapointRepository
+     *
+     * @var \Ubl\SparqlToucan\Domain\Repository\DatapointRepository
+     * @inject
+     */
+    protected $datapointRepository = null;
+    /**
+     * textpointRepository
+     *
+     * @var \Ubl\SparqlToucan\Domain\Repository\TextpointRepository
+     * @inject
+     */
+    protected $textpointRepository = null;
+    /**
+     * collectionEntryRepository
+     *
+     * @var \Ubl\SparqlToucan\Domain\Repository\collectionEntryRepository
+     * @inject
+     */
+    protected $collectionEntryRepository = null;
+
     /**
      * name
      *
@@ -101,7 +124,7 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var \Ubl\SparqlToucan\Domain\Model\Textpoint
      */
-    protected $textpoint = 0;
+    protected $textpoint = null;
 
     //fake entries without database representation
     /**
@@ -170,6 +193,10 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
             //makes sure we get a somewhat clean grid-area format
             $parts = explode("/", $cssGridArea);
             $this->gridArea = trim($parts[0]) ." / ". trim($parts[1]) ." / ". trim($parts[2]) ." / ". trim($parts[3]);
+            return true;
+        }
+        elseif( trim($cssGridArea) == "" ) {
+            $this->gridArea = "";
             return true;
         }
         return false;
@@ -329,6 +356,10 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         $this->datapointId = $datapointId;
     }
 
+    public function unsetDatapoint() {
+        $this->datapointId = 0;
+    }
+
     /**
      * Returns the collectionID
      *
@@ -377,6 +408,10 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
     }
 
+    public function unsetParentEntry() {
+        $this->parentEntry = 0;
+    }
+
     /**
      * Returns the branching entry if there is any
      *
@@ -397,6 +432,11 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
        $this->textpoint = $textpoint;
     }
+
+    public function unsetTextpoint() {
+        $this->textpoint = 0;
+    }
+
 
     /**
      * gets the Status of the entry, if its a branch or not
@@ -434,5 +474,56 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
             'position' => $this->getPosition(),
             'gridArea' => $this->getGridArea()
         ];
+    }
+
+    /**
+     * setLink - Wrapper
+     *
+     * This shortens the use of setDatapoint, setTextpoint and setParentEntry to one function
+     * mostly cause it now can be used in a loop. I am, the creator of this, feel really bad about this. To achieve
+     * what i wanted i needed to include repositories in the description of this class, which feels quite hacky to
+     * be honest. I am not sure sure if this is the way.
+     *
+     * @param $linkName
+     * @param $value
+     * @return bool
+     */
+    public function setLink($linkName, $value) {
+        Switch( strtolower($linkName) ) {
+            case 'datapoint':
+            case 'datapointid':
+                if( !$value instanceof Datapoint && is_int($value)) {
+                    $value = $this->datapointRepository->findByUid($value);
+                }
+                $this->setDatapointId($value); break;
+            case 'textpoint':
+                if( !$value instanceof Textpoint && is_int($value)) {
+                    $value = $this->textpointRepository->findByUid($value);
+                }
+                $this->setTextpoint($value); break;
+            case 'parentbranch':
+                if( !$value instanceof CollectionEntry && is_int($value)) {
+                    $value = $this->collectionEntryRepository->findByUid($value);
+                }
+                $this->setParentEntry($value); break;
+            default:
+                return false;
+        }
+        return true;
+    }
+
+    public function unsetLink($linkName) {
+        Switch( strtolower($linkName) ) {
+            case 'datapoint':
+            case 'datapointid':
+                $this->unsetDatapoint(); break;
+            case 'textpoint':
+                $this->unsetTextpoint(); break;
+            case 'parentbranch':
+                $this->unsetParentEntry(); break;
+            default:
+                return false;
+        }
+        return true;
     }
 }

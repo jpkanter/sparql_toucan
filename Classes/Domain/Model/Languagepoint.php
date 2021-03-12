@@ -37,14 +37,14 @@ class Languagepoint extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      *
      * @var \Ubl\SparqlToucan\Domain\Model\Datapoint
      */
-    protected $datapointId = 0;
+    protected $datapointId = Null;
 
     /**
      * Id of the source that is used for the datapoint
      *
      * @var \Ubl\SparqlToucan\Domain\Model\Textpoint
      */
-    protected $textpoint = 0;
+    protected $textpoint = Null;
 
     /** @var int */
     protected $crdate;

@@ -107,12 +107,6 @@ class FrontController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
         $sys_language_name = $this->getLanguage();
 
-        $lastElement = end($entries);
-        reset($entries);
-        if( $lastElement != False) {
-            $lastCounter = $lastElement->getGridColumn();
-        }
-
         /****DEBUG****/
         $exceptionStack = array();
 
@@ -140,9 +134,16 @@ class FrontController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             $entries[$myKey]->setStyle($newStyle);
             //end of ugly style hack
             try {
-                $value = $this->languagepointRepository->fetchSpecificLanguage($entry->getDatapointId(), $sys_language_name);
+                if( $entry->getDatapointId() != 0 ) {
+                    $value = $this->languagepointRepository->fetchSpecificLanguage($entry->getDatapointId(), $sys_language_name);
+                }
+                elseif( $entry->getTextpoint() != 0 ) {
+                    $value = $this->languagepointRepository->fetchSpecificLanguage($entry->getTextpoint(), $sys_language_name);
+                }
+                else {
+                    $value = ""; //if neither Textpoint nor Datapoint exists its an empty placeholder entry
+                }
                 $entries[$myKey]->SetTempValue($value);
-                $entries[$myKey]->getDatapointId()->setCachedValue($value);
             } catch (\Exception $e) {
                 $error['message'] = $e->getMessage();
                 $error['code'] = $e->getCode();

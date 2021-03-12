@@ -39,6 +39,7 @@ call_user_func(
                                     deleteCollectionEntry, 
                                     showCollectionEntry,
                                     updateCollectionEntry,
+                                    updateCollectionEntry2,
                                     
                                     datapointOverview,
                                     newDatapoint,

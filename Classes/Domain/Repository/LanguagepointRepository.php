@@ -57,6 +57,16 @@ class LanguagepointRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 $this->deleteCorrespondingTP($args[0]);
             }
         }
+        if ( $method === 'fetchSpecificLanguage') {
+            if( count($args) >= 2 && count($args) <= 3 && $args[0] instanceof Datapoint) {
+                if( isset($args[2]) ) { $arg2 = $args[2]; } else { $arg2 = 'en'; }
+                return $this->fetchSpecificLanguageDP($args[0], $args[1], $arg2);
+            }
+            if( count($args) >= 2 && count($args) <= 3 && $args[0] instanceof Textpoint) {
+                if( isset($args[2]) ) { $arg2 = $args[2]; } else { $arg2 = 'en'; }
+                return $this->fetchSpecificLanguageTP($args[0], $args[1]);
+            }
+        }
     }
 
     public function fetchCorrespondingDP(Datapoint $datapoint) {
@@ -104,7 +114,7 @@ class LanguagepointRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
      * @return string returns the found label
      * @throws \Exception if no languagepoint can be found at all
      */
-    public function fetchSpecificLanguage(Datapoint $datapoint, string $language, $defaultLanguage = "en") {
+    public function fetchSpecificLanguageDP(Datapoint $datapoint, string $language, $defaultLanguage = "en") {
         $allLanguagePoints = $this->fetchCorresponding($datapoint);
         foreach( $allLanguagePoints as $languagePoint) {
             $lan = $languagePoint->getLanguage();
@@ -126,6 +136,31 @@ class LanguagepointRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         else {
             //what now? Do i throw an exception cause there is an error? Or do i just return nothing cause there is nothing?
             throw new \Exception("No Languagepoint to that Datapoint could be found", 3);
+        }
+    }
+
+    public function fetchSpecificLanguageTP(Textpoint $textpoint, string $language, $defaultLanguage = "en") {
+        $allLanguagePoints = $this->fetchCorresponding($textpoint);
+        foreach( $allLanguagePoints as $languagePoint) {
+            $lan = $languagePoint->getLanguage();
+            if($lan  == $language ) {
+                return $languagePoint->getContent();
+            }
+            if( $lan == $defaultLanguage ) {
+                $fallback = $languagePoint->getContent();
+                continue;
+            }
+            $anything = $languagePoint->getContent();
+        }
+        if( isset($fallback) ) {
+            return $fallback;
+        }
+        if( isset($anything) ) {
+            return $anything;
+        }
+        else {
+            //what now? Do i throw an exception cause there is an error? Or do i just return nothing cause there is nothing?
+            throw new \Exception("No Languagepoint to that Textpoint could be found", 3);
         }
     }
 }

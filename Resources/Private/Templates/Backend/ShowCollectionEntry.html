@@ -11,36 +11,42 @@
 
     <div class="tx_sparqltoucan_formworld">
         <h2>Edit of Collection Entry #{ThisEntry.uid}</h2>
-        <f:form action="updateCollectionEntry" name="collectionEntry" object="{ThisEntry}" >
-            <f:form.hidden property="collectionID" value="{ThisEntry.collectionID}"/>
+        <f:form action="updateCollectionEntry2" name="collectionEntry">
+            <f:form.hidden name="collectionID" value="{ThisEntry.collectionID}"/>
+            <f:form.hidden name="collectionEntry" value="{ThisEntry}"/>
 
             <label for="name">Name</label>
-                <f:form.textfield property="name" size="50" type="text" placeholder="[Name]" maxlength="128" value="{ThisEntry.name}"/>
+                <f:form.textfield name="name" size="50" type="text" placeholder="[Name]" maxlength="128" value="{ThisEntry.name}"/>
             <label for="grid_area"><f:translate key="tx_sparqltoucan_domain_model_collectionentry.gridarea" /></label>
-                <f:form.textfield property="gridRow" size="4" type="integer"  maxlength="4" value="{ThisEntry.gridRow}"/>
-            <f:form.textfield property="gridColumn" size="4" type="integer"  maxlength="4" value="{ThisEntry.gridColumn}"/>
-            <f:form.textfield property="gridRowEnd" size="4" type="integer"  maxlength="4" value="{ThisEntry.gridRowEnd}"/>
-            <f:form.textfield property="gridColumnEnd" size="4" type="integer"  maxlength="4" value="{ThisEntry.gridColumnEnd}"/>
+                <f:form.textfield name="gridRow" size="4" type="integer"  maxlength="4" value="{ThisEntry.gridRow}"/>
+            <f:form.textfield name="gridColumn" size="4" type="integer"  maxlength="4" value="{ThisEntry.gridColumn}"/>
+            <f:form.textfield name="gridRowEnd" size="4" type="integer"  maxlength="4" value="{ThisEntry.gridRowEnd}"/>
+            <f:form.textfield name="gridColumnEnd" size="4" type="integer"  maxlength="4" value="{ThisEntry.gridColumnEnd}"/>
             <label for="position"><f:translate key="tx_sparqltoucan_domain_model_collectionentry.position" /></label>
-                <f:form.textfield property="position" size="4" type="integer" placeholder="[{f:translate(key:'tx_sparqltoucan_domain_model_collectionentry.position')}]" maxlength="4" value="{ThisEntry.position}"/>
+                <f:form.textfield name="position" size="4" type="integer" placeholder="[{f:translate(key:'tx_sparqltoucan_domain_model_collectionentry.position')}]" maxlength="4" value="{ThisEntry.position}"/>
             <label for="style">Style</label>
-                <f:render partial="Backend/CollectionEntryStyles" arguments="{style : ThisEntry.style}"/>
-            <label for="style_name">CSS Style Name</label>
-                <f:form.textfield property="styleName" size="50" type="text" placeholder="[CSS Style Class Name" maxlength="128" value="{ThisEntry.styleName}"/>
-            <label for="datapoint_id">Datapoint</label>
-                <f:form.select property="datapointId" options="{Datapoints}" optionValueField="uid" optionLabelField="name" value="{ThisEntry.datapointId}"/>
-            <div class="additional_data">
-                [Current Datapoint]<br>
-                (Subject)<br>
-                &lt;<span class="tx_sparqltoucan_monospaced">{ThisEntry.datapointId.subject}</span>&gt; <br><br>
-                (Predicate)<br>
-                &lt;<span class="tx_sparqltoucan_monospaced">{ThisEntry.datapointId.predicate}</span>&gt; <br>
-                <br>[Languagepoints]<br>
-                <f:for each="{LanguagePoints}" as="Point">
-                    {Point.content} <span class="tx_toucan_language_block">{Point.language}</span><br>
-                </f:for>
+                <f:render partial="Backend/CollectionEntryStyles2" arguments="{style : ThisEntry.style}"/>
+            <label for="styleName">CSS Style Name</label>
+                <f:form.textfield name="styleName" size="50" type="text" placeholder="[CSS Style Class Name" maxlength="128" value="{ThisEntry.styleName}"/>
+            <label for="datapointId">Datapoint</label>
+                <f:form.select name="datapointId" options="{Datapoints}" optionValueField="uid" optionLabelField="name" value="{ThisEntry.datapointId}"/>
+            <label for="textpoint">Textpoint</label>
+                <f:form.select name="textpoint" options="{Textpoints}" optionValueField="uid" optionLabelField="name" value="{ThisEntry.textpoint}"/>
 
-            </div>
+            <f:if condition="{ThisEntry.datapointId} > 0">
+                <div class="additional_data">
+                    [Current Datapoint]<br>
+                    (Subject)<br>
+                    &lt;<span class="tx_sparqltoucan_monospaced">{ThisEntry.datapointId.subject}</span>&gt; <br><br>
+                    (Predicate)<br>
+                    &lt;<span class="tx_sparqltoucan_monospaced">{ThisEntry.datapointId.predicate}</span>&gt; <br>
+                    <br>[Languagepoints]<br>
+                    <f:for each="{LanguagePoints}" as="Point">
+                        {Point.content} <span class="tx_toucan_language_block">{Point.language}</span><br>
+                    </f:for>
+                </div>
+            </f:if>
+
             <f:form.submit value="Update"/>
         </f:form>
     </div>

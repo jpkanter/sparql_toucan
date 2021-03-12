@@ -146,7 +146,7 @@ CREATE TABLE tx_sparqltoucan_domain_model_collectionentry (
 	is_branch boolean DEFAULT false,
     position int(11) DEFAULT '0' NOT NULL,
 	parent_entry int(11) DEFAULT '0' NOT NULL,
-	textpoint int(11) DEFAULT '0' NOT NULL,
+	textpoint int(11) DEFAULT '0',
 
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,

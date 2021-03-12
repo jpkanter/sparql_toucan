@@ -125,6 +125,8 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             }
         }
         $this->view->assign('datapoints', $datapoints);
+        $textpoints = $this->textpointRepository->findAll();
+        $this->view->assign('textpoints', $textpoints);
     }
 
     /**
@@ -332,7 +334,12 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     {
         $this->view->assign("ThisEntry", $collectionEntry);
         $this->view->assign("OtherEntries", $this->collectionEntryRepository->fetchCorresponding($collectionEntry->getCollectionID()));
-        $this->view->assign("Datapoints", $this->datapointRepository->findAll());
+        $dps = $this->datapointRepository->findAll()->toArray();
+        array_unshift($dps, ['uid' => 0, 'name' => "noentry"]); //TODO: i18n
+        $this->view->assign("Datapoints", $dps);
+        $tps = $this->textpointRepository->findAll()->toArray();
+        array_unshift($tps, ['uid' => 0, 'name' => "noentry"]);
+        $this->view->assign("Textpoints", $tps);
         $this->view->assign("LanguagePoints", $this->languagepointRepository->fetchCorresponding($collectionEntry->getDatapointId()));
     }
 
@@ -342,6 +349,48 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->redirect('showCollectionEntry', Null, Null, array('collectionEntry'=>$collectionEntry));
     }
 
+    public function updateCollectionEntry2Action() {
+        //this feels quite fragile
+        $this->view->assign("debug", $this->request->getArguments());
+        $form = $this->request->getArguments();
+        $pureCE = $this->collectionEntryRepository->findByUid(intval($form['collectionEntry']['__identity']));
+        $pureCE->setName($form['name']);
+        $pureCE->setGridRow(intval($form['gridRow']));
+        $pureCE->setGridColumn(intval($form['gridColumn']));
+        $pureCE->setGridRowEnd(intval($form['gridRowEnd']));
+        $pureCE->setGridColumnEnd(intval($form['gridColumnEnd']));
+        $pureCE->setPosition(intval($form['position']));
+        $pureCE->setStyle(intval($form['style']));
+        $pureCE->setStyleName($form['styleName']);
+        $links = ['datapointId', 'textpoint'];
+        foreach( $links as $link) {
+            $value = -1;
+            if ( isset($form[$link]['__identity']) && is_string($form[$link]['__identity'])) {
+                $value = intval($form[$link]['__identity']);
+            }
+            elseif( isset($form[$link]) && is_string($form[$link]) ) {
+                $value = intval($form[$link]);
+            }
+            if( $value == 0 ) {
+                $pureCE->unsetLink($link);
+            }
+            else {
+                $pureCE->setLink($link, $value);
+            }
+        }
+        $this->view->assign('test', $pureCE);
+        $this->collectionEntryRepository->update($pureCE);
+        /*Okay, i dont understand this, call me a moron, so be it. I need to update right here right now so it has any
+        effect, then it works flawlessly. My original plan was to preserve the general structure and just redirect
+        to the actual update function in case i want to expand there. But despite giving the modified "pureCE" object
+        nothing happens, most likely cause it fetches a fresh version of it, why ever it should do that. I dont
+        understand that part, but if i persistent my frankensteined Collection Entry it works. Most likely the real
+        update collection Entry doesnt do anything anymore. Maybe it has something to do with the double redirect, i am
+        not entirely sure when the persistance manager triggers, maybe only for the first redirect, anyway, this works
+        i will just leave it there, temporarily of course till i have something better, but we all know how this works,
+        it will stay here for ever except if it breaks somehow very spectacularly*/
+        $this->redirect('updateCollectionEntry', Null, Null, array('collectionEntry'=>$pureCE));
+    }
 
     /**
      * action createSource
