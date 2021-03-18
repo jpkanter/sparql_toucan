@@ -46,6 +46,19 @@ The waters in front of my are muddy and the sky is dark. To achieve my goals i d
 A few days ago i realized a huge oversight on my part, while the inclusion of remote linked data triples works almost flawlessly i failed in an important aspect: i cannot include static text. While this seems counterintuitive to my goal there is certainly a need for just that. A collection is a static, rectangular block, everything within is my domain, everything without is not. To avoid splitting up everything to the tiniest part i need some functionality that is outside the most basic spec. My problems start here, i augmented *CollectionEntry* to be able to hold more than just a *Datapoint* but also so called *Textpoint*s, those work similar to the aforementioned *Datapoint*s but give control to the user of its content. This means that each *CollectionEntry* now has a Janus faced nature, it might be a *Datapoint*-Entry or a *Textpoint*-Entry, it could even be both speaking strictly logically. But this is undefined behavior. (*although i just had an idea how to handle and* abuse *this*). It turns out i have huge problems to unmake the link between a *CollectionEntry* and its assigned *Datapoint*. Once forged there is no easy way to just break that connection. I found a way, of course, that is what i do after all, finding ways. But i have doubts, huge doubts upon my ways. I am without peers on this lonely voyage and sometimes i fear i might steer right into madness. I augmented the capabilities of several Repositories and Classes to achieve what i want and it works! Fortuna be praised, it works. But i fear the way i went is to unorthodox and will break sometimes in the future. This goes against my philosophy for creating something *worthy* but my gaze is clouded and i cannot see any other options. When i lift my eyes i can see a glimpse of the future, there i will augment the Janus face even more and add a third side, i fear those moments but they will come. Faith is needed in those trying times. I don't believe in faith in software development, and yet, here were are.
 **Note:** *this is a kinda humorist approach, the doubts are real, the whole faith and captain rhetoric less so, this particular entry went a bit more lyrical than usual*
 
+*18.03.2021 14:30*
+
+I have passed the passage of the ugly javascript depths. My ideas for the basic layouting process were fruitful and the most basic functions works as i intended to. There are some major hiccups i found most annoying. I cannot say exactly why but i fear it might have something to do with the *iframe* nature of a Typo3 extension that meddles with the way i move things around. Whatever it might be, there is a fix, there has to be one, it might be somewhat ugly. For the same reason, so i conclude the stretching functionality doesn't work. This brings us to a short list of things that should be around but aren't:
+
+* moving entries to any place around an existing one, not just bottom right/bottom and top left/top
+* being able to wedge entries between other entries vertically
+* stretching entries to be as broad as two or more other entries
+* creating new empty placeholder elements
+* being actually able to see how an entry moves around instead of having faith that it might happen
+* changing the orientation and style of any one entry directly in the layouter
+
+I am most faithful that i can accomplish all those task in some time but for now more pressing matter occupy my conscience. 
+
 ## Backport to Typo3 7.6.33
 
 * *DatapointOverview.html*

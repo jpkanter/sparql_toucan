@@ -1,4 +1,4 @@
-const KONST_TOU_VERSION = "0.7.7.1";
+//const KONST_TOU_VERSION = "0.7.7.1";
 
 var active = false;
 var activeItem = null;
