@@ -3,6 +3,9 @@
 
 <f:section name="content">
 
+    <script src="{f:uri.resource(path: 'JavaScript/tou_layouter.js')}"></script>
+    <link rel="stylesheet" href="{f:uri.resource(path: 'Css/tou_layouter.css')}">
+
     <f:render partial="Backend/MenuBar" />
 
     <f:flashMessages />
@@ -11,34 +14,46 @@
 
     <h1>i18n:Layouting {collection.name}</h1>
 
-    <f:form action="editCollectionRearrange" name="editCollectioNRearrange">
 
+    <f:form action="editCollectionRearrange" name="editCollectionRearrange" id="tou_form">
+        <f:form.hidden property="collection" value="{collection}"/>
+        <div id="tou_layouter">
+            <h2>Items in Grid</h2>
 
-        <h2>Items in Grid</h2>
+            <div class="tou_assembly" id="tou_assembly">
+                <div class="tou_spaceblock">
+                    <div class="tou_bench" id="tou_bench">
+                        <f:for each="{chainedEntries}" as="entry">
+                            <div style="grid-area: {entry.gridArea}">
+                                {entry.tempValue}
+                                <f:if condition="{entry.datapointId} != 0">
+                                    <f:then><em>{entry.datapointId.name}</em></f:then>
+                                    <f:else><em>[static]</em></f:else> <!--TODO: i18n-->
+                                </f:if>
 
-        <div class="tx_sparqltoucan_layouter">
-            <f:for each="{chainedEntries}" as="entry">
-                <div style="grid-area: {entry.gridArea}">{entry.tempValue}
-                    <em>{entry.datapointId.name}</em>
-                    <f:form.hidden property="{entry.uid}" value="{entry.gridArea}"/>
+                                <f:form.hidden property="{entry.uid}" value="{entry.gridArea}"/>
+                            </div>
+                        </f:for>
+                    </div>
                 </div>
-            </f:for>
+            </div>
 
+            <h2>Items without Grid</h2>
+            <!--Area without grid interaction-->
+            <div class="tou_warehouse" id="tou_warehouse">
+                <f:for each="{freeEntries}" as="entry">
+                    <div class="tou_containment">{entry.tempValue}
+                        <f:if condition="{entry.datapointId} != 0">
+                            <f:then><em>{entry.datapointId.name}</em></f:then>
+                            <f:else><em>[static]</em></f:else> <!--TODO: i18n-->
+                        </f:if>
+                        <f:form.hidden property="{entry.uid}" value="{entry.gridArea}"/>
+                    </div>
+                </f:for>
+            </div>
+            <f:form.submit value="Save"/>
         </div>
 
-        <h2>Items without Grid</h2>
-        <!--Area without grid interaction-->
-        <div class="tx_sparqltoucan_layouter_free">
-            <f:for each="{freeEntries}" as="entry">
-                <div>{entry.tempValue}
-                    <em>{entry.datapointId.name}
-                    <f:form.hidden property="{entry.uid}" value="{entry.gridArea}"/>
-                </div>
-            </f:for>
-
-        </div>
-
-        <f:form.submit value="Save" />
 
     </f:form>
 

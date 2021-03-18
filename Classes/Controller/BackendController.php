@@ -82,6 +82,28 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     protected $textpointRepository = null;
 
+    protected function getLanguage() {
+        //this abstracts the language name for the moment but is no permanent solution
+        /*Typo V9*/
+        /*
+                $languageAspect = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Context\Context::class)->getAspect('language');
+                $sys_language_uid = $languageAspect->getId();
+                //or
+                $context = GeneralUtility::makeInstance(Context::class);
+                // The requested language of the current page as integer (uid)
+                $currentLanguageUid = $context->getPropertyFromAspect('language', 'id');
+        */
+        // $GLOBALS['TSFE']->sys_language_uid
+        if (TYPO3_MODE === 'FE') {
+            if (isset($GLOBALS['TSFE']->config['config']['language'])) {
+                return $GLOBALS['TSFE']->config['config']['language'];
+            }
+        } elseif (strlen($GLOBALS['BE_USER']->uc['lang']) > 0) {
+            return $GLOBALS['BE_USER']->uc['lang'];
+        }
+        return 'en'; //default
+    }
+
     public function OverviewAction() {
         $collections = $this->collectionRepository->findAll();
         $this->view->assign("collections", $collections);
@@ -139,20 +161,28 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     {
         $this->view->assign('collection', $collection);
         $entries = $this->collectionEntryRepository->fetchCorresponding($collection);
+        $sys_language_name = $this->getLanguage();
         $freeEntries = [];
         $chainedEntries = [];
 
         foreach($entries as $thisKey => $onePoint) {
-            if( trim($onePoint->getDatapointId()->getName()) == "") {
+            if( $onePoint->getDatapointId() != 0 && trim($onePoint->getDatapointId()->getName()) == "") {
                 $entries[$thisKey]->getDatapointId()->setName(">> ".substr($onePoint->getDatapointId()->getpredicate(), -20));
             }
             try {
-                $value = $this->languagepointRepository->fetchSpecificLanguage($onePoint->getDatapointId(), "en");
+                if( $onePoint->getDatapointId() != 0 ) {
+                    $value = $this->languagepointRepository->fetchSpecificLanguage($onePoint->getDatapointId(), $sys_language_name);
+                }
+                elseif( $onePoint->getTextpoint() != 0 ) {
+                    $value = $this->languagepointRepository->fetchSpecificLanguage($onePoint->getTextpoint(), $sys_language_name);
+                }
+                else {
+                    $value = ""; //if neither Textpoint nor Datapoint exists its an empty placeholder entry
+                }
             } catch (\Exception $e) {
                 $value = "<[NO LP]>";
             }
             $entries[$thisKey]->SetTempValue($value);
-            $entries[$thisKey]->getDatapointId()->setCachedValue($value);
             if( trim($onePoint->getGridArea()) == "" && $onePoint->getParentEntry == 0 ) {
                 $freeEntries[] = $onePoint;
             }
@@ -168,7 +198,16 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     public function editCollectionRearrangeAction() {
         //expects formData regardless
         $formdata = $this->request->getArguments();
-        $this->view->assign("echo", $formdata['editCollectioNRearrange']);
+        $thisData = $formdata['editCollectionRearrange'];
+        $thisCollection = $this->collectionRepository->findByUid($thisData['collection']);
+        foreach( $thisData as $key => $entry) {
+            if($key != "collection") {
+                $cEntry = $this->collectionEntryRepository->findByUid($key);
+                $cEntry->setGridArea($entry);
+                $this->collectionEntryRepository->Update($cEntry);
+            }
+        }
+        $this->redirect("editCollectionDynamicLayout", null, null, array('collection' => $thisCollection));
         //redirect to editCollectionDynamic
     }
 

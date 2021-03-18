@@ -18,6 +18,7 @@ namespace Ubl\SparqlToucan\Domain\Model;
 class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
     //the lenghts of my frankenstein constructions scares me a lot
+    private const MAXGRIDNUMBER = 500;
     /**
      * datapointRepository
      *
@@ -215,7 +216,7 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $insert = intval($column);
         if( $insert == 0 ) { return false; } //luckily 0 isnt a viable grid position anyway
-        if( $insert >= 500) { return false; } //magic number sanity check
+        if( $insert >= $this->MAXGRIDNUMBER ) { return false; } //magic number sanity check
         if( trim($this->gridArea) != "" ) {
             $parts = explode("/", $this->gridArea);
         }
@@ -239,7 +240,7 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $insert = intval($row);
         if( $insert == 0 ) { return false; } //luckily 0 isnt a viable grid position anyway
-        if( $insert >= 500) { return false; } //magic number sanity check
+        if( $insert >= $this->MAXGRIDNUMBER ) { return false; } //magic number sanity check
         if( trim($this->gridArea) != "" ) {
             $parts = explode("/", $this->gridArea);
         }
@@ -263,7 +264,7 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $insert = intval($row);
         if( $insert == 0 ) { return false; } //luckily 0 isnt a viable grid position anyway
-        if( $insert >= 500) { return false; } //magic number sanity check
+        if( $insert >= $this->MAXGRIDNUMBER ) { return false; } //magic number sanity check
         if( trim($this->gridArea) != "" ) {
             $parts = explode("/", $this->gridArea);
         }
@@ -287,7 +288,7 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         $insert = intval($column);
         if( $insert == 0 ) { return false; } //luckily 0 isnt a viable grid position anyway
-        if( $insert >= 500) { return false; } //magic number sanity check
+        if( $insert >= $this->MAXGRIDNUMBER ) { return false; } //magic number sanity check
         if( trim($this->gridArea) != "" ) {
             $parts = explode("/", $this->gridArea);
         }
