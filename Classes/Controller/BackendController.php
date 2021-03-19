@@ -249,7 +249,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->redirect('overview');
     }
 
-    public function updateDatapointLanguagepoints(\Ubl\SparqlToucan\Domain\Model\Datapoint $datapoint)
+    public function updateDatapointLanguagepoints(\Ubl\SparqlToucan\Domain\Model\Datapoint $datapoint, $selfCatch = true)
     {
         $datapoint->getUID();
         try {
@@ -305,7 +305,12 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             return $languagePoints;
         }
         catch( \Exception $e ) {
-            return $e->getMessage();
+            if( $selfCatch ) {
+                return $e->getMessage();
+            }
+            else {
+                throw $e;
+            }
         }
 
     }
@@ -558,14 +563,13 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     }
 
     public function remoteUpdateDatapointsAction() {
-        $persistenceManager = $this->objectManager->get("TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager");
         //request test
         $datapoints = $this->datapointRepository->findAll();
         $totallist = array();
         foreach( $datapoints as $point ) {
             try {
-                $pointList = $this->updateDatapointLanguagepoints($point);
-                array_push($totallist, $pointList);
+                $randomPoint = $this->updateDatapointLanguagepoints($point, false);
+                $totallist[] = $randomPoint[0]; //TODO: this is quite weird, fix it
             }
             catch( \Exception $e ) {
                 echo $e->getMessage()."<br>";

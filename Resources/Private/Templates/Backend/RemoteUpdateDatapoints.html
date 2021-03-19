@@ -11,18 +11,22 @@
 
     <table>
         <tr>
-
+            <th>UID</th>
+            <th>DP Name</th>
+            <th>Source Name</th>
+            <th>Language</th>
+            <th>Content</th>
         </tr>
-        <f:for each="{languagepoint}" as="entry">
+        <f:for each="{languagepoints}" as="entry">
             <tr>
-                <td>{langugepoint.uid}</td>
-                <td>{languagepoint.datapoint_id.name}</td>
-                <td>{languagepoint.datapoint_id.source_id.name}</td>
-                <td>{languagepoint.language}</td>
-                <td>{languagepoint.content}</td>
+                <td>{entry.uid}</td>
+                <td>{entry.datapoint_id.name}</td>
+                <td>{entry.datapoint_id.source_id.name}</td>
+                <td>{entry.language}</td>
+                <td>{entry.content}</td>
             </tr>
         </f:for>
     </table>
-    <f:debug>{debug}</f:debug>
+    <f:debug>{_all}</f:debug>
 </f:section>
 </html>
