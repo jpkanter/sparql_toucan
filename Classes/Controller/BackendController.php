@@ -1,6 +1,7 @@
 <?php
 namespace Ubl\SparqlToucan\Controller;
 
+use http\Exception;
 use MongoDB\Driver\Query;
 use Ubl\SparqlToucan\Domain\Model\Collection;
 use Ubl\SparqlToucan\Domain\Model\CollectionEntry;
@@ -251,17 +252,32 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
     public function updateDatapointLanguagepoints(\Ubl\SparqlToucan\Domain\Model\Datapoint $datapoint, $selfCatch = true)
     {
-        $datapoint->getUID();
+        $mode = $datapoint->getMode();
+        if( $mode === 0 ) { // First Label Mode
+            return $this->updateLanguagepointsMode0($datapoint, $selfCatch);
+        }
+
+        if( $mode === 2 ) { // Special Algorithm Way
+            return $this->updateLanguagepointsMode2($datapoint, $selfCatch);
+        }
+
+
+    }
+
+    private function updateLanguagepointsMode0($jsoned, Datapoint $datapoint, $selfCatch = true) {
         try {
             $subject = $datapoint->getSubject();
-            if( preg_match("^<.*>$^", $subject) == 0) {
-                $subject = "<" . $subject . ">";
-            }
+            $this->arrowBrackets($subject);
             $predicate = $datapoint->getPredicate();
-            if( preg_match("^<.*>$^", $predicate) == 0) {
-                $predicate = "<" . $predicate . ">";
-            }
+            $this->arrowBrackets($predicate);
             $jsoned = $this->simpleQuery($datapoint->getSourceId()->getUrl(), $subject, $predicate);
+        }
+        catch ( \Exception $e ) { //theoretically ->simpleQuery should not throw exceptions
+            if( $selfCatch ) { return $e->getMessage(); }
+            else { throw $e; }
+        }
+
+        try {
             /* This might get really interesting if we assume that people modeled their linked data incorrectly. If every
             thing is in order, there should be either a language identifier or some other thing that tells us informations
             but its entirely possible that at least the following things happen:
@@ -312,7 +328,35 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 throw $e;
             }
         }
+    }
 
+    private function updateLanguagepointsMode2(Datapoint $datapoint, $selfCatch = true) {
+        $weekDays = ["http://schema.org/Monday" => 0, "http://schema.org/Tuesday" => 1, "http://schema.org/Wednesday" => 2,
+                     "http://schema.org/Thursday" => 3, "http://schema.org/Friday" => 4, "http://schema.org/Saturday" => 5,
+                     "http://schema.org/Sunday" => 6];
+        $predicate = $datapoint->getPredicate();
+        if( strtolower($predicate) == "http://schema.org/openinghoursspecification"
+        ||  strtolower($predicate) == "https://schema.org/openinghoursspecification" ) { //the desperate try to future proof this thing
+            $subject = $datapoint->getSubject();
+            $specialQuery = "SELECT ?day, ?open, ?close 
+                WHERE { <{$subject}> <{$predicate}> ?entry .
+                    {
+                         SELECT ?entry, ?day, ?open, ?close WHERE { 
+                            ?entry <http://schema.org/dayOfWeek> ?day;
+                            <http://schema.org/closes> ?close;
+                            <http://schema.org/opens> ?open. 
+                         } 
+                    }
+                }"; //query is quite simple, its basically foreach entry[type=openingHours) get day, closing time & opening time
+            $jsoned = $this->genericSparqlQuery($datapoint->getSourceId()->getUrl(), $specialQuery);
+            foreach( $jsoned as $entry ) {
+                //group opening hours together
+            }
+            return $jsoned;
+        }
+        else {
+            throw new \Exception("Dont know how to handle Predicate '{$predicate}' with Mode 2", 7 );
+        }
     }
 
     /**
@@ -1515,16 +1559,31 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         echo("Test 1 - wrong Area:".intval($entry->setGridArea("23 / 23/ 23 / kl"))."<br>");
         echo("Test 2 - right Area but weird: ".intval($entry->setGridArea("1   / 211/2 /   2")));
         $this->view->assign("entry", $entry);
-        $tp = $this->textpointRepository->findByUid(1);
-        echo $this->textpointRepository->updateLanguages($tp);
-        echo $tp->getLanguages();
-        $persistenceManager->persistAll();
-        $this->view->assign("tp", $tp);
+        $word = "https://LOD.source.de/DNBV-1248";
+        $this->view->assign("test-12", $word);
+        $this->arrowBrackets($word);
+        $this->view->assign("test-13", $word);
+        //update Mode 2
+        $dp = $this->datapointRepository->findByUid(31);
+        $this->view->assign("queryTest", $this->updateLanguagepointsMode2($dp));
 
     }
 
     public function ajaxCallTestAction(Collection $collection) {
         $this->view->assign("collection", $collection);
+    }
+
+    /**
+     * Puts the word in arrow brackets if it isnt already, works by reference
+     *
+     * @param &$word
+     * @return string
+     */
+    private function arrowBrackets(&$word) {
+        if( preg_match("^<.*>$^", $word) === 0) {
+            $word = "<" . $word . ">";
+        }
+        return $word; //totally unnecessary but doesnt hurt
     }
 
     #TODO: delete this backport
