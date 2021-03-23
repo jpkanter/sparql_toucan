@@ -254,17 +254,17 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     {
         $mode = $datapoint->getMode();
         if( $mode === 0 ) { // First Label Mode
-            return $this->updateLanguagepointsMode0($datapoint, $selfCatch);
+            return $this->updateLanguagepointMode0($datapoint, $selfCatch);
         }
 
         if( $mode === 2 ) { // Special Algorithm Way
-            return $this->updateLanguagepointsMode2($datapoint, $selfCatch);
+            return $this->updateLanguagepointMode2($datapoint, $selfCatch);
         }
 
 
     }
 
-    private function updateLanguagepointsMode0($jsoned, Datapoint $datapoint, $selfCatch = true) {
+    private function updateLanguagepointMode0(Datapoint $datapoint, $selfCatch = true) {
         try {
             $subject = $datapoint->getSubject();
             $this->arrowBrackets($subject);
@@ -330,7 +330,18 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
     }
 
-    private function updateLanguagepointsMode2(Datapoint $datapoint, $selfCatch = true) {
+    /**
+     * Mode 2, special algorhitmn to retrieve more non-standard kinds of data, this is the one function i have huge doubts
+     * i can futureproof in any sense. Every function is tailored for a specific mapping or a special case that was
+     * relevant in the original problem case i had in front of me.
+     *
+     * @param Datapoint $datapoint
+     * @param bool $selfCatch
+     * @return array
+     * @throws \Exception
+     */
+    private function updateLanguagepointMode2(Datapoint $datapoint, $selfCatch = true) {
+        $prfe = microtime();
         $weekDays = ["http://schema.org/Monday" => 0, "http://schema.org/Tuesday" => 1, "http://schema.org/Wednesday" => 2,
                      "http://schema.org/Thursday" => 3, "http://schema.org/Friday" => 4, "http://schema.org/Saturday" => 5,
                      "http://schema.org/Sunday" => 6];
@@ -349,10 +360,117 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                     }
                 }"; //query is quite simple, its basically foreach entry[type=openingHours) get day, closing time & opening time
             $jsoned = $this->genericSparqlQuery($datapoint->getSourceId()->getUrl(), $specialQuery);
+            $timeslots = [0 => [], 1 => [], 2 => [], 3 => [], 4 => [], 5 => [], 6 => []];
             foreach( $jsoned as $entry ) {
+                if( array_key_exists($entry['day']['value'], $weekDays) ) {
+                    //there is some internal discussion whether i should use some nice php time function or just
+                    //cast the string around, if somethings breaks related to this its probably here
+                    $timeSplitters = explode(":", $entry['open']['value']);
+                    $entry['open']['value'] = intval($timeSplitters[0])*3600 + intval($timeSplitters[1])*60 + intval($timeSplitters[2]);
+                    $timeSplitters = explode(":", $entry['close']['value']);
+                    $entry['close']['value'] = intval($timeSplitters[0])*3600 + intval($timeSplitters[1])*60 + intval($timeSplitters[2]);
+                    $oneSlot = ['start' => $entry['open']['value'], 'stop' => $entry['close']['value']];
+                    if( count($timeslots[$weekDays[$entry['day']['value']]]) > 0 ) {
+                        foreach ($timeslots[$weekDays[$entry['day']['value']]] as $key => $otherSlot) {
+                            //5 cases: outside l/r, inside, border l/r
+                            if ($otherSlot['start'] < $oneSlot['start'] && $otherSlot['stop'] < $oneSlot['stop']) { //outside of known area, left
+                                $timeslots[$weekDays[$entry['day']['value']]][] = $oneSlot;
+                            } elseif ($oneSlot['start'] > $otherSlot['stop'] && $oneSlot['stop'] > $otherSlot['stop']) {//one condition actually SHOULD be sufficient, start > stop
+                                $timeslots[$weekDays[$entry['day']['value']]][] = $oneSlot;
+                            } elseif ($oneSlot['start'] >= $otherSlot['start'] && $oneSlot['stop'] <= $otherSlot['start']) { //inside existing boundaries
+                                continue; // nothing happens, most likely case, duplicated data
+                            } elseif ($oneSlot['start'] < $otherSlot['start'] && $oneSlot['stop'] >= $otherSlot['start']) { //overlap on  the left
+                                $timeslots[$weekDays[$entry['day']['value']]][$key]['start'] = $oneSlot['start']; //this is a nightmare
+                            } elseif ($oneSlot['start'] <= $otherSlot['stop'] && $oneSlot['stop'] > $otherSlot['stop']) { //overlap on the right
+                                $timeslots[$weekDays[$entry['day']['value']]][$key]['stop'] = $oneSlot['stop'];
+                            } else {
+                                throw new \Exception("Some weird time configuration, most likely bad mapping", 8);
+                            }
+                        }
+                    } else {
+                        $timeslots[$weekDays[$entry['day']['value']]][] = $oneSlot;
+                    }
+
+                }
+                else {
+                    throw new \Exception("Unknown day, if we are still on earth this is most likely due a hardcoded mapping with false name - function 'updateLanguagepointMode2'", 8);
+                }
                 //group opening hours together
             }
-            return $jsoned;
+            //creating of actual text
+            //TODO: i18n here, might be a tad bit complex:
+            //grouping of days together (eg. Mo, Tu: 10-18, We: 9-15, Th, Fr: 10-15)
+            $sameDays = [];
+            foreach( $timeslots as $key1 => $day1) {
+                $notUsedAlready = true; //check if the day already exists in one of the groups
+                foreach( $sameDays as $group) {
+                    if( in_array($key1, $group) ) { $notUsedAlready = false; }
+                }
+                if( $notUsedAlready ) {
+                    $dayGroups = [$key1];
+                    foreach ($timeslots as $key2 => $day2) {
+                        if ($key1 == $key2) {
+                            continue;
+                        } // not comparing the same day
+                        if (count($day1) != count($day2)) {
+                            continue;
+                        }
+                        $sameCondition = true;
+                        foreach ($day1 as $idx => $slots1) { //this feels like a am overlooking something
+                            if ($day1[idx]['start'] != $day2[idx]['start'] || $day1[idx]['stop'] != $day2[idx]['stop']) {
+                                $sameCondition = false;
+                                break;
+                            }
+                        }
+                        if ($sameCondition) { //this second day is exactly the same as the other day
+                            $dayGroups[] = $key2;
+                        }
+                    }
+                    $sameDays[] = $dayGroups;
+                }
+            }
+            $hardcodedShortNames = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
+            $finalString = "";
+            foreach( $sameDays as $group ) {
+                $line = "";
+                $continuity = false;
+                if( count($timeslots[$group[0]]) <= 0 ) { continue; } //all days exists, but can be empty
+                foreach( $group as $idx => $day ) {
+                    if( $idx != 0 && count($group) > $idx+1 && $group[$idx+1] == $day+1 && $group[$idx-1] == $day-1) {
+                        $continuity = true;
+                    }
+                    else {
+                        if( $continuity ) {
+                            $line.= "-";
+                            $continuity = false;
+                        }
+                        elseif ( $idx > 0) {
+                            $line.= ", ";
+                        }
+                        $line.= $hardcodedShortNames[$day];
+                    }
+                }
+
+                $line.= ": ";
+                foreach($timeslots[$group[0]] as $idx => $times) {
+                    if( $times['start'] == 0 && ( $times['stop'] == 60*60*24 || $times['stop'] == 60*60*24-1 ) ) {
+                        $line.= "all day";
+                    }
+                    elseif( $times['start'] != 0 && ( $times['stop'] == 60*60*24 || $times['stop'] == 60*60*24-1 ) ) {
+                        $line.= $this->shortenTime($times['start']) . "-24";
+                    }
+                    else {
+                        $line.= $this->shortenTime($times['start']) . "-" . $this->shortenTime($times['stop']);
+                        if( $idx < count($timeslots[$group[0]])-1 ) { $line.= ", ";}
+                    }
+                }
+                $finalString.= $line."\r\n";
+            }
+
+            $this->languagepointRepository->deleteCorresponding($datapoint);
+            $l_point = new Languagepoint($datapoint, $finalString, "en"); //todo: i18n
+            $this->languagepointRepository->add($l_point);
+            return [$l_point];
         }
         else {
             throw new \Exception("Dont know how to handle Predicate '{$predicate}' with Mode 2", 7 );
@@ -1565,7 +1683,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->view->assign("test-13", $word);
         //update Mode 2
         $dp = $this->datapointRepository->findByUid(31);
-        $this->view->assign("queryTest", $this->updateLanguagepointsMode2($dp));
+        $this->view->assign("queryTest", $this->updateLanguagepointMode2($dp));
 
     }
 
@@ -1584,6 +1702,20 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             $word = "<" . $word . ">";
         }
         return $word; //totally unnecessary but doesnt hurt
+    }
+
+    private function shortenTime($integer) {
+        if( $integer % 60 == 0 ) { //down to minutes
+            if( $integer % 3600 == 0 ) { //down to hours
+                return intdiv($integer, 3600); // this  should be no different than $integer / 3600
+            }
+            else {
+                return intdiv($integer,3600) . ":" . sprintf("%2d", intdiv($integer%3600, 60));
+            }
+        }
+        else {
+            return intdiv($integer, 3600) . ":" . sprintf("%2d", intdiv($integer, 60)) . sprintf("%02d", $integer%60);
+        }
     }
 
     #TODO: delete this backport
