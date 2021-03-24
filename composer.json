@@ -1,10 +1,34 @@
 {
     "name": "ubl/sparql-toucan",
     "type": "typo3-cms-extension",
-    "description": "An Extension that fills parts of the website with the content of a semantic data source. Uses a triplestore as remote database",
-    "authors": [],
+    "description": "This extension fills parts of the website with the content of a semantic data source. Uses a triplestore as remote database",
+    "keywords": [
+        "TYPO3",
+        "CMS",
+        "extension",
+        "sparql",
+        "api"
+    ],
+    "homepage": "https://git.sc.uni-leipzig.de/ubl/bdd_dev/webmasterei/tx-sparql-toucan",
+    "licence": "GPL-2.0+",
+    "version": "2.0.1",
+    "support": {
+        "issues": "https://git.sc.uni-leipzig.de/ubl/bdd_dev/webmasterei/tx-sparql-toucan/issues"
+    },
+    "authors": [
+        {
+            "name": "Leipzig University Libary",
+            "email": "info@ub.uni-leipzig.de",
+            "role": "Public service"
+        },
+        {
+            "name": "JP Kanter",
+            "email": "kanter@ub.uni-leipzig.de",
+            "role": "Developer"
+        }
+    ],
     "require": {
-        "typo3/cms-core": "^8.7.1"
+        "typo3/cms-core": "7.6"
     },
     "autoload": {
         "psr-4": {

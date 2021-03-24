@@ -50,7 +50,7 @@ CREATE TABLE tx_sparqltoucan_domain_model_datapoint (
 	pid int(11) DEFAULT '0' NOT NULL,
 
 	name varchar(255) DEFAULT '' NOT NULL,
-	cached_value text DEFAULT '' NOT NULL,
+	cached_value text,
 	subject varchar(255) DEFAULT '' NOT NULL,
 	predicate varchar(255) DEFAULT '' NOT NULL,
 	mode int(11) DEFAULT '0' NOT NULL,
@@ -230,7 +230,7 @@ CREATE TABLE tx_sparqltoucan_domain_model_languagepoint (
      uid int(11) NOT NULL auto_increment,
      pid int(11) DEFAULT '0' NOT NULL,
 
-     content text DEFAULT '' NOT NULL,
+     content text,
      language varchar(5) DEFAULT 'en' NOT NULL,
      datapoint_id int(11) unsigned DEFAULT '0',
      textpoint int(11) unsigned DEFAULT '0',
@@ -275,8 +275,8 @@ CREATE TABLE tx_sparqltoucan_domain_model_textpoint (
     pid int(11) DEFAULT '0' NOT NULL,
 
     name varchar(255) DEFAULT '' NOT NULL,
-    description text DEFAULT '' NOT NULL,
-    languages text DEFAULT '' NOT NULL,
+    description text,
+    languages text,
 
     tstamp int(11) unsigned DEFAULT '0' NOT NULL,
     crdate int(11) unsigned DEFAULT '0' NOT NULL,
