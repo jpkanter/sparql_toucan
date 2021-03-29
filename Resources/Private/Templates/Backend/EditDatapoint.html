@@ -1,0 +1,21 @@
+<html xmlns:f="https://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:layout name="Backend" />
+
+<f:section name="content">
+
+    <f:render partial="Backend/MenuBar" />
+
+    <li><f:link.action action="datapointOverview">Zurück zu den Datenpunkten i18n<f:translate key="tx_sparql_toucan_menubar.datapoint" /></f:link.action></li>
+
+    <h1><f:translate key="tx_sparql_toucan_h1.editdatapoint" /></h1>
+
+    <f:flashMessages />
+
+    <f:render partial="FormErrors" />
+    <f:form action="updateDatapoint"  name="updateDatapoint" object="{datapoint}">
+        <f:render partial="Datapoint/FormFields" arguments="{sources:sources, datapoint:datapoint}"/>
+        <f:form.submit value="{f:translate(key:'tx_sparql_toucan_general.edit')}" />
+    </f:form>
+    <f:debug>{_all}</f:debug>
+</f:section>
+</html>

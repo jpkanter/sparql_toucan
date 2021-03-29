@@ -181,6 +181,9 @@
 			<trans-unit id="tx_sparql_toucan_general.createedit">
 				<source>Create &amp; Edit</source>
 			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.createback">
+				<source>Create &amp; Back</source>
+			</trans-unit>
 			<trans-unit id="tx_sparqltoucan_domain_model_datapoint.object">
 				<source>Object</source>
 			</trans-unit>
@@ -222,6 +225,9 @@
 			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_h1.newdatapoint">
 				<source>New Datapoint</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_h1.editdatapoint">
+				<source>Edit Datapoint</source>
 			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_h1.newsource">
 				<source>New Source</source>
@@ -428,6 +434,9 @@
 			<trans-unit id="tx_sparql_toucan_general.createedit">
 				<source>Erschaffen &amp; Bearbeiten</source>
 			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.createback">
+				<source>Erschaffen &amp; Zurück</source>
+			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_general.update">
 				<source>Aktualisieren</source>
 			</trans-unit>
@@ -463,6 +472,9 @@
 			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_h1.newdatapoint">
 				<source>Neuer Datenpunkt</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_h1.editdatapoint">
+				<source>Datenpunkt bearbeiten</source>
 			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_h1.newsource">
 				<source>Neue Quelle</source>

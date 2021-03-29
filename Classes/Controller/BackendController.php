@@ -242,12 +242,29 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     public function createDatapointAction(Datapoint $newDatapoint)
     {
-        $persistenceManager = $this->objectManager->get("TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager");
+        $formdata = $this->request->getArguments();
         // update content
         $this->datapointRepository->add($newDatapoint);
-        $persistenceManager->persistAll();
         $this->updateDatapointLanguagepoints($newDatapoint);
+        if( isset($formdata['newExplorer']) ) {
+            $this->redirect("explore", null, null, array("postcontent" => array("sourceId" => $newDatapoint->getSourceId(), "subject" => $newDatapoint->getSubject())));
+        }
+        else {
+            $this->redirect("overview");
+        }
         $this->redirect('overview');
+    }
+
+    public function editDatapointAction(Datapoint $datapoint) {
+        $sources = $this->sourceRepository->findAll();
+        $this->view->assign("sources", $sources);
+        $this->view->assign("datapoint", $datapoint);
+    }
+
+    public function updateDatapointAction(Datapoint $datapoint) {
+        //check if its used anywhere if yes, give extra warning
+        //check for changed source specifically?
+        $this->redirect('datapointOverview');
     }
 
     public function updateDatapointLanguagepoints(\Ubl\SparqlToucan\Domain\Model\Datapoint $datapoint, $selfCatch = true)
@@ -373,9 +390,9 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                     if( count($timeslots[$weekDays[$entry['day']['value']]]) > 0 ) {
                         foreach ($timeslots[$weekDays[$entry['day']['value']]] as $key => $otherSlot) {
                             //5 cases: outside l/r, inside, border l/r
-                            if ($otherSlot['start'] < $oneSlot['start'] && $otherSlot['stop'] < $oneSlot['stop']) { //outside of known area, left
+                            if ( $oneSlot['start'] < $otherSlot['start'] && $oneSlot['stop'] < $otherSlot['start']) { //outside of known area, left
                                 $timeslots[$weekDays[$entry['day']['value']]][] = $oneSlot;
-                            } elseif ($oneSlot['start'] > $otherSlot['stop'] && $oneSlot['stop'] > $otherSlot['stop']) {//one condition actually SHOULD be sufficient, start > stop
+                            } elseif ( $oneSlot['start'] > $otherSlot['stop'] && $oneSlot['stop'] > $otherSlot['stop']) {//one condition actually SHOULD be sufficient, start > stop
                                 $timeslots[$weekDays[$entry['day']['value']]][] = $oneSlot;
                             } elseif ($oneSlot['start'] >= $otherSlot['start'] && $oneSlot['stop'] <= $otherSlot['start']) { //inside existing boundaries
                                 continue; // nothing happens, most likely case, duplicated data
@@ -384,7 +401,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                             } elseif ($oneSlot['start'] <= $otherSlot['stop'] && $oneSlot['stop'] > $otherSlot['stop']) { //overlap on the right
                                 $timeslots[$weekDays[$entry['day']['value']]][$key]['stop'] = $oneSlot['stop'];
                             } else {
-                                throw new \Exception("Some weird time configuration, most likely bad mapping", 8);
+                                throw new \Exception("Some weird time configuration, most likely bad mapping, Day: {$entry['day']['value']}", 8);
                             }
                         }
                     } else {
@@ -402,6 +419,10 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             //grouping of days together (eg. Mo, Tu: 10-18, We: 9-15, Th, Fr: 10-15)
             $sameDays = [];
             foreach( $timeslots as $key1 => $day1) {
+                //sort entries of each day by start time
+                usort($timeslots[$key1], function($a, $b) { //i confess: usort is black magic for me
+                   return $a['start'] <=> $b['start']; // also, behold the spaceship operator!
+                });
                 $notUsedAlready = true; //check if the day already exists in one of the groups
                 foreach( $sameDays as $group) {
                     if( in_array($key1, $group) ) { $notUsedAlready = false; }
@@ -429,6 +450,8 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                     $sameDays[] = $dayGroups;
                 }
             }
+
+
             $hardcodedShortNames = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
             $finalString = "";
             foreach( $sameDays as $group ) {
@@ -464,7 +487,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                         if( $idx < count($timeslots[$group[0]])-1 ) { $line.= ", ";}
                     }
                 }
-                $finalString.= $line."\r\n";
+                $finalString.= $line."\n";
             }
 
             $this->languagepointRepository->deleteCorresponding($datapoint);
@@ -757,6 +780,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $tables = [
             "datapoint" => $this->datapointRepository,
             "languagepoint" => $this->languagepointRepository,
+            "textpoint" => $this->textpointRepository,
             "collectionentry" => $this->collectionEntryRepository,
             "collection" => $this->collectionRepository,
             "labelcache" => $this->labelcacheRepository,
@@ -800,6 +824,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $tables = [
             "datapoint" => $this->datapointRepository,
             "languagepoint" => $this->languagepointRepository,
+            "textpoint" => $this->textpointRepository,
             "collectionentry" => $this->collectionEntryRepository,
             "collection" => $this->collectionRepository,
             "labelcache" => $this->labelcacheRepository,
@@ -814,7 +839,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 $repository->remove($entry);
             }
         }
-        $this->addFlashMessage("The machine did it work and erased the past", '', \TYPO3\CMS\Core\Messaging\FlashMessage::OK);
+        $this->addFlashMessage("The machine did its work and erased the past", '', \TYPO3\CMS\Core\Messaging\FlashMessage::OK);
         $this->redirect("timemachine");
     }
 
@@ -1682,9 +1707,8 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->arrowBrackets($word);
         $this->view->assign("test-13", $word);
         //update Mode 2
-        $dp = $this->datapointRepository->findByUid(31);
+        $dp = $this->datapointRepository->findByUid(32);
         $this->view->assign("queryTest", $this->updateLanguagepointMode2($dp));
-
     }
 
     public function ajaxCallTestAction(Collection $collection) {
@@ -1707,7 +1731,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     private function shortenTime($integer) {
         if( $integer % 60 == 0 ) { //down to minutes
             if( $integer % 3600 == 0 ) { //down to hours
-                return intdiv($integer, 3600); // this  should be no different than $integer / 3600
+                return intdiv($integer, 3600) . ":00"; // this  should be no different than $integer / 3600
             }
             else {
                 return intdiv($integer,3600) . ":" . sprintf("%2d", intdiv($integer%3600, 60));

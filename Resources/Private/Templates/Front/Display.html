@@ -4,20 +4,12 @@
 
 <f:section name="content">
 
-    <h2>Kollektion: "{collection.name}"</h2>
+    <h2>[DEBUG]Collektion: "{collection.name}"</h2>
     <div style="display: grid">
         <f:for each="{entries}" as="gridElement">
-            <div style="display: inline-grid; grid-area: {gridElement.gridArea};">{gridElement.tempValue}</div>
+            <div style="display: inline-grid; grid-area: {gridElement.gridArea};">{gridElement.tempValue -> f:format.nl2br()}</div>
         </f:for>
     </div>
-
-
-    <f:if condition="{collection.layout}==1">
-        <f:render partial="CollectionDisplay/1row" arguments="{cEntries:entries}" />
-    </f:if>
-    <f:if condition="{collection.layout}==2">
-        <f:render partial="CollectionDisplay/2row" arguments="{cEntries:entries}" />
-    </f:if>
 
     <f:if condition="{exceptions}">
         <pre>
@@ -26,8 +18,6 @@
             </f:for>
         </pre>
     </f:if>
-
-    <f:debug>{_all}</f:debug>
 
 </f:section>
 

@@ -17,6 +17,7 @@
             <th>Subject</th>
             <th>Predicate</th>
             <th>Value</th>
+            <th colspan="2"><f:translate key="tx_sparql_toucan_general.action"/></th>
         </tr>
         <f:widget.paginate objects="{datapoints}" as="paginateLabel" configuration="{itemsPerPage: 30, insertAbove: 0, insertBelow: 1, maximumNumberOfLinks: 10}">
             <f:for each="{paginateLabel}" as="datapoint" key="for_key">
@@ -37,6 +38,8 @@
                             </f:if>
                         </f:for>
                     </td>
+                    <td><f:link.action action="editDatapoint" arguments="{datapoint : datapoint}"><f:translate key="tx_sparql_toucan_general.edit"/></f:link.action></td>
+                    <td><f:link.action action="editDatapoint" arguments="{datapoint : datapoint}"><f:translate key="tx_sparql_toucan_general.delete"/></f:link.action></td>
                 </tr>
             </f:for>
         </f:widget.paginate>

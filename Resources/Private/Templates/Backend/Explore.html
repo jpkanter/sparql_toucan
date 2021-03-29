@@ -22,11 +22,11 @@
                 <tr>
                     <td><label><f:translate key="tx_sparqltoucan_domain_model_datapoint.predicate" /></label></td>
                     <td><f:form.textfield property="predicate" value="{form.predicate}" size="90"/></td>
-                </tr>-->
+                </tr>
                 <tr>
                     <td><label><f:translate key="tx_sparql_toucan_general.rawquery" /></label></td>
                     <td><f:form.textarea property="query" rows="4" cols="90">{form.query}</f:form.textarea></td>
-                </tr>
+                </tr>-->
                 <tr>
                     <td colspan="2" align="center"><f:form.submit value="{f:translate(key:'tx_sparql_toucan_general.explore')}" /></td>
                 </tr>
@@ -34,59 +34,62 @@
         </div>
     </f:form>
 
-    <f:form action="newComplexCollection"  name="seedDatapoint" object="{seedDatapoint}">
-        <f:form.hidden property="name" value=""/>
-        <f:form.hidden property="subject" value="{form.subject}"/>
-        <f:form.hidden property="predicate" value=""/>
-        <f:form.hidden property="sourceId" value="{form.sourceId}"/>
-        <f:form.submit value="Collection Creation" />
-    </f:form>
+    <f:if condition="{trueExplore}">
 
-    <table class="tx_sparqltoucan">
-        <tr>
-            <th><f:translate key="tx_sparqltoucan_domain_model_datapoint.predicate" /></th>
-            <th><f:translate key="tx_sparqltoucan_domain_model_datapoint.object" /></th>
-            <th><f:translate key="tx_sparql_toucan_general.extrainformation" /></th>
-            <th><f:translate key="tx_sparql_toucan_general.newdatapoint" /></th>
-        </tr>
-        <f:for each="{trueExplore}" as="predicate">
+        <f:form action="newComplexCollection"  name="seedDatapoint" object="{seedDatapoint}">
+            <f:form.hidden property="name" value=""/>
+            <f:form.hidden property="subject" value="{form.subject}"/>
+            <f:form.hidden property="predicate" value=""/>
+            <f:form.hidden property="sourceId" value="{form.sourceId}"/>
+            <f:form.submit value="Collection Creation" />
+        </f:form>
+
+        <table class="tx_sparqltoucan">
             <tr>
-                <td rowspan="{predicate.rowspan}"><f:link.action action="explore" arguments="{postcontent: {sourceId: form.sourceId, subject: predicate.value}}">{predicate.label}</f:link.action></td>
-                <f:for each="{predicate.objects}" as="obj" iteration="iterator">
-                    <f:if condition="{iterator.index} > 0"></tr><tr></f:if>
-                    <td>
-                        <f:if condition="{obj.type} == 'uri'">
-                            <f:then>
-                                <f:link.action action="explore" arguments="{postcontent: {sourceId: form.sourceId, subject: obj.value}}">{obj.label}</f:link.action>
-                            </f:then>
-                            <f:else>
-                                {obj.label}
-                            </f:else>
-                        </f:if>
-                    </td>
-                    <td>
-                        {obj.adda}
-                    </td>
-                    <td>
-                        <f:if condition="{obj.type} == 'uri'">
-                            <f:then>
-                                <f:link.action action="explore" arguments="{postcontent: {sourceId: form.sourceId, subject: obj.value}}">Explore object</f:link.action>
-                            </f:then>
-                            <f:else>
-                                <f:form action="newDatapoint"  name="newDatapoint" object="{newDatapoint}">
-                                    <f:form.hidden property="name" value=""/>
-                                    <f:form.hidden property="subject" value="{form.subject}"/>
-                                    <f:form.hidden property="predicate" value="{predicate.value}"/>
-                                    <f:form.hidden property="sourceId" value="{form.sourceId}"/>
-                                    <f:form.submit value="Convert to Datapoint" />
-                                </f:form>
-                            </f:else>
-                        </f:if>
-                    </td>
-                </f:for>
+                <th><f:translate key="tx_sparqltoucan_domain_model_datapoint.predicate" /></th>
+                <th><f:translate key="tx_sparqltoucan_domain_model_datapoint.object" /></th>
+                <th><f:translate key="tx_sparql_toucan_general.extrainformation" /></th>
+                <th><f:translate key="tx_sparql_toucan_general.newdatapoint" /></th>
             </tr>
-        </f:for>
-    </table>
+            <f:for each="{trueExplore}" as="predicate">
+                <tr>
+                    <td rowspan="{predicate.rowspan}"><f:link.action action="explore" arguments="{postcontent: {sourceId: form.sourceId, subject: predicate.value}}">{predicate.label}</f:link.action></td>
+                    <f:for each="{predicate.objects}" as="obj" iteration="iterator">
+                        <f:if condition="{iterator.index} > 0"></tr><tr></f:if>
+                        <td>
+                            <f:if condition="{obj.type} == 'uri'">
+                                <f:then>
+                                    <f:link.action action="explore" arguments="{postcontent: {sourceId: form.sourceId, subject: obj.value}}">{obj.label}</f:link.action>
+                                </f:then>
+                                <f:else>
+                                    {obj.label}
+                                </f:else>
+                            </f:if>
+                        </td>
+                        <td>
+                            {obj.adda}
+                        </td>
+                        <td>
+                            <f:if condition="{obj.type} == 'uri'">
+                                <f:then>
+                                    <f:link.action action="explore" arguments="{postcontent: {sourceId: form.sourceId, subject: obj.value}}">Explore object</f:link.action>
+                                </f:then>
+                                <f:else>
+                                    <f:form action="newDatapoint"  name="newDatapoint" object="{newDatapoint}">
+                                        <f:form.hidden property="name" value=""/>
+                                        <f:form.hidden property="subject" value="{form.subject}"/>
+                                        <f:form.hidden property="predicate" value="{predicate.value}"/>
+                                        <f:form.hidden property="sourceId" value="{form.sourceId}"/>
+                                        <f:form.submit value="Convert to Datapoint" />
+                                    </f:form>
+                                </f:else>
+                            </f:if>
+                        </td>
+                    </f:for>
+                </tr>
+            </f:for>
+        </table>
+    </f:if>
 
     <f:debug>{_all}</f:debug>
 </f:section>
