@@ -3,6 +3,9 @@
 	<file source-language="en" datatype="plaintext" original="messages" date="2020-10-27T14:00:28Z" product-name="sparql_toucan">
 		<header/>
 		<body>
+			<trans-unit id="tx_sparqltoucan_main_name">
+				<source>Sparql Toucan</source>
+			</trans-unit>
 			<trans-unit id="tx_sparqltoucan_domain_model_source">
 				<source>Source</source>
 			</trans-unit>
@@ -184,6 +187,12 @@
 			<trans-unit id="tx_sparql_toucan_general.createback">
 				<source>Create &amp; Back</source>
 			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.property">
+				<source>Property</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.value">
+				<source>Value</source>
+			</trans-unit>
 			<trans-unit id="tx_sparqltoucan_domain_model_datapoint.object">
 				<source>Object</source>
 			</trans-unit>
@@ -257,6 +266,9 @@
 	<file source-language="de" datatype="plaintext" original="messages" date="2020-10-27T14:00:28Z" product-name="sparql_toucan">
 		<header/>
 		<body>
+			<trans-unit id="tx_sparqltoucan_main_name">
+				<source>Sparql Toucan</source>
+			</trans-unit>
 			<trans-unit id="tx_sparqltoucan_domain_model_source">
 				<source>Quelle</source>
 			</trans-unit>
@@ -436,6 +448,12 @@
 			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_general.createback">
 				<source>Erschaffen &amp; Zurück</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.property">
+				<source>Eigenschaft</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_general.value">
+				<source>Wert</source>
 			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_general.update">
 				<source>Aktualisieren</source>

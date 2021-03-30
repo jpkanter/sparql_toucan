@@ -22,7 +22,14 @@ class PageLayoutViewDrawItemHook implements PageLayoutViewDrawItemHookInterface 
      * @var Ubl\SparqlToucan\Domain\Repository\CollectionRepository $collectionRepository
      * @inject
      */
-    protected $collectionRepository = null;
+    //protected $collectionRepository = null;
+
+    function __construct() {
+        /** @var $extbaseObjectManager \TYPO3\CMS\Extbase\Object\ObjectManager */
+        $extbaseObjectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+        $this->collectionRepository = $extbaseObjectManager->get('Ubl\SparqlToucan\Domain\Repository\CollectionRepository');
+        $this->collectionEntryRepository = $extbaseObjectManager->get('Ubl\SparqlToucan\Domain\Repository\CollectionEntryRepository');
+    }
 
     /**
      * Rendering for custom content elements
@@ -44,10 +51,15 @@ class PageLayoutViewDrawItemHook implements PageLayoutViewDrawItemHookInterface 
                 $flexFormService = GeneralUtility::makeInstance(FlexFormService::class);
             }
             $flexformData = $flexFormService->convertFlexFormContentToArray($row['pi_flexform']);
-            //$collection = $this->collectionRepository->findByUid($flexformData['settings']['choosenCollection']);
-            $bla = [$this->collectionRepository];
+            $collection = $this->collectionRepository->findByUid($flexformData['settings']['choosenCollection']);
+            //$bla = [$this->collectionRepository];
 
-            //$headerContent = '<strong>Sparql Toucan - ' . htmlspecialchars($collection->getName()) . '</strong><br />';
+            $headerContent = false;//'<strong>Sparql Toucan - ' . htmlspecialchars($collection->getName()) . '</strong><br />';
+            $lines = [
+                "name" => $collection->getName(),
+                "layout" => $collection->getLayout(),
+                "entries" => count($this->collectionEntryRepository->fetchCorresponding($collection))
+            ];
 
             // Festlegen der Template-Datei
             /** @var \TYPO3\CMS\Fluid\View\StandaloneView $fluidTemplate */
@@ -55,7 +67,7 @@ class PageLayoutViewDrawItemHook implements PageLayoutViewDrawItemHookInterface 
             $fluidTemplate = GeneralUtility::makeInstance(StandaloneView::class);
             $fluidTemplate->setTemplatePathAndFilename($fluidTemplateFilePath);
             //$fluidTmpl->assign('flex', $flexform);
-            $fluidTemplate->assign('debug', $bla);
+            $fluidTemplate->assign('stats', $lines);
 
             // Rendern
             $itemContent = $parentObject->linkEditContent($fluidTemplate->render(), $row);

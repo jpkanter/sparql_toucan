@@ -1,0 +1,35 @@
+<html xmlns:f="https://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:layout name="Backend" />
+
+<f:section name="content">
+
+    <f:render partial="Backend/MenuBar" />
+
+    <f:flashMessages />
+
+    <f:render partial="FormErrors" />
+
+
+
+    <f:if condition="{entries}">
+        <table>
+            <th>Eintrag</th>
+            <th>Kollektion</th>
+            <f:for each="{entries}" as="entry">
+                <tr>
+                    <td><em>{entry.uid}</em> {entry.name}</td>
+                    <td><em>{entry.collectionId.uid}</em> {entry.collectionId.name}</td>
+                </tr>
+            </f:for>
+        </table>
+    </f:if>
+
+    <f:form action="deleteDatapoint" property="{datapoint}">
+        <f:form.hidden value="{datapoint}"/>
+        <f:form.hidden name="deleteConfirmed" value="true2"/>
+        <f:form.submit>Löschen</f:form.submit>
+    </f:form>
+    <f:debug>{_all}</f:debug>
+
+</f:section>
+</html>
