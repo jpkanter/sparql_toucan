@@ -12,7 +12,7 @@
 
 $EM_CONF[$_EXTKEY] = [
     'title' => 'Sparql Toucan',
-    'description' => 'An Extension that fills parts of the website with the content of a semantic data source. Uses a triplestore as remote database',
+    'description' => 'An Extension that fills parts of the website with the content of a semantic data source. Uses a triplestore as remote database and sparql as interface.',
     'category' => 'plugin',
     'author' => 'JPKanter',
     'author_email' => 'bdd_dev@ub.uni-leipzig.de',
@@ -20,7 +20,7 @@ $EM_CONF[$_EXTKEY] = [
     'uploadfolder' => 0,
     'createDirs' => '',
     'clearCacheOnLoad' => 0,
-    'version' => '0.5.0',
+    'version' => '0.5.3',
     'constraints' => [
         'depends' => [
             'typo3' => '7.6.0-8.7.99',

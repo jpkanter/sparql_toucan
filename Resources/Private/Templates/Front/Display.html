@@ -4,10 +4,12 @@
 
 <f:section name="content">
 
+    <link href="{f:uri.resource(path: 'Css/CollectionEntry.css')}" rel="stylesheet"/>
+
     <h2>[DEBUG]Collektion: "{collection.name}"</h2>
     <div style="display: grid">
         <f:for each="{entries}" as="gridElement">
-            <div style="display: inline-grid; grid-area: {gridElement.gridArea};">{gridElement.tempValue -> f:format.nl2br()}</div>
+            <div style="display: inline-grid; grid-area: {gridElement.gridArea};" class="{gridElement.style}">{gridElement.tempValue -> f:format.nl2br()}</div>
         </f:for>
     </div>
 

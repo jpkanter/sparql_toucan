@@ -5,16 +5,16 @@
 
     <f:render partial="Backend/MenuBar" />
 
-    <li><f:link.action action="datapointOverview">Zurück zu den Datenpunkten i18n<f:translate key="tx_sparql_toucan_menubar.datapoint" /></f:link.action></li>
+    <f:link.action action="datapointOverview">Zurück zu den Datenpunkten i18n<f:translate key="tx_sparql_toucan_menubar.datapoint" /></f:link.action>
 
     <h1><f:translate key="tx_sparql_toucan_h1.editdatapoint" /></h1>
 
     <f:flashMessages />
 
     <f:render partial="FormErrors" />
-    <f:form action="updateDatapoint"  name="updateDatapoint" object="{datapoint}">
+    <f:form action="updateDatapoint"  name="datapoint" object="{datapoint}">
         <f:render partial="Datapoint/FormFields" arguments="{sources:sources, datapoint:datapoint}"/>
-        <f:form.submit value="{f:translate(key:'tx_sparql_toucan_general.edit')}" />
+        <f:form.submit value="{f:translate(key:'tx_sparql_toucan_general.saveedit')}" />
     </f:form>
     <f:debug>{_all}</f:debug>
 </f:section>

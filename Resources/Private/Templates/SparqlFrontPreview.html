@@ -24,11 +24,19 @@
             <td>{stats.name}</td>
         </tr>
     <tr>
-        <td>Entires</td>
+        <td>Entries</td>
         <td>{stats.entries}</td>
     </tr>
     <tr>
         <td>Layout</td>
         <td>{stats.layout}</td>
+    </tr>
+    <tr>
+        <th colspan="2">Preview</th>
+    </tr>
+    <tr>
+        <td colspan="2">
+            {stats.preview-> f:format.nl2br()}
+        </td>
     </tr>
 </table>

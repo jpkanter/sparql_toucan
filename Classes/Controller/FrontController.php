@@ -151,11 +151,26 @@ class FrontController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
             }
             $cycleCounter++;
         }
-        array_push($entries, $blankEntries);
+
+        //convert 2D Grid in a 1D List so it can be copy & pasted without looking weird, for that
+        //we simply rearrange the array by the power of usort
+        $entryArray = [];
+        foreach($entries as $entry ) {
+            $entryArray[] = $entry->convertToArray();
+        }
+
+        usort($entryArray, function($a, $b) {
+            return $a['gridColumn'] <=> $b['gridColumn'];
+        });
+
+        usort($entryArray, function($a, $b) {
+            return $a['gridRow'] <=> $b['gridRow'];
+        });
+
 
         $this->view->assign("collection", $collection);
         $this->view->assign("exceptions", $exceptionStack);
-        $this->view->assign("entries", $entries);
+        $this->view->assign("entries", $entryArray);
     }
 
     public function PluginList( array &$config) {

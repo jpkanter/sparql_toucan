@@ -468,12 +468,18 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
         return [
             'CollectionId' => $this->getCollectionID(),
             'DatapointId' => $this->getDatapointId(),
+            'Textpoint' => $this->getTextpoint(),
             'StyleName' => $this->getStyleName(),
             'style' => $this->getStyle(),
             'name' => $this->getName(),
             'crdate' => $this->getCrdate(),
             'position' => $this->getPosition(),
-            'gridArea' => $this->getGridArea()
+            'gridArea' => $this->getGridArea(),
+            'gridRow' => $this->getGridRow(),
+            'gridColumn' => $this->getGridColumn(),
+            'gridRowEnd' => $this->getGridRowEnd(),
+            'gridColumnEnd' => $this->getGridColumnEnd(),
+            'tempValue' => $this->getTempValue()
         ];
     }
 

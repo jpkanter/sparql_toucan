@@ -29,6 +29,7 @@ class PageLayoutViewDrawItemHook implements PageLayoutViewDrawItemHookInterface 
         $extbaseObjectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
         $this->collectionRepository = $extbaseObjectManager->get('Ubl\SparqlToucan\Domain\Repository\CollectionRepository');
         $this->collectionEntryRepository = $extbaseObjectManager->get('Ubl\SparqlToucan\Domain\Repository\CollectionEntryRepository');
+        $this->languagepointRepository = $extbaseObjectManager->get('Ubl\SparqlToucan\Domain\Repository\LanguagepointRepository');
     }
 
     /**
@@ -58,8 +59,28 @@ class PageLayoutViewDrawItemHook implements PageLayoutViewDrawItemHookInterface 
             $lines = [
                 "name" => $collection->getName(),
                 "layout" => $collection->getLayout(),
-                "entries" => count($this->collectionEntryRepository->fetchCorresponding($collection))
+                "entries" => count($this->collectionEntryRepository->fetchCorresponding($collection)),
+                "preview" => ""
             ];
+
+            $entries = $this->collectionEntryRepository->fetchCorresponding($collection);
+            $entryArray = [];
+            foreach($entries as $entry ) {
+                $entry->setTempValue($this->languagepointRepository->fetchSpecificLanguage($entry->getDatapointId(), "en"));
+                $entryArray[] = $entry->convertToArray();
+            }
+
+            usort($entryArray, function($a, $b) {
+                return $a['gridColumn'] <=> $b['gridColumn'];
+            });
+
+            usort($entryArray, function($a, $b) {
+                return $a['gridRow'] <=> $b['gridRow'];
+            });
+
+            foreach( $entryArray as $entry ) {
+                $lines['preview'].= $entry['tempValue'] . "\n";
+            }
 
             // Festlegen der Template-Datei
             /** @var \TYPO3\CMS\Fluid\View\StandaloneView $fluidTemplate */

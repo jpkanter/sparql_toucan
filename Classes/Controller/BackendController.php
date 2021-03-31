@@ -262,8 +262,10 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     }
 
     public function updateDatapointAction(Datapoint $datapoint) {
+        $this->addFlashMessage('[The Entry has been updated, Cache clearing required to see effects immediately]', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
         //check if its used anywhere if yes, give extra warning
         //check for changed source specifically?
+        $this->datapointRepository->update($datapoint);
         $this->redirect('datapointOverview');
     }
 
