@@ -448,6 +448,10 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     {
         return $this->isBranch;
     }
+    public function IsBranch(): bool
+    {
+        return $this->isBranch;
+    }
 
     /**
      *
@@ -465,6 +469,7 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      * @return array
      */
     public function convertToArray() {
+        //why the heck i am even using those functions and not accessing stuff directly?
         return [
             'CollectionId' => $this->getCollectionID(),
             'DatapointId' => $this->getDatapointId(),
@@ -479,7 +484,9 @@ class CollectionEntry extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
             'gridColumn' => $this->getGridColumn(),
             'gridRowEnd' => $this->getGridRowEnd(),
             'gridColumnEnd' => $this->getGridColumnEnd(),
-            'tempValue' => $this->getTempValue()
+            'tempValue' => $this->getTempValue(),
+            'isBranch' => $this->isBranch(),
+            'Uid' => $this->getUid()
         ];
     }
 

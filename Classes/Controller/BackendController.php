@@ -158,9 +158,10 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      *
      * @param Collection $collection
      */
-    public function editCollectionDynamicLayoutAction(\Ubl\SparqlToucan\Domain\Model\Collection  $collection)
+    public function editCollectionDynamicLayoutAction(\Ubl\SparqlToucan\Domain\Model\Collection $collection)
     {
         $this->view->assign('collection', $collection);
+         $this->view->assign("settin",  $formdata = $this->request->getArguments());
         $entries = $this->collectionEntryRepository->fetchCorresponding($collection);
         $sys_language_name = $this->getLanguage();
         $freeEntries = [];
@@ -208,7 +209,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 $this->collectionEntryRepository->Update($cEntry);
             }
         }
-        $this->redirect("editCollectionDynamicLayout", null, null, array('collection' => $thisCollection));
+        $this->redirect("editCollectionDynamicLayout", null, null, array('collection' => $thisCollection, 'forms' => $thisData));
         //redirect to editCollectionDynamic
     }
 

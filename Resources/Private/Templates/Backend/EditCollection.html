@@ -42,10 +42,7 @@
         </tr>
         <f:for each="{collectionEntry}" as="Entry">
             <tr style="border: 1px solid grey">
-                <td>{Entry.gridRow}</td>
-                <td>{Entry.gridColumn}</td>
-                <td>{Entry.gridRowEnd}</td>
-                <td>{Entry.gridColumnEnd}</td>
+                <td colspan="4" style="font-family: 'Iosevka Extended';">{Entry.gridRow} / {Entry.gridColumn} / {Entry.gridRowEnd} / {Entry.gridColumnEnd} {Entry.Uid}</td>
                 <td>{Entry.name} - <em>{Entry.datapointId.name}</em></td>
                 <td>
                     {Entry.datapointId.predicate}
@@ -63,10 +60,10 @@
         <tr>
             <f:form action="createCollectionEntry" name="newCollectionEntry" object="{newCollectionEntry}" >
                 <f:form.hidden property="collectionID" value="{collection.uid}"/>
-                <td><f:form.textfield property="gridRow" size="4"/></td>
-                <td><f:form.textfield property="gridColumn" size="4"/></td>
-                <td><f:form.textfield property="gridRowEnd" size="4"/></td>
-                <td><f:form.textfield property="gridColumnEnd" size="4"/></td>
+                <td><f:form.textfield property="gridRow" size="2"/></td>
+                <td><f:form.textfield property="gridColumn" size="2"/></td>
+                <td><f:form.textfield property="gridRowEnd" size="2"/></td>
+                <td><f:form.textfield property="gridColumnEnd" size="2"/></td>
                 <td><f:form.textfield property="name" size="50"/></td>
                 <td><f:form.select property="datapointId" options="{datapoints}" optionValueField="uid" optionLabelField="name"/></td>
                 <td></td>
@@ -83,10 +80,10 @@
         <tr>
             <f:form action="createCollectionEntry" name="newCollectionEntry" object="{newCollectionEntry}" >
                 <f:form.hidden property="collectionID" value="{collection.uid}"/>
-                <td><f:form.textfield property="gridRow" size="4"/></td>
-                <td><f:form.textfield property="gridColumn" size="4"/></td>
-                <td><f:form.textfield property="gridRowEnd" size="4"/></td>
-                <td><f:form.textfield property="gridColumnEnd" size="4"/></td>
+                <td><f:form.textfield property="gridRow" size="2"/></td>
+                <td><f:form.textfield property="gridColumn" size="2"/></td>
+                <td><f:form.textfield property="gridRowEnd" size="2"/></td>
+                <td><f:form.textfield property="gridColumnEnd" size="2"/></td>
                 <td><f:form.textfield property="name" size="50"/></td>
                 <td></td>
                 <td><f:form.select property="textpoint" options="{textpoints}" optionValueField="uid" optionLabelField="name"/></td>
