@@ -11,7 +11,7 @@
 
     <f:render partial="FormErrors" />
 
-    <div style="display: grid; grid-template-columns: 20rem 20rem;margin-right: auto;">
+    <div style="display: grid; grid-template-columns: 20rem 20rem 50rem; margin-right: auto;">
         <div style="display: flex;">
             <f:form action="updateCollection" name="collection" object="{collection}" >
                 <f:render partial="Collection/FormFields" arguments="{collection:collection}" />
@@ -20,6 +20,14 @@
         </div>
         <div style="display: flex;" >
             <f:link.action action="editCollectionDynamicLayout" arguments="{collection:collection}" class="tx_sparqltoucan_interactive_button">Interactive Layouting</f:link.action>
+        </div>
+
+        <div style="display: flex; margin-bottom: auto;">
+            <div style="display: grid">
+                <f:for each="{entries}" as="gridElement">
+                    <div style="display: inline-grid; grid-area: {gridElement.gridArea};" class="{gridElement.style}">{gridElement.tempValue -> f:format.nl2br()}</div>
+                </f:for>
+            </div>
         </div>
     </div>
 
@@ -42,7 +50,8 @@
         </tr>
         <f:for each="{collectionEntry}" as="Entry">
             <tr style="border: 1px solid grey">
-                <td colspan="4" style="font-family: 'Iosevka Extended';">{Entry.gridRow} / {Entry.gridColumn} / {Entry.gridRowEnd} / {Entry.gridColumnEnd} {Entry.Uid}</td>
+                <td><span style="color: darkred; text-transform: capitalize;">[Debug]</span></td>
+                <td colspan="3" style="font-family: 'Iosevka Extended';">{Entry.gridRow} / {Entry.gridColumn} / {Entry.gridRowEnd} / {Entry.gridColumnEnd} {Entry.Uid}</td>
                 <td>{Entry.name} - <em>{Entry.datapointId.name}</em></td>
                 <td>
                     {Entry.datapointId.predicate}

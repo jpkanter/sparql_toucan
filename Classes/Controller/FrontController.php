@@ -107,17 +107,10 @@ class FrontController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 
         $sys_language_name = $this->getLanguage();
 
-        /****DEBUG****/
-        $exceptionStack = array();
+        $entryArray = $this->collectionRepository->toEntryMix($collection, $sys_language_name);
 
-        $blankEntries = [];
-        $cycleCounter = 1;
-        $blankLines = 0;
-
-        foreach ($entries as $myKey => $entry) {
-            //adding empty elements
-            //Style stuff, needed cause Typo V7 Fluid doesnt work properly in the frontend
-            switch( $entry->getStyle() ) {
+        foreach( $entryArray as $key => $entry ) {
+            switch( $entry['style'] ) {
                 case 1:
                     $newStyle = "tx_sparqltoucan_ce_bold"; break;
                 case 2:
@@ -131,45 +124,10 @@ class FrontController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
                 default:
                     $newStyle = "tx_sparqltoucan_ce_none"; break;
             }
-            $entries[$myKey]->setStyle($newStyle);
-            //end of ugly style hack
-            try {
-                if( $entry->getDatapointId() != 0 ) {
-                    $value = $this->languagepointRepository->fetchSpecificLanguage($entry->getDatapointId(), $sys_language_name);
-                }
-                elseif( $entry->getTextpoint() != 0 ) {
-                    $value = $this->languagepointRepository->fetchSpecificLanguage($entry->getTextpoint(), $sys_language_name);
-                }
-                else {
-                    $value = ""; //if neither Textpoint nor Datapoint exists its an empty placeholder entry
-                }
-                $entries[$myKey]->SetTempValue($value);
-            } catch (\Exception $e) {
-                $error['message'] = $e->getMessage();
-                $error['code'] = $e->getCode();
-                $exceptionStack[] = $error;
-            }
-            $cycleCounter++;
+            $entryArray[$key]['style'] = $newStyle;
         }
-
-        //convert 2D Grid in a 1D List so it can be copy & pasted without looking weird, for that
-        //we simply rearrange the array by the power of usort
-        $entryArray = [];
-        foreach($entries as $entry ) {
-            $entryArray[] = $entry->convertToArray();
-        }
-
-        usort($entryArray, function($a, $b) {
-            return $a['gridColumn'] <=> $b['gridColumn'];
-        });
-
-        usort($entryArray, function($a, $b) {
-            return $a['gridRow'] <=> $b['gridRow'];
-        });
-
 
         $this->view->assign("collection", $collection);
-        $this->view->assign("exceptions", $exceptionStack);
         $this->view->assign("entries", $entryArray);
     }
 

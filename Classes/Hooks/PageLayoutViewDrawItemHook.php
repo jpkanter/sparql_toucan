@@ -63,59 +63,7 @@ class PageLayoutViewDrawItemHook implements PageLayoutViewDrawItemHookInterface 
                 "preview" => ""
             ];
 
-            $entries = $this->collectionEntryRepository->fetchCorresponding($collection);
-            $entryArray = [];
-            $twigs = [];
-            foreach($entries as $entry ) {
-                if( !$entry->getIsBranch() ) {
-                    if ($entry->getTextpoint() != null && $entry->getDatapointId() != null) {
-                        $entry->setTempValue(
-                            $this->languagepointRepository->fetchSpecificLanguage($entry->getDatapointId(), "en")
-                            .
-                            $this->languagepointRepository->fetchSpecificLanguage($entry->getTextpoint(), "en")
-                        );
-                    } elseif ($entry->getDatapointId() != null && $entry->getTextpoint() == null) {
-                        $entry->setTempValue($this->languagepointRepository->fetchSpecificLanguage($entry->getDatapointId(), "en"));
-                    } elseif ($entry->getTextpoint() != null && $entry->getDatapointId() == null) {
-                        $entry->setTempValue($this->languagepointRepository->fetchSpecificLanguage($entry->getTextpoint(), "en"));
-                    } else {
-                        $entry->setTempValue(""); //this should definitely not happen
-                    }
-                    if( $entry->getParentEntry() == 0 ) {
-                        $entryArray[] = $entry->convertToArray();
-                    }
-                    else {
-                        if( !isset($twigs[$entry->getParentEntry()->getUid()]) ) { $twigs[$entry->getParentEntry()->getUid()] = [];}
-                        $twigs[$entry->getParentEntry()->getUid()][] = $entry->getTempValue();
-                    }
-
-                }
-            }
-
-            foreach( $twigs as $key => $entry) {
-                usort($twigs[$key], function($a, $b) {
-                   return $a['position'] <=> $b['position'];
-                });
-            }
-
-            foreach($entries as $entry ) {
-                if( $entry->getIsBranch() ) {
-                    $compound = "";
-                    foreach ($twigs[$entry->getUid()] as $subentry) {
-                        $compound.= $subentry . " ";
-                    }
-                    $entry->setTempValue(trim($compound));
-                    $entryArray[] = $entry->convertToArray();
-                }
-            }
-
-            usort($entryArray, function($a, $b) {
-                return $a['gridColumn'] <=> $b['gridColumn'];
-            });
-
-            usort($entryArray, function($a, $b) {
-                return $a['gridRow'] <=> $b['gridRow'];
-            });
+            $entryArray = $this->collectionRepository->toEntryMix($collection, "en");
 
             foreach( $entryArray as $entry ) {
                 $lines['preview'].= $entry['tempValue'] . "\n";

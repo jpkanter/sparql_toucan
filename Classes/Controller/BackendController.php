@@ -147,6 +147,28 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 $datapoints[$thisKey]->setName(">> ".substr($onePoint->getsubject(), -20));
             }
         }
+
+        //Preview
+        $entryArray = $this->collectionRepository->toEntryMix($collection, "en");
+        foreach( $entryArray as $key => $entry ) {
+            switch( $entry['style'] ) {
+                case 1:
+                    $newStyle = "tx_sparqltoucan_ce_bold"; break;
+                case 2:
+                    $newStyle = "tx_sparqltoucan_ce_italic"; break;
+                case 3:
+                    $newStyle = "tx_sparqltoucan_ce_bold-italic"; break;
+                case 4:
+                    $newStyle = "tx_sparqltoucan_ce_thin"; break;
+                case 5:
+                    $newStyle = "tx_sparqltoucan_ce_thin-italic"; break;
+                default:
+                    $newStyle = "tx_sparqltoucan_ce_none"; break;
+            }
+            $entryArray[$key]['style'] = $newStyle;
+        }
+        $this->view->assign("entries", $entryArray);
+
         $this->view->assign('datapoints', $datapoints);
         $textpoints = $this->textpointRepository->findAll();
         $this->view->assign('textpoints', $textpoints);
