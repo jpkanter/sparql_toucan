@@ -1,14 +1,24 @@
 <html xmlns:f="https://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
-    <div class="tx_sparqltoucan_menu">
-        <ul>
-            <li><f:link.action action="overview" class="tx_sparqltoucan_fatlink"><f:translate key="tx_sparql_toucan_menubar.overview" /></f:link.action></li>
-            <li><f:link.action action="explore" class="tx_sparqltoucan_fatlink"><f:translate key="tx_sparql_toucan_menubar.exploreendpoint" /></f:link.action></li>
-            <li><f:link.action action="datapointOverview"><f:translate key="tx_sparql_toucan_menubar.datapoint" /></f:link.action></li>
-            <li><f:link.action action="textpointOverview"><f:translate key="tx_sparql_toucan_menubar.textpoint" /></f:link.action></li>
-            <li><f:link.action action="languagepointOverview"><f:translate key="tx_sparql_toucan_menubar.languagepoint" /></f:link.action></li>
-            <li><f:link.action action="timemachine"><f:translate key="tx_sparql_toucan_menubar.timemachine" /></f:link.action></li>
+        <ul class="nav nav-tabs t3js-tabs" role="tablist" data-store-last-tab="1">
+            <li {f:if(condition: '{activeTab} == "overview"', then: 'class="active"')}>
+                <f:link.action action="overview" class="tx_sparqltoucan_fatlink"><f:translate key="tx_sparql_toucan_menubar.overview" /></f:link.action>
+            </li>
+            <li {f:if(condition: '{activeTab} == "explorer"', then: 'class="active"')}>
+                <f:link.action action="explore" class="tx_sparqltoucan_fatlink"><f:translate key="tx_sparql_toucan_menubar.exploreendpoint" /></f:link.action>
+            </li>
+            <li {f:if(condition: '{activeTab} == "datapoint"', then: 'class="active"')}>
+                <f:link.action action="datapointOverview" class="tx_sparqltoucan_fatlink"><f:translate key="tx_sparql_toucan_menubar.datapoint" /></f:link.action>
+            </li>
+            <li {f:if(condition: '{activeTab} == "textpoint"', then: 'class="active"')}>
+                <f:link.action action="textpointOverview" class="tx_sparqltoucan_fatlink"><f:translate key="tx_sparql_toucan_menubar.textpoint" /></f:link.action>
+            </li>
+            <li {f:if(condition: '{activeTab} == "languagepoint"', then: 'class="active"')}>
+                <f:link.action action="languagepointOverview" class="tx_sparqltoucan_fatlink"><f:translate key="tx_sparql_toucan_menubar.languagepoint" /></f:link.action>
+            </li>
+            <li {f:if(condition: '{activeTab} == "timemachine"', then: 'class="active"')}>
+                <f:link.action action="timemachine" class="tx_sparqltoucan_fatlink"><f:translate key="tx_sparql_toucan_menubar.timemachine" /></f:link.action>
+            </li>
             <!--<li><f:link.action action="backport">Backport Test</f:link.action></li>
             <li><f:link.action action="dynamic">AJAX Test</f:link.action></li> -->
         </ul>
-    </div>
 </html>

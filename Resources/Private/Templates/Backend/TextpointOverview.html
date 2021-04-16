@@ -1,22 +1,26 @@
 <html xmlns:f="https://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+{namespace core = TYPO3\CMS\Core\ViewHelpers}
 <f:layout name="Backend" />
 
 <f:section name="content">
 
-    <f:render partial="Backend/MenuBar" />
+    <f:render partial="Backend/MenuBar"  arguments="{activeTab : 'textpoint'}"/>
 
     <f:flashMessages />
 
     <f:render partial="FormErrors" />
 
-    <table class="tx_sparqltoucan_paginator_table">
+    <table class="table table-striped table-hover">
+        <thead>
         <tr>
             <th colspan="2"><f:translate key="tx_sparqltoucan_domain_model_textpoint" /></th>
             <th><f:translate key="tx_sparqltoucan_domain_model_textpoint.description" /></th>
             <th><f:translate key="tx_sparql_toucan_general.languages" /></th>
-            <th colspan="3"><f:translate key="tx_sparql_toucan_general.control" /></th>
+            <th colspan="1"><f:translate key="tx_sparql_toucan_general.control" /></th>
         </tr>
+        </thead>
         <f:widget.paginate objects="{textpoints}" as="paginateLabel" configuration="{itemsPerPage: 30, insertAbove: 0, insertBelow: 1, maximumNumberOfLinks: 10}">
+            <tbody>
             <f:for each="{paginateLabel}" as="point">
                 <tr>
                     <td><em>{point.uid}</em></td>
@@ -27,12 +31,21 @@
                             <span class="tx_sparqltoucan_language_block">{lan}</span>
                         </f:for>
                     </td>
+                    <td class="col-control">
+                        <div class="btn-group" role="group">
+                            <f:link.action action="editTextpoint" class="btn btn-default" arguments="{textpoint : point}"><core:icon identifier="actions-document-open"/></f:link.action>
+                            <f:link.action action="deleteTextpoint" class="btn btn-danger" arguments="{textpoint : point}"><core:icon identifier="actions-edit-delete" /></f:link.action>
+                            <f:link.action action="updateTextpointLang" class="btn btn-warning" arguments="{textpoint : point}"><core:icon identifier="actions-system-refresh" /></f:link.action>
+                        </div>
+                    </td>
+                    <!--
                     <td><f:link.action action="editTextpoint" arguments="{textpoint : point}"><f:translate key="tx_sparql_toucan_general.edit" /></f:link.action></td>
                     <td><f:link.action action="deleteTextpoint" arguments="{textpoint : point}"><f:translate key="tx_sparql_toucan_general.delete" /></f:link.action></td>
                     <td><span style="font-size: 0.4rem"><f:link.action action="updateTextpointLang" arguments="{textpoint : point}"><f:translate key="tx_sparql_toucan_general.update" /></f:link.action></span></td>
-
+                    -->
                 </tr>
             </f:for>
+            </tbody>
         </f:widget.paginate>
     </table>
 

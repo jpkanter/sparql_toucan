@@ -3,20 +3,23 @@
 
 <f:section name="content">
 
-    <f:render partial="Backend/MenuBar" />
+    <f:render partial="Backend/MenuBar"  arguments="{activeTab : 'languagepoint'}"/>
 
     <h1><f:translate key="tx_sparql_toucan_h1.alllabels" /></h1>
 
     <f:flashMessages />
 
-    <table class="tx_sparqltoucan_paginator_table">
+    <table class="table table-striped table-hover">
+        <thead>
         <tr>
             <th><f:translate key="tx_sparql_toucan_general.label" /></th>
             <th><f:translate key="tx_sparql_toucan_general.language" /></th>
             <th colspan="2"><f:translate key="tx_sparqltoucan_domain_model_datapoint" /> / <f:translate key="tx_sparqltoucan_domain_model_textpoint" /></th>
             <th><f:translate key="tx_sparqltoucan_domain_model_source" /></th>
         </tr>
-        <f:widget.paginate objects="{languagepoints}" as="paginateLabel" configuration="{itemsPerPage: 30, insertAbove: 0, insertBelow: 1, maximumNumberOfLinks: 10}">
+        </thead>
+        <f:widget.paginate objects="{languagepoints}" as="paginateLabel" configuration="{itemsPerPage: 25, insertAbove: 0, insertBelow: 1, maximumNumberOfLinks: 10}">
+            <tbody>
             <f:for each="{paginateLabel}" as="point">
                 <tr>
                     <td>{point.content}</td>
@@ -41,6 +44,7 @@
                     <td>{point.datapointId.sourceId.name}</td>
                 </tr>
             </f:for>
+            </tbody>
         </f:widget.paginate>
     </table>
 

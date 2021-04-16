@@ -1,15 +1,17 @@
 <html xmlns:f="https://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+{namespace core = TYPO3\CMS\Core\ViewHelpers}
 <f:layout name="Backend" />
 
 <f:section name="content">
 
-    <f:render partial="Backend\MenuBar"/>
+    <f:render partial="Backend\MenuBar"  arguments="{activeTab : 'datapoint'}"/>
 
     <h1>All the Datapoints!</h1>
 
     <f:flashMessages />
 
-    <table class="tx_sparqltoucan_paginator_table">
+    <table class="table table-striped table-hover">
+        <thead>
         <tr>
             <th>UID</th>
             <th>Name</th>
@@ -17,9 +19,11 @@
             <th>Subject</th>
             <th>Predicate</th>
             <th>Value</th>
-            <th colspan="2"><f:translate key="tx_sparql_toucan_general.action"/></th>
+            <th colspan="1"><f:translate key="tx_sparql_toucan_general.action"/></th>
         </tr>
+        </thead>
         <f:widget.paginate objects="{datapoints}" as="paginateLabel" configuration="{itemsPerPage: 30, insertAbove: 0, insertBelow: 1, maximumNumberOfLinks: 10}">
+            <tbody>
             <f:for each="{paginateLabel}" as="datapoint" key="for_key">
                 <tr>
                     <td>{datapoint.uid}</td>
@@ -38,14 +42,20 @@
                             </f:if>
                         </f:for>
                     </td>
-                    <td><f:link.action action="editDatapoint" arguments="{datapoint : datapoint}"><f:translate key="tx_sparql_toucan_general.edit"/></f:link.action></td>
-                    <td><f:link.action action="editDatapoint" arguments="{datapoint : datapoint}"><f:translate key="tx_sparql_toucan_general.delete"/></f:link.action></td>
+                    <td class="col-control">
+                        <div class="btn-group" role="group">
+                            <f:link.action action="editDatapoint" class="btn btn-default" arguments="{datapoint : datapoint}"><core:icon identifier="actions-document-open"/></f:link.action>
+                            <f:link.action action="deleteDatapoint" class="btn btn-default" arguments="{datapoint : datapoint}"><core:icon identifier="actions-edit-delete" /></f:link.action>
+                            <f:link.action action="updateDatapoint" class="btn btn-default" arguments="{datapoint : datapoint}"><core:icon identifier="actions-system-refresh" /></f:link.action>
+                        </div>
+                    </td>
                 </tr>
             </f:for>
+            </tbody>
         </f:widget.paginate>
     </table>
-    <f:link.action action="newDatapoint">New Datapoint</f:link.action>
-    <sub><f:link.action action="remoteUpdateDatapoints">Update Datapoints</f:link.action></sub>
+    <f:link.action action="newDatapoint" class="btn btn-default">New Datapoint</f:link.action>
+    <f:link.action action="remoteUpdateDatapoints" class="btn btn-warning">Update all Datapoints</f:link.action>
     <br>
 
 
