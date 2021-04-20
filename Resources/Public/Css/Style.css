@@ -20,6 +20,21 @@
     margin-top: 1em;
 }
 
+.h1_subtitle {
+    font-family: 'DejaVu Sans Condensed', sans-serif;
+    font-weight: lighter;
+    font-stretch: extra-condensed
+}
+
+.h1_main {
+    font-family: 'DejaVu Sans', sans-serif;
+    font-stretch: normal;
+    font-weight: bolder;
+    background: linear-gradient(90deg, #DA0000 5%, #F88A19, #F6CF1C, #F6CF1c 93%, black 7%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
 table.tx_sparqltoucan {
     font-family: 'Noto Sans', sans-serif, Verdana;
 }
@@ -80,7 +95,7 @@ h4 {font-size: 1.4rem}
 h5 {font-size: 1.2rem}
 h6 {font-size: 1.0rem}
 
-h1, h2, h3, h4, h5, h6 { color: var(--tou_red); font-weight: bold;}
+h2, h3, h4, h5, h6 { color: var(--tou_red); font-weight: bold;}
 
 .tx_sparqltoucan_monospaced {
     font-family: var(--tou_teletext) ;

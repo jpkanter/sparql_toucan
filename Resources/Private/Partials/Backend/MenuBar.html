@@ -1,5 +1,5 @@
 <html xmlns:f="https://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
-        <ul class="nav nav-tabs t3js-tabs" role="tablist" data-store-last-tab="1">
+        <ul class="nav nav-tabs t3js-tabs" role="tablist" data-store-last-tab="1" style="text-align: right;">
             <li {f:if(condition: '{activeTab} == "overview"', then: 'class="active"')}>
                 <f:link.action action="overview" class="tx_sparqltoucan_fatlink"><f:translate key="tx_sparql_toucan_menubar.overview" /></f:link.action>
             </li>
@@ -15,7 +15,8 @@
             <li {f:if(condition: '{activeTab} == "languagepoint"', then: 'class="active"')}>
                 <f:link.action action="languagepointOverview" class="tx_sparqltoucan_fatlink"><f:translate key="tx_sparql_toucan_menubar.languagepoint" /></f:link.action>
             </li>
-            <li {f:if(condition: '{activeTab} == "timemachine"', then: 'class="active"')}>
+
+            <li {f:if(condition: '{activeTab} == "timemachine"', then: 'class="active"')} style="float:none;display: inline-block;">
                 <f:link.action action="timemachine" class="tx_sparqltoucan_fatlink"><f:translate key="tx_sparql_toucan_menubar.timemachine" /></f:link.action>
             </li>
             <!--<li><f:link.action action="backport">Backport Test</f:link.action></li>
