@@ -88,14 +88,14 @@ a.tx_sparqltoucan_fatlink {
     font-size: 1.5em;
 }
 
-h1 {font-size: 4.5rem;}
-h2 {font-size: 2.0rem;}
-h3 {font-size: 1.6rem}
-h4 {font-size: 1.4rem}
-h5 {font-size: 1.2rem}
-h6 {font-size: 1.0rem}
+h1.touCanDo {font-size: 4.5rem;}
+h2.touCanDo {font-size: 2.0rem;}
+h3.touCanDo {font-size: 1.6rem}
+h4.touCanDo {font-size: 1.4rem}
+h5.touCanDo {font-size: 1.2rem}
+h6.touCanDo {font-size: 1.0rem}
 
-h2, h3, h4, h5, h6 { color: var(--tou_red); font-weight: bold;}
+.touCanDo { color: var(--tou_red); font-weight: bold;}
 
 .tx_sparqltoucan_monospaced {
     font-family: var(--tou_teletext) ;
@@ -333,4 +333,10 @@ tr.x_sparqltoucan_hiddentr{
 .tx_sparqltoucan_fakebutton {
     font-size: 1.4rem;
     padding: 0.4rem
+}
+
+.tx_sparqltoucan_hidden_form {
+    display: none;
+    position: fixed;
+    width: 30rem;
 }

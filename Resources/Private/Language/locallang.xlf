@@ -226,6 +226,12 @@
 			<trans-unit id="tx_sparql_toucan_menubar.timemachine">
 				<source>Timemachine</source>
 			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_menubar.collections">
+				<source>Datasets</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_menubar.sources">
+				<source>Datasources</source>
+			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_h1.newcollection">
 				<source>New Collection</source>
 			</trans-unit>
@@ -260,6 +266,21 @@
 				is to be done with care. There is also the option to delete any linked datapoint, languagepoint and entry
 				which will probably tear holes in any existing structure but offers a clear way in abandoning a specific
 				datasource.</source>
+			</trans-unit>
+
+			<trans-unit id="tx_sparql_toucan_infoboxtitle_introduction">
+				<source>Synchronized data</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_longtexts_introduction">
+				<source>
+					Donec lacinia at metus dictum scelerisque. Sed porttitor ultricies laoreet. Vestibulum ante ipsum primis in faucibus
+					orci luctus et ultrices posuere cubilia curae; Sed blandit metus tellus, nec varius nulla convallis eu. Fusce vitae
+					nisi ac libero auctor interdum at quis lorem. Praesent sed turpis vitae leo fermentum sodales et in risus. Ut eget
+					efficitur mauris. Cras efficitur maximus lorem, quis rutrum quam mollis vitae. Mauris eu faucibus turpis, nec porttitor
+					sapien. Suspendisse nec velit eget nibh porta laoreet ut vestibulum velit. Pellentesque habitant morbi tristique
+					senectus et netus et malesuada fames ac turpis egestas. Sed accumsan malesuada eros nec facilisis. Phasellus convallis
+					dui luctus libero malesuada, vel cursus lectus ullamcorper.
+				</source>
 			</trans-unit>
 		</body>
 	</file>
@@ -482,6 +503,12 @@
 			<trans-unit id="tx_sparql_toucan_menubar.timemachine">
 				<source>Zeitmaschine</source>
 			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_menubar.collections">
+				<source>Datensets</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_menubar.sources">
+				<source>Datenquellen</source>
+			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_h1.newcollection">
 				<source>Neue Kollektion</source>
 			</trans-unit>
@@ -511,6 +538,19 @@
 			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_longtexts_deleteexplanation">
 				<source>TODO Erklärung</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_infoboxtitle_introduction">
+				<source>Synchronisierte Daten</source>
+			</trans-unit>
+			<trans-unit id="tx_sparql_toucan_longtexts_introduction">
+				<source>DE
+					Integer hendrerit, erat nec fringilla rhoncus, orci orci rutrum lacus, a pharetra odio mauris ac
+					nulla. Nam bibendum urna nec condimentum iaculis. Donec ultrices, quam at consequat placerat,
+					mauris turpis pulvinar lorem, et vehicula nibh erat id sem. In varius lorem in sapien imperdiet,
+					ut elementum libero dictum. Quisque non placerat nibh. Vivamus interdum tincidunt risus non
+					bibendum. Integer egestas eget metus eu aliquet. Cras elit purus, sodales sed tortor vel,
+					venenatis sollicitudin mauris. Interdum et malesuada fames ac ante ipsum primis in faucibus.
+				</source>
 			</trans-unit>
 		</body>
 	</file>

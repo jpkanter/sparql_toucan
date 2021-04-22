@@ -10,67 +10,98 @@
         <div class="panel panel-tab">
             <div class="panel-body">
 
-        <h1><span class="h1_main">Toucan.</span> <span class="h1_subtitle">Linked Data Integration</span> B 7.66 Dodo - 0.5.4</h1>
+                <f:flashMessages />
 
-        <f:flashMessages />
+                <f:be.infobox title="{f:translate(key:'tx_sparql_toucan_infoboxtitle_introduction')}" state="-2" iconName="info">
+                    <f:translate key="tx_sparql_toucan_longtexts_introduction"/>
+                </f:be.infobox>
 
-        <h2><f:translate key="tx_sparqltoucan_bck_overview_title" /></h2>
+                <h2><f:translate key="tx_sparql_toucan_sparqlbackend_explore_title" /></h2>
+                <f:form action="overview" name="postcontent" controller="Backend" enctype="multipart/form-data">
+                    <div class="tx_sparqltoucan_central">
+                        <table class="tx_sparqltoucan">
+                            <tr>
+                                <td><label class="t3js-formengine-label"><f:translate key="tx_sparql_toucan_general.endpoints" />:</label></td>
+                                <td><f:form.select property="sourceId" options="{sources}" optionValueField="uid" optionLabelField="name" value="{form.sourceId}" class="form-control"/></td>
+                            </tr>
+                            <tr>
+                                <td><label class="t3js-formengine-label"><f:translate key="tx_sparqltoucan_domain_model_datapoint.subject" />:</label></td>
+                                <td><f:form.textfield property="subject" value="{form.subject}" size="90" class="form-control"/></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" align="center"><f:form.submit value="{f:translate(key:'tx_sparql_toucan_general.explore')}" class="btn btn-default"/></td>
+                            </tr>
+                        </table>
+                    </div>
+                </f:form>
 
-        <table  class="table table-striped table-hover" >
-            <thead>
-            <tr>
-                <th><f:translate key="tx_sparqltoucan_domain_model_collection.name" /></th>
-                <th><f:translate key="tx_sparqltoucan_domain_model_collection.layout" /></th>
-                <th><f:translate key="tx_sparqltoucan_domain_model_collection.style_override" /></th>
-                <th span="3">Actions </th>
-            </tr>
-            </thead>
+                <f:if condition="{trueExplore}">
 
-            <tbody>
-            <f:for each="{collections}" as="collection">
-                <tr>
-                    <td><f:link.action action="editCollection" arguments="{collection : collection}"> {collection.name}</f:link.action></td>
-                    <td><f:link.action action="editCollection" arguments="{collection : collection}"> {collection.layout}</f:link.action></td>
-                    <td><f:link.action action="editCollection" arguments="{collection : collection}"> {collection.styleOverride}</f:link.action></td>
-                    <td class="col-control">
-                        <div class="btn-group" role="group">
-                        <f:link.action action="updateCollectionLanguagepoints" arguments="{collection : collection}" class="btn btn-default">Update Collection Languagepoints</f:link.action>
-                        <f:link.action action="editCollectionDynamicLayout" arguments="{collection : collection}" class="btn btn-primary">Layouting</f:link.action>
-                        <f:link.action action="deleteCollection" arguments="{collection : collection}" class="btn btn-danger"><core:icon identifier="actions-edit-delete" /></f:link.action></td>
-                        </div>
-                </tr>
-            </f:for>
-            </tbody>
-        </table>
-        <f:link.action action="newCollection" class="btn btn-default">New Collection</f:link.action>
+                    <f:form action="newComplexCollection"  name="seedDatapoint" object="{seedDatapoint}">
+                        <f:form.hidden property="name" value=""/>
+                        <f:form.hidden property="subject" value="{form.subject}"/>
+                        <f:form.hidden property="predicate" value=""/>
+                        <f:form.hidden property="sourceId" value="{form.sourceId}"/>
+                        <f:form.submit value="Collection Creation" class="btn btn-default"/>
+                    </f:form>
 
-    </div></div></div>
+                    <table class="table table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th><f:translate key="tx_sparqltoucan_domain_model_datapoint.predicate" /></th>
+                            <th><f:translate key="tx_sparqltoucan_domain_model_datapoint.object" /></th>
+                            <th><f:translate key="tx_sparql_toucan_general.extrainformation" /></th>
+                            <th><f:translate key="tx_sparql_toucan_general.newdatapoint" /></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <f:for each="{trueExplore}" as="predicate">
+                            <tr>
+                                <td rowspan="{predicate.rowspan}">
+                                    <f:link.action action="explore" arguments="{postcontent: {sourceId: form.sourceId, subject: predicate.value}}">{predicate.label}</f:link.action></td>
+                            <f:for each="{predicate.objects}" as="obj" iteration="iterator">
+                                        <f:if condition="{iterator.index} > 0"></tr><tr></f:if>
+                                <td>
+                                <f:if condition="{obj.type} == 'uri'">
+                                    <f:then>
+                                        <f:link.action action="explore" arguments="{postcontent: {sourceId: form.sourceId, subject: obj.value}}">{obj.label}</f:link.action>
+                                    </f:then>
+                                    <f:else>
+                                        {obj.label}
+                                    </f:else>
+                                </f:if>
+                                </td>
+                                <td>{obj.adda}</td>
+                                <td>
+                                    <f:if condition="{obj.type} == 'uri'">
+                                        <f:then>
+                                            <f:link.action action="explore" arguments="{postcontent: {sourceId: form.sourceId, subject: obj.value}}" class="btn btn-default">Explore object</f:link.action>
+                                        </f:then>
+                                        <f:else>
+                                            <f:form action="newDatapoint"  name="newDatapoint" object="{newDatapoint}">
+                                                <f:form.hidden property="name" value=""/>
+                                                <f:form.hidden property="subject" value="{form.subject}"/>
+                                                <f:form.hidden property="predicate" value="{predicate.value}"/>
+                                                <f:form.hidden property="sourceId" value="{form.sourceId}"/>
+                                                <f:form.submit value="Convert to Datapoint" class="btn btn-default"/>
+                                            </f:form>
+                                        </f:else>
+                                    </f:if>
+                                </td>
+                            </f:for>
+                            </tr>
+                        </f:for>
+                        </tbody>
+                    </table>
+                </f:if>
 
-        <h2>Sources</h2>
-        <table  class="tx_sparqltoucan" >
-            <tr>
-                <th>UID</th>
-                <th>Name</th>
-                <th>URL</th>
-                <th span="2">i18n:Actions</th>
-            </tr>
-            <f:for each="{sources}" as="source">
-                <tr>
-                    <td>{source.uid}</td>
-                    <td>{source.name}</td>
-                    <td>{source.url}</td>
-                    <td><f:link.action action="editSource" arguments="{source:source}">i18n:Edit Source</f:link.action></td>
-                    <td><f:link.action action="deleteSource" arguments="{source:source}" class="tx_sparqltoucan_srslink">i18n:Delete Source</f:link.action></td>
-                </tr>
-            </f:for>
-        </table>
-        <f:link.action action="newSource">New Source</f:link.action>
 
-
-        <f:be.buttons.csh />
+            </div>
+        </div>
+    </div>
 
         <p><em>Only real with capitalised nouns in english</em></p>
-        <f:link.action action="testSomething" class="tx_sparqltoucan_fatlink">Do they Debug Case of the Day.</f:link.action>
+        <f:link.action action="testSomething" class="btn btn-warning">Do they Debug Case of the Day.</f:link.action>
 
         <f:debug>{_all}</f:debug>
 

@@ -4,51 +4,56 @@
 <f:section name="content">
 
     <f:render partial="Backend/MenuBar"  arguments="{activeTab : 'timemachine'}"/>
+    <div class="tab-pane active" role="tabpanel">
+        <div class="panel panel-tab">
+            <div class="panel-body">
+                <h2>Timemachine - Things that happened <em>recently</em></h2>
+                <f:flashMessages />
 
-    <h1>Timemachine - Things that happened <em>recently</em></h1>
-    <f:flashMessages />
+                <f:render partial="FormErrors" />
 
-    <f:render partial="FormErrors" />
+                <div>
+                    <div class="tx_sparqltoucan_formworld">
+                        <f:form action="timemachine" name="timemachineDeletion">
+                            <label>Time-Delta</label>
+                            <f:form.textfield type="time" id="datetimepicker" name="timeDelta" value="{f:if(condition: '{time_delta}', then: '{time_delta}', else: '01:00')}"/>
+                            <script type="text/javascript">
+                                $('#datetimepicker').datetimepicker();
+                            </script>
+                            <label>Expands the scope the time machine looks into the past</label>
+                            <f:form.submit value="Apply"  class="btn btn-default" style="width: 150px;"/>
+                        </f:form>
+                    </div>
 
-    <div>
-        <div class="tx_sparqltoucan_formworld">
-            <f:form action="timemachine" name="timemachineDeletion">
-                <label>Time-Delta</label>
-                <f:form.textfield type="time" id="datetimepicker" name="timeDelta" value="{f:if(condition: '{time_delta}', then: '{time_delta}', else: '01:00')}"/>
-                <script type="text/javascript">
-                    $('#datetimepicker').datetimepicker();
-                </script>
-                <label>Expands the scope the time machine looks into the past</label>
-                <f:form.submit value="Apply" />
-            </f:form>
-        </div>
+                    <div class="tx-sparqltoucan_formworld">
+                        <f:form action="deleteTimemachine" name="timemachineLever">
+                            <f:form.hidden property="deletionTime" value="{deletionTime}"/>
+                            <f:form.submit value="Delete All recent activities"  class="btn btn-default"/>
+                        </f:form>
+                    </div>
+                </div>
 
-        <div class="tx-sparqltoucan_formworld">
-            <f:form action="deleteTimemachine" name="timemachineLever">
-                <f:form.hidden property="deletionTime" value="{deletionTime}"/>
-                <f:form.submit value="Delete All recent activities"/>
-            </f:form>
+                <f:if condition="{tables.collection -> f:count()} > 0">
+                    <h2>Collections</h2>
+                    <f:render partial="Backend/CompleteTableCollection" arguments="{Collections: tables.collection}" />
+                </f:if>
+                <f:if condition="{tables.collectionentry -> f:count()} > 0">
+                    <h2>Collection Entries</h2>
+                    <f:render partial="Backend/CompleteTableCollectionentry" arguments="{CollectionEntries: tables.collectionentry}" />
+                </f:if>
+
+                <f:if condition="{tables.datapoint -> f:count()} > 0">
+                    <h2>Datapoints</h2>
+                    <f:render partial="Backend/CompleteTableDatapoint" arguments="{Datapoints: tables.datapoint}" />
+                </f:if>
+
+                <f:if condition="{tables.languagepoint -> f:count()} > 0">
+                    <h2>Languapoint</h2>
+                    <f:render partial="Backend/CompleteTableLanguagepoint" arguments="{Languagepoints: tables.languagepoint}" />
+                </f:if>
+            </div>
         </div>
     </div>
-
-    <f:if condition="{tables.collection -> f:count()} > 0">
-        <h2>Collections</h2>
-        <f:render partial="Backend/CompleteTableCollection" arguments="{Collections: tables.collection}" />
-    </f:if>
-    <f:if condition="{tables.collectionentry -> f:count()} > 0">
-        <h2>Collection Entries</h2>
-        <f:render partial="Backend/CompleteTableCollectionentry" arguments="{CollectionEntries: tables.collectionentry}" />
-    </f:if>
-
-    <f:if condition="{tables.datapoint -> f:count()} > 0">
-        <h2>Datapoints</h2>
-        <f:render partial="Backend/CompleteTableDatapoint" arguments="{Datapoints: tables.datapoint}" />
-    </f:if>
-
-    <f:if condition="{tables.languagepoint -> f:count()} > 0">
-        <h2>Languapoint</h2>
-        <f:render partial="Backend/CompleteTableLanguagepoint" arguments="{Languagepoints: tables.languagepoint}" />
-    </f:if>
 
     <f:debug>{_all}</f:debug>
 </f:section>

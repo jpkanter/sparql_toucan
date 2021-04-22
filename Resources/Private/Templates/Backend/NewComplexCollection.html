@@ -5,59 +5,66 @@
 
     <f:render partial="Backend/MenuBar"  arguments="{activeTab : 'collection'}"/>
 
-    <h1>Sparql Toucan &gt;&gt; Complex Collection Creation</h1>
+    <div class="tab-pane active" role="tabpanel">
+        <div class="panel panel-tab">
+            <div class="panel-body">
 
-    <f:flashMessages />
+                <h2 class="touCanDo">Sparql Toucan &gt;&gt; Complex Collection Creation</h2>
 
-    <f:render partial="FormErrors" />
+                <f:flashMessages />
 
-    <p>This creates an entire collection with collection entries based on a single Node and a preset rule set.</p>
+                <f:render partial="FormErrors" />
 
-    <div class="tx_sparqltoucan_submenu">
+                <p>This creates an entire collection with collection entries based on a single Node and a preset rule set.</p>
 
-        <h2>Node &lt;{seedDatapoint.subject}&gt;</h2>
+                <div class="tx_sparqltoucan_submenu">
 
-        <f:if condition="{place}">
-            <f:then>
-                <span>The found nodes allow the creation of <strong>Place Collection</strong></span>
-                <div class="tx_sparqltoucan_formworld">
-                    <f:form action="createComplexCollection"  name="CollectionAndMore">
-                        <label for="name">Name</label>
-                            <f:form.textfield property="name" size="40" type="text" placeholder="[Name of the collection]" maxlength="128" value="{newName}"/>
-                        <label for="layout">Layout</label>
-                            <f:form.textfield property="layout" size="4" type="integer" placeholder="[Layout Number]" maxlength="6"/>
-                        <label for="style_override">Overriding Style</label>
-                            <f:form.textfield property="style_override" size="40" type="text" placeholder="[CSS Class to overwrite this]" maxlength="128"/>
-                        <label>Seed-Node</label>
-                            <f:form.textfield property="subject" size="40" type="text" placeholder="URI of Seed for complex collection" value="{seedDatapoint.subject}"/>
-                        <label>Seed-Source</label>
-                            <f:form.select property="sourceId" options="{sources}" optionValueField="uid" optionLabelField="name" value="{seedDatapoint.sourceId.UID}"/></br>
-                        <f:form.hidden property="seedSource" value="{seedDatapoint.sourceId}"/>
-                        <f:form.submit value="Create"/>
-                    </f:form>
+                    <h2>Node &lt;{seedDatapoint.subject}&gt;</h2>
+
+                    <f:if condition="{place}">
+                        <f:then>
+                            <span>The found nodes allow the creation of <strong>Place Collection</strong></span>
+                            <div class="tx_sparqltoucan_formworld">
+                                <f:form action="createComplexCollection"  name="CollectionAndMore">
+                                    <label for="name">Name</label>
+                                        <f:form.textfield property="name" size="40" type="text" placeholder="[Name of the collection]" maxlength="128" value="{newName}" class="form-control"/>
+                                    <label for="layout">Layout</label>
+                                        <f:form.textfield property="layout" size="4" type="integer" placeholder="[Layout Number]" maxlength="6" class="form-control"/>
+                                    <label for="style_override">Overriding Style</label>
+                                        <f:form.textfield property="style_override" size="40" type="text" placeholder="[CSS Class to overwrite this]" maxlength="128" class="form-control"/>
+                                    <label>Seed-Node</label>
+                                        <f:form.textfield property="subject" size="40" type="text" placeholder="URI of Seed for complex collection" value="{seedDatapoint.subject}" class="form-control"/>
+                                    <label>Seed-Source</label>
+                                        <f:form.select property="sourceId" options="{sources}" optionValueField="uid" optionLabelField="name" value="{seedDatapoint.sourceId.UID}" class="form-control"/></br>
+                                    <f:form.hidden property="seedSource" value="{seedDatapoint.sourceId}"/>
+                                    <f:form.submit value="Create" class="btn btn-default"/>
+                                </f:form>
+                            </div>
+                        </f:then>
+                        <f:else>
+                            <span class="tx_sparqltoucan_errortext">The avaible node-points dont match with any known complex collection templates.</span>
+                        </f:else>
+                    </f:if>
+
+                    <table class="tx_sparqltoucan">
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                        <f:for each="{explorer}" as="line" iteration="iter">
+                                <td>{line.pre.value}</td>
+                            <f:if condition="{iter.cycle} % 3 == 0">
+                                </tr><tr>
+                            </f:if>
+                        </f:for>
+                        </tr>
+
+                    </table>
                 </div>
-            </f:then>
-            <f:else>
-                <span class="tx_sparqltoucan_errortext">The avaible node-points dont match with any known complex collection templates.</span>
-            </f:else>
-        </f:if>
-
-        <table class="tx_sparqltoucan">
-            <tr>
-                <th></th>
-                <th></th>
-                <th></th>
-            </tr>
-            <tr>
-            <f:for each="{explorer}" as="line" iteration="iter">
-                    <td>{line.pre.value}</td>
-                <f:if condition="{iter.cycle} % 3 == 0">
-                    </tr><tr>
-                </f:if>
-            </f:for>
-            </tr>
-
-        </table>
+            </div>
+        </div>
     </div>
     <f:debug>{_all}</f:debug>
 </f:section>

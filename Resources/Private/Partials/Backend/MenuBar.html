@@ -1,10 +1,13 @@
 <html xmlns:f="https://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+
+        <h1 class="touCanDo"><span class="h1_main">Toucan.</span> <span class="h1_subtitle">Linked Data Integration</span> B 7.66 Dodo - 0.5.4</h1>
+
         <ul class="nav nav-tabs t3js-tabs" role="tablist" data-store-last-tab="1" style="text-align: right;">
             <li {f:if(condition: '{activeTab} == "overview"', then: 'class="active"')}>
                 <f:link.action action="overview" class="tx_sparqltoucan_fatlink"><f:translate key="tx_sparql_toucan_menubar.overview" /></f:link.action>
             </li>
-            <li {f:if(condition: '{activeTab} == "explorer"', then: 'class="active"')}>
-                <f:link.action action="explore" class="tx_sparqltoucan_fatlink"><f:translate key="tx_sparql_toucan_menubar.exploreendpoint" /></f:link.action>
+            <li {f:if(condition: '{activeTab} == "collection"', then: 'class="active"')}>
+            <f:link.action action="collectionOverview" class="tx_sparqltoucan_fatlink"><f:translate key="tx_sparql_toucan_menubar.collections" /></f:link.action>
             </li>
             <li {f:if(condition: '{activeTab} == "datapoint"', then: 'class="active"')}>
                 <f:link.action action="datapointOverview" class="tx_sparqltoucan_fatlink"><f:translate key="tx_sparql_toucan_menubar.datapoint" /></f:link.action>
@@ -16,6 +19,9 @@
                 <f:link.action action="languagepointOverview" class="tx_sparqltoucan_fatlink"><f:translate key="tx_sparql_toucan_menubar.languagepoint" /></f:link.action>
             </li>
 
+            <li {f:if(condition: '{activeTab} == "source"', then: 'class="active"')} style="float:none;display: inline-block;">
+            <f:link.action action="sourceOverview" class="tx_sparqltoucan_fatlink"><f:translate key="tx_sparql_toucan_menubar.sources" /></f:link.action>
+            </li>
             <li {f:if(condition: '{activeTab} == "timemachine"', then: 'class="active"')} style="float:none;display: inline-block;">
                 <f:link.action action="timemachine" class="tx_sparqltoucan_fatlink"><f:translate key="tx_sparql_toucan_menubar.timemachine" /></f:link.action>
             </li>

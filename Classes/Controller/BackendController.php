@@ -105,11 +105,71 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         return 'en'; //default
     }
 
-    public function OverviewAction() {
-        $collections = $this->collectionRepository->findAll();
-        $this->view->assign("collections", $collections);
+    public function OverviewAction()
+    {
         $sources = $this->sourceRepository->findAll();
         $this->view->assign("sources", $sources);
+
+        $formdata = $this->request->getArguments();
+        $this->view->assign("debug", $formdata);
+        if (isset($formdata['postcontent'])) {
+            $url = $this->sourceRepository->findByUid($formdata['postcontent']['sourceId'])->getUrl();
+            // mirror content of form back to form
+            $this->view->assign("form", $formdata['postcontent']);
+            // start request to sparql endpoint
+
+            $subject = trim($formdata['postcontent']['subject']);
+            if (preg_match("^<.*>$^", $subject) == 0) {
+                $subject = "<" . $subject . ">";
+            }
+            // ^<.*>$
+
+            $this->view->assign("form", $formdata['postcontent']);
+
+            $explorative_result = $this->explorativeQuery($url, $subject);
+            /** Pre backing lines for Type V7
+             * Otherwise stuff like this would work in Fluid: <f:if condition="{labels.{lineItem}}">
+             * Fluid in Typo7 doesnt support this kind of behaviour, therefore i need to do it in php, annoying
+             */
+
+            $explore_table = array();
+            foreach ($explorative_result[1] as $key => $predicate) {
+                if (isset($explorative_result[0][$key])) {
+                    $label = $explorative_result[0][$key];
+                } else {
+                    $label = $key;
+                }
+                $objects = array();
+                foreach ($predicate as $object) {
+                    $label_key = $object['value'];
+                    if (isset($explorative_result[0][$label_key])) { //never works if type!=uri
+                        $object_label = $explorative_result[0][$label_key];
+                    } else {
+                        $object_label = $object['value'];
+                    }
+                    $adda = "";
+                    foreach ($object as $objkey => $objvalue) {
+                        if ($objkey != "value" && $objkey != "type") {
+                            $adda .= $objkey . ": " . $objvalue . "; ";
+                        }
+                    }
+                    if (empty($adda)) {
+                        $adda = "N/A";
+                    } //TODO: i18n here
+                    $objects[] = ["value" => $label_key, "label" => $object_label, "type" => $object['type'], "adda" => $adda];
+                }
+                $explore_table[] = ["value" => $key, "label" => $label, "rowspan" => count($predicate), "objects" => $objects];
+
+            }
+
+            /**End of PreBacking Processing*/
+            $this->view->assign("trueExplore", $explore_table);
+        }
+    }
+
+    public function CollectionOverviewAction() {
+        $collections = $this->collectionRepository->findAll();
+        $this->view->assign("collections", $collections);
     }
 
     public function showCollectionAction(\Ubl\SparqlToucan\Domain\Model\Collection $collection)
@@ -693,6 +753,16 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->redirect('overview');
     }
     /**
+     * action sourceOverview
+     *
+     * @return void
+     */
+    public function sourceOverviewAction()
+    {
+        $sources = $this->sourceRepository->findAll();
+        $this->view->assign("sources", $sources);
+    }
+    /**
      * action newSource
      *
      * @return void
@@ -892,16 +962,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             }
             // ^<.*>$
 
-            //$predicate = trim($formdata['postcontent']['predicate']);
-            //if( $predicate == "") { $predicate = "?pre"; }
-
             $this->view->assign("form", $formdata['postcontent']);
-
-            if( trim($formdata['postcontent']['query']) != "") { //direct query
-                $content = $this->directQuery($url, $formdata['postcontent']['query']);
-                $this->view->assign("debug", $content);
-                return void;
-            }
 
             $explorative_result = $this->explorativeQuery($url, $subject);
             /** Pre backing lines for Type V7
@@ -941,6 +1002,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
             /**End of PreBacking Processing*/
             $this->view->assign("trueExplore", $explore_table);
+            //$this->redirect('overview', Null, Null, array("trueExplorer" => $explore_table, "postContent" => $formdata['postcontent']));
         }
 
     }

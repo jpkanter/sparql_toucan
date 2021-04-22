@@ -12,8 +12,8 @@
     <f:render partial="FormErrors" />
     <f:form action="createDatapoint"  name="newDatapoint" object="{newDatapoint}">
         <f:render partial="Datapoint/FormFields" arguments="{sources:sources, newDatapoint:datapoint}"/>
-        <f:form.submit value="{f:translate(key:'tx_sparql_toucan_general.createnew')}" name="newMainmenu"/>
-        <f:form.submit value="{f:translate(key:'tx_sparql_toucan_general.createback')}" name="newExplorer"/>
+        <f:form.submit value="{f:translate(key:'tx_sparql_toucan_general.createnew')}" name="newMainmenu"  class="btn btn-default"/>
+        <f:form.submit value="{f:translate(key:'tx_sparql_toucan_general.createback')}" name="newExplorer"  class="btn btn-default"/>
         <f:form.submit additionalAttributes="{test:1}" value="Test Connection" />
     </f:form>
     <f:debug>{_all}</f:debug>
