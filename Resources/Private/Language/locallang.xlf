@@ -273,13 +273,11 @@
 			</trans-unit>
 			<trans-unit id="tx_sparql_toucan_longtexts_introduction">
 				<source>
-					Donec lacinia at metus dictum scelerisque. Sed porttitor ultricies laoreet. Vestibulum ante ipsum primis in faucibus
-					orci luctus et ultrices posuere cubilia curae; Sed blandit metus tellus, nec varius nulla convallis eu. Fusce vitae
-					nisi ac libero auctor interdum at quis lorem. Praesent sed turpis vitae leo fermentum sodales et in risus. Ut eget
-					efficitur mauris. Cras efficitur maximus lorem, quis rutrum quam mollis vitae. Mauris eu faucibus turpis, nec porttitor
-					sapien. Suspendisse nec velit eget nibh porta laoreet ut vestibulum velit. Pellentesque habitant morbi tristique
-					senectus et netus et malesuada fames ac turpis egestas. Sed accumsan malesuada eros nec facilisis. Phasellus convallis
-					dui luctus libero malesuada, vel cursus lectus ullamcorper.
+					Det finns många olika varianter av Lorem Ipsum, men majoriteten av dessa har ändrats på någotvis.
+					Antingen med inslag av humor, eller med inlägg av ord som knappast ser trovärdiga ut. Skall man
+					använda långa stycken av Lorem Ipsum bör man försäkra sig om att det inte gömmer sig något pinsamt
+					mitt i texten. Lorem Ipsum-generatorer på internet tenderar att repetera Lorem Ipsum-texten styckvis
+					efter behov, något som gör denna sidan till den första riktiga Lorem Ipsum-generatorn på internet.
 				</source>
 			</trans-unit>
 		</body>
