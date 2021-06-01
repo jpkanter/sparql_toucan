@@ -8,20 +8,22 @@
 
     <f:render partial="Backend/MenuBar" arguments="{activeTab : 'source'}" />
 
-    <f:flashMessages />
-
-    <f:render partial="FormErrors" />
-
     <div class="tab-pane active" role="tabpanel">
         <div class="panel panel-tab">
             <div class="panel-body">
+
+                <f:flashMessages />
+
+                <f:render partial="FormErrors" />
 
                 <h2 class="touCanDo">Sources</h2>
 
                 <f:flashMessages />
 
+
                 <table class="table table-striped table-hover">
                     <thead>
+                        <tr> <th colspan="4"><a href="#" id="create_source_btn" class="btn btn-default tx_sparqltoucan_hidden_btn">New Source</a></th></tr>
                         <tr> <!--TODO: i18n-->
                             <th>UID</th>
                             <th>Name</th>
@@ -37,16 +39,34 @@
                                 <td>{source.url}</td>
                                 <td class="col-control">
                                     <div class="btn-group" role="group">
-                                        <f:link.action action="editSource" arguments="{source:source}" class="btn btn-default"><core:icon identifier="actions-document-open" /></f:link.action>
+                                        <!--<f:link.action action="editSource" arguments="{source:source}" class="btn btn-default" id="edit_source{source.uid}"><core:icon identifier="actions-document-open"/></f:link.action>-->
+                                        <a href="#" class="btn btn-default tx_sparqltoucan_hidden_btn" id="edit_source{source.uid}_btn"><core:icon identifier="actions-document-open"/></a>
                                         <f:link.action action="deleteSource" arguments="{source:source}" class="btn btn-danger"><core:icon identifier="actions-edit-delete" /></f:link.action>
                                     </div>
                                 </td>
                             </tr>
+                            <!--hidden form-->
+                            <div class="tab-pane tx_sparqltoucan_hidden_form" role="tabpanel" id="edit_source{source.uid}_form">
+                                <div class="panel-tab"></div>
+                                <div class="panel panel-tab">
+
+                                    <div class="panel-body">
+
+                                        <button class="btn btn-danger" id="edit_source{source.uid}_close" style="float: right;"><core:icon identifier="actions-document-close"/></button>
+
+                                        <h1><f:translate key="tx_sparql_toucan_h1.editsource" /></h1>
+
+                                        <f:form action="updateSource" name="source" object="{source}" >
+                                            <f:render partial="Source/FormFields" arguments="{source:source}" />
+                                            <f:form.submit value="{f:translate(key:'tx_sparql_toucan_general.save')}"  class="btn btn-default" />
+                                        </f:form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end hidden form-->
                         </f:for>
                     </tbody>
                 </table>
-                <f:link.action action="newSource" class="btn btn-default">New Source</f:link.action>
-                <a href="#" id="create_source_btn" class="btn btn-default tx_sparqltoucan_hidden_btn">New Source</a>
             </div>
         </div>
     </div>
@@ -56,11 +76,12 @@
         <div class="panel panel-tab">
 
             <div class="panel-body">
+
+                <button class="btn btn-danger" id="create_source_close" style="float: right;"><core:icon identifier="actions-document-close"/></button>
+
                 <h1><f:translate key="tx_sparql_toucan_h1.newsource" /></h1>
 
                 <f:flashMessages />
-
-                <f:render partial="FormErrors" />
 
                 <f:form action="createSource"  name="newSource" object="{newSource}">
                     <f:render partial="Source/FormFields" />

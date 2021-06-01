@@ -337,6 +337,7 @@ tr.x_sparqltoucan_hiddentr{
 
 .tx_sparqltoucan_hidden_form {
     display: none;
-    position: fixed;
+    position: absolute;
     width: 30rem;
+    z-index: 200;
 }

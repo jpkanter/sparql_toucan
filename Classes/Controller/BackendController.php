@@ -317,6 +317,21 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->view->assign("sources", $sources);
         $this->view->assign("newDatapoint", $newDatapoint);
     }
+
+    /**
+     * action deleteDatapoint
+     *
+     * @param Datapoint $oldDatapoint
+     */
+    public function deleteDatapointAction(Datapoint $datapoint)
+    {
+        //doing it like this seems risky at best, three checks, delete datapoint and live with loose ends
+        //delete this datapoint and all collection entries that utilize it
+        $this->addFlashMessage("Datapoint ID {$datapoint->getUID()}, Name: '{$datapoint->getName()}' was deleted. This function is currently volatile and might cause problems", '', \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
+        $this->languagepointRepository->deleteCorresponding($datapoint);
+        $this->datapointRepository->remove($datapoint);
+        $this->redirect('datapointOverview');
+    }
     /**
      * action createDatapoint
      *
@@ -750,7 +765,8 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     public function updateSourceAction(\Ubl\SparqlToucan\Domain\Model\Source $source)
     {
         $this->sourceRepository->update($source);
-        $this->redirect('overview');
+        $this->addFlashMessage('i18n: Source ID: '.$source->getUID().' ('.$source->getName().') was updated', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
+        $this->redirect('sourceOverview');
     }
     /**
      * action sourceOverview
