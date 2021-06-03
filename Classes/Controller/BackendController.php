@@ -341,16 +341,20 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     public function createDatapointAction(Datapoint $newDatapoint)
     {
         $formdata = $this->request->getArguments();
-        // update content
-        $this->datapointRepository->add($newDatapoint);
-        $this->updateDatapointLanguagepoints($newDatapoint);
+        if( $this->datapointRepository->duplicationCheck($newDatapoint->getSourceID(), $newDatapoint->getSubject(), $newDatapoint->getPredicate()) ) {
+            $this->addFlashMessage("i18n: Cannot create datapoint, there is already one with the exact two triple parts", '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
+        }
+        else {
+            $this->addFlashMessage("i18n: New Datapoint '{$newDatapoint->getName()}' created", '', \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
+            $this->datapointRepository->add($newDatapoint);
+            $this->updateDatapointLanguagepoints($newDatapoint);
+        }
         if( isset($formdata['newExplorer']) ) {
-            $this->redirect("explore", null, null, array("postcontent" => array("sourceId" => $newDatapoint->getSourceId(), "subject" => $newDatapoint->getSubject())));
+            $this->redirect("overview", null, null, array("postcontent" => array("sourceId" => $newDatapoint->getSourceId(), "subject" => $newDatapoint->getSubject())));
         }
         else {
             $this->redirect("overview");
         }
-        $this->redirect('overview');
     }
 
     public function editDatapointAction(Datapoint $datapoint) {
@@ -360,10 +364,17 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     }
 
     public function updateDatapointAction(Datapoint $datapoint) {
-        $this->addFlashMessage('[The Entry has been updated, Cache clearing required to see effects immediately]', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
+
         //check if its used anywhere if yes, give extra warning
         //check for changed source specifically?
-        $this->datapointRepository->update($datapoint);
+        if( $this->datapointRepository->duplicationCheck($datapoint->getSourceID(), $datapoint->getSubject(), $datapoint->getPredicate(), $datapoint) ) {
+            $this->addFlashMessage("i18n: Changing this datapoint would mean there is duplicated data", '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
+        }
+        else {
+            $this->addFlashMessage('[The Entry has been updated, Cache clearing required to see effects immediately]', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::OK);
+            $this->datapointRepository->update($datapoint);
+        }
+
         $this->redirect('datapointOverview');
     }
 
@@ -1115,23 +1126,37 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     }
 
     public function createLanguagepointAction(Languagepoint $newLanguagepoint) {
-            $persistenceManager = $this->objectManager->get("TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager");
-        $this->addFlashMessage('The object was created.', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
-        $this->languagepointRepository->add($newLanguagepoint);
-            $persistenceManager->persistAll();
-        //failsafe, direct languagepoint edits should only be avaible in textpoints but anyway
+        $persistenceManager = $this->objectManager->get("TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager");
         if( $newLanguagepoint->getTextpoint() !== 0 ) {
-            $this->textpointRepository->updateLanguages($newLanguagepoint->getTextpoint());
-            $this->redirect('editTextpoint', null, null, array('textpoint' => $newLanguagepoint->getTextpoint()));
+            if( trim($newLanguagepoint->getContent() == "") ) {
+                $this->addFlashMessage('i18n: Cannot create empty Languagepoints', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
+                $this->redirect('editTextpoint', null, null, array('textpoint' => $newLanguagepoint->getTextpoint()));
+            }
+
+            # Duplication Check
+            if( $this->languagepointRepository->duplicationCheck($newLanguagepoint->getTextpoint(), $newLanguagepoint->getLanguage()) ) {
+                $this->addFlashMessage('i18n: Cannot create another Languagepoint of that language', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
+                # i tried to give the malformed languagepoint back..it proved hard
+                $this->redirect('editTextpoint', null, null, array('textpoint' => $newLanguagepoint->getTextpoint()));
+            }
+            else {
+                $this->languagepointRepository->add($newLanguagepoint);
+                $persistenceManager->persistAll();
+                $this->textpointRepository->updateLanguages($newLanguagepoint->getTextpoint());
+                $this->redirect('editTextpoint', null, null, array('textpoint' => $newLanguagepoint->getTextpoint()));
+            }
         }
         else {
+            $this->addFlashMessage('The object was created.', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
+            $this->languagepointRepository->add($newLanguagepoint);
+            $persistenceManager->persistAll();
             $this->redirect('overview');
-        }
 
+        }
     }
 
     public function deleteLanguagepointAction(Languagepoint $oldLanguagepoint) {
-            $persistenceManager = $this->objectManager->get("TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager");
+        $persistenceManager = $this->objectManager->get("TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager");
         $this->addFlashMessage('The object was removed.', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
         $this->languagepointRepository->remove($oldLanguagepoint);
             $persistenceManager->persistAll();
@@ -1146,15 +1171,23 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     }
 
     public function updateLanguagepointAction(Languagepoint $languagepoint) {
-            $persistenceManager = $this->objectManager->get("TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager");
-        $this->addFlashMessage('The object was updated.', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
-        $this->languagepointRepository->update($languagepoint);
-            $persistenceManager->persistAll();
-        if( $languagepoint->getTextpoint() !== 0 ) {
-            $this->textpointRepository->updateLanguages($languagepoint->getTextpoint());
+        $persistenceManager = $this->objectManager->get("TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager");
+        if( $languagepoint->getTextpoint() != 0 ) {
+            if( $this->languagepointRepository->duplicationCheck($languagepoint->getTextpoint(), $languagepoint->getLanguage(), $languagepoint)) {
+                $this->addFlashMessage('i18n: Changing to that language would mean that there are two languagepoints with that language', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
+            }
+            else {
+                $this->addFlashMessage('The object was updated.', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
+                $this->textpointRepository->updateLanguages($languagepoint->getTextpoint());
+            }
+
             $this->redirect('editTextpoint', null, null, array('textpoint' => $languagepoint->getTextpoint()));
+            $persistenceManager->persistAll();
         }
         else {
+            $this->addFlashMessage('The object was updated.', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::WARNING);
+            $this->languagepointRepository->update($languagepoint);
+            $persistenceManager->persistAll();
             $this->redirect('overview');
         }
     }

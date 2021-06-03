@@ -2,6 +2,7 @@
 namespace Ubl\SparqlToucan\Domain\Repository;
 
 use TYPO3\CMS\Extbase\Persistence\Repository;
+use Ubl\SparqlToucan\Domain\Model\Datapoint;
 use Ubl\SparqlToucan\Domain\Model\Source;
 
 /***
@@ -60,6 +61,32 @@ class DatapointRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         );
         $query->setLimit(1);
         return $query->execute();
+    }
 
+    public function duplicationCheck(Source $source, $subject, $predicate, Datapoint $exempt = Null) {
+        $query = $this->createQuery();
+        if( $exempt == Null )
+        {
+            $query->matching(
+                $query->logicalAnd([
+                    $query->equals('source_id', $source),
+                    $query->equals('subject', $subject),
+                    $query->equals('predicate', $predicate)
+                ])
+            );
+        }
+        else
+        { # in case of edit we want to make sure we dont find the same object we are currently modifying
+            $query->matching(
+                $query->logicalAnd([
+                    $query->equals('source_id', $source),
+                    $query->equals('subject', $subject),
+                    $query->equals('predicate', $predicate),
+                    $query->logicalNot($query->equals('uid', $exempt))
+                ])
+            );
+        }
+        if( $query->count() > 0 ) return true;
+        else return false;
     }
 }

@@ -54,8 +54,18 @@
                     <f:form action="createLanguagepoint" name="newLanguagepoint" object="{newLanguagepoint}">
                         <f:form.hidden property="textpoint" value="{textpoint.uid}"/>
                         <td>New</td><!-- TODO: i18n-->
-                        <td><f:form.textfield property="language" placeholder="{f:translate(key:'tx_sparql_toucan_general.language')}" size="5"/></td>
-                        <td><f:form.textfield property="content" placeholder="{f:translate(key:'tx_sparql_toucan_general.content')}" size="40"/></td>
+                        <td><f:form.textfield
+                                property="language"
+                                placeholder="{f:translate(key:'tx_sparql_toucan_general.language')}"
+                                size="5"
+                                value="{f:if(condition:'{lastLanguagepoint}', then: '{lastLanguagepoint.language}', else: '')}"
+                        /></td>
+                        <td><f:form.textfield
+                                property="content"
+                                placeholder="{f:translate(key:'tx_sparql_toucan_general.content')}"
+                                size="40"
+                                value="{f:if(condition:'{lastLanguagepoint}', then: '{lastLanguagepoint.content}', else: '')}"
+                        /></td>
 
                         <td><f:form.submit value="{f:translate(key:'tx_sparql_toucan_general.create')}"/></td>
                     </f:form>

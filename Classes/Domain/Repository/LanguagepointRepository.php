@@ -3,6 +3,7 @@ namespace Ubl\SparqlToucan\Domain\Repository;
 
 use TYPO3\CMS\Extbase\Persistence\Repository;
 use Ubl\SparqlToucan\Domain\Model\Datapoint;
+use Ubl\SparqlToucan\Domain\Model\Languagepoint;
 use Ubl\SparqlToucan\Domain\Model\Textpoint;
 
 /***
@@ -84,16 +85,21 @@ class LanguagepointRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
     }
 
     public function deleteCorrespondingDP(Datapoint $datapoint) {
+        if ( $datapoint->getUID() === 0 ) { #weird failsafe, but apparently this happened for reasons my testing
+            return false;
+        }
         $persistenceManager = $this->objectManager->get("TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager");
         $points = $this->fetchCorresponding($datapoint);
         foreach($points as $point) {
             $this->remove($point);
-
         }
         $persistenceManager->persistAll();
     }
 
     public function deleteCorrespondingTP(Textpoint $textpoint) {
+        if ( $textpoint->getUID() === 0 ) {
+            return false;
+        }
         $persistenceManager = $this->objectManager->get("TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager");
         $points = $this->fetchCorresponding($textpoint);
         foreach($points as $point) {
@@ -162,5 +168,30 @@ class LanguagepointRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
             //what now? Do i throw an exception cause there is an error? Or do i just return nothing cause there is nothing?
             throw new \Exception("No Languagepoint to that Textpoint could be found", 3);
         }
+    }
+
+    public function duplicationCheck(Textpoint $textpoint, $language, Languagepoint $exempt = Null) {
+        $query = $this->createQuery();
+        if( $exempt == Null ) // typically used when new Languagepoint is set
+        {
+            $query->matching(
+                $query->logicalAnd([
+                    $query->equals('textpoint', $textpoint),
+                    $query->equals('language', $language)
+                ])
+            );
+        }
+        else
+        { # in case of edit we want to make sure we dont find the same object we are currently modifying
+            $query->matching(
+                $query->logicalAnd([
+                    $query->equals('textpoint', $textpoint),
+                    $query->equals('language', $language),
+                    $query->logicalNot($query->equals('uid', $exempt))
+                ])
+            );
+        }
+        if( $query->count() > 0 ) return true;
+        else return false;
     }
 }

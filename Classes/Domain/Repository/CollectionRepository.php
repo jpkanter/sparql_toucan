@@ -67,15 +67,30 @@ class CollectionRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         foreach($entries as $entry ) {
             if( !$entry->getIsBranch() ) {
                 if ($entry->getTextpoint() != null && $entry->getDatapointId() != null) {
+                    try { $dpLabel = $this->languagepointRepository->fetchSpecificLanguage($entry->getDatapointId(), $language); }
+                    catch ( \Exception $e ) { $dpLabel = "ERR[{$entry->getDatapointId()->getPredicate()}]"; }
+                    try { $tpLabel = $this->languagepointRepository->fetchSpecificLanguage($entry->getTextpoint(), $language); }
+                    catch ( \Exception $e ) { $tpLabel = "ERR[{$entry->getTextpoint()->getName()}]"; }
                     $entry->setTempValue(
-                        $this->languagepointRepository->fetchSpecificLanguage($entry->getTextpoint(), $language)
+                        $tpLabel
                         .
-                        $this->languagepointRepository->fetchSpecificLanguage($entry->getDatapointId(), $language)
+                        $dpLabel
                     );
                 } elseif ($entry->getDatapointId() != null && $entry->getTextpoint() == null) {
-                    $entry->setTempValue($this->languagepointRepository->fetchSpecificLanguage($entry->getDatapointId(), $language));
+                    try {
+                        $entry->setTempValue($this->languagepointRepository->fetchSpecificLanguage($entry->getDatapointId(), $language));
+                    }
+                    catch ( \Exception $e) {
+                        $entry->setTempValue("ERR[{$entry->getDatapointId()->getPredicate()}]");
+                    }
                 } elseif ($entry->getTextpoint() != null && $entry->getDatapointId() == null) {
-                    $entry->setTempValue($this->languagepointRepository->fetchSpecificLanguage($entry->getTextpoint(), $language));
+                    try {
+                        $entry->setTempValue($this->languagepointRepository->fetchSpecificLanguage($entry->getTextpoint(), $language));
+                    }
+                    catch ( \Exception $e) {
+                        $entry->setTempValue("ERR[{$entry->getTextpoint()->getName()}]");
+                    }
+
                 } else {
                     $entry->setTempValue(""); //this should definitely not happen
                 }
